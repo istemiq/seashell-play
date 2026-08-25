@@ -1,0 +1,1637 @@
+/* Shell-компоненты — визуально как .vkui* в crt-theme.css (историческое имя классов темы). */
+
+.seashell-crt .ss-panel {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: var(--ss-app-height, var(--tg-viewport-stable-height, var(--tg-viewport-height, 100dvh)));
+  max-height: var(--ss-app-height, var(--tg-viewport-stable-height, var(--tg-viewport-height, 100dvh)));
+  overflow-x: hidden;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  touch-action: pan-y;
+  background: var(--crt-bg);
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-panel__in {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-bottom: calc(
+    var(--ss-space-panel-bottom, 34px) + env(safe-area-inset-bottom, 0px) + var(--ss-keyboard-gap, 0px)
+  );
+  box-sizing: border-box;
+}
+
+@media (min-width: 768px) {
+  .seashell-crt .ss-panel__in {
+    padding-left: max(12px, env(safe-area-inset-left, 0px));
+    padding-right: max(12px, env(safe-area-inset-right, 0px));
+  }
+}
+
+.seashell-crt .ss-panel-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  min-height: var(--ss-space-cell-min, 52px);
+  margin: 0 -16px 10px;
+  padding: 0;
+  background: var(--crt-bg-elev);
+  border-bottom: 1px solid var(--crt-border);
+  box-shadow: 0 0 16px var(--crt-glow), inset 0 -1px 0 var(--crt-header-inset);
+}
+
+@media (min-width: 768px) {
+  .seashell-crt .ss-panel-header {
+    margin-left: -12px;
+    margin-right: -12px;
+  }
+}
+
+.seashell-crt .ss-panel-header--with-after {
+  grid-template-columns: 44px 1fr auto;
+}
+
+.seashell-crt .ss-panel-header__side--after {
+  justify-content: flex-end;
+  padding: 0 4px;
+  min-width: 44px;
+}
+
+.seashell-crt .ss-panel-header__side--after .ss-button {
+  font-size: var(--ss-font-size-caption, 0.9em);
+  padding: 4px 8px;
+  white-space: nowrap;
+}
+
+.seashell-crt .ss-panel-header__side--empty {
+  visibility: hidden;
+}
+
+.seashell-crt .ss-panel-header__side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--ss-space-cell-min, 52px);
+}
+
+.seashell-crt .ss-panel-header__content {
+  min-width: 0;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1.067em;
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-panel-header-back {
+  width: 44px;
+  height: 44px;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--crt-fg);
+  font-size: 1.867em;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.seashell-crt .ss-group {
+  margin-bottom: var(--ss-space-group, 16px);
+  background: transparent;
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-group__header {
+  margin-bottom: 8px;
+}
+
+.seashell-crt .ss-group-title {
+  font-size: 1em;
+  font-weight: 600;
+  color: var(--crt-fg-dim);
+  padding: 6px 0 2px;
+}
+
+.seashell-crt .ss-group-title--s {
+  font-size: var(--ss-font-size-secondary, 0.95em);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.seashell-crt .ss-group-title--secondary {
+  font-size: 0.967em;
+  font-weight: 500;
+}
+
+.seashell-group-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.seashell-group-header-row .ss-group-title {
+  margin-bottom: 0;
+  padding: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.seashell-crt .ss-group__content {
+  display: flex;
+  flex-direction: column;
+}
+
+.seashell-crt .ss-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--ss-space-cell-min, 52px);
+  padding: var(--ss-space-cell-y, 12px) 0;
+  border: none;
+  border-bottom: 1px solid var(--crt-cell-border);
+  background: transparent;
+  color: var(--crt-fg);
+  text-align: left;
+  font: inherit;
+  cursor: default;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.seashell-crt .ss-group__content > .ss-cell:last-child {
+  border-bottom: none;
+}
+
+.seashell-crt .ss-cell--action {
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.seashell-crt .ss-cell--action:active {
+  background: var(--crt-cell-hover);
+}
+
+.seashell-crt .ss-cell--selected .ss-cell__title {
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-cell--selected {
+  box-shadow: inset 3px 0 0 var(--crt-accent);
+}
+
+.seashell-crt .ss-card-lang-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: var(--ss-space-cell-min, 52px);
+  padding: var(--ss-space-cell-y, 12px) 0;
+  border: none;
+  border-bottom: 1px solid var(--crt-cell-border);
+  background: transparent;
+  color: var(--crt-fg);
+  font: inherit;
+  font-size: 1em;
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+  box-sizing: border-box;
+}
+
+.seashell-crt .ss-card-lang-trigger:active {
+  background: var(--crt-cell-hover);
+}
+
+.seashell-crt .ss-card-lang-trigger__value {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.seashell-crt .ss-card-lang-trigger__chevron {
+  flex: none;
+  color: var(--crt-fg-dim);
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.seashell-crt .ss-card-lang-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 16px;
+  border: none;
+  border-bottom: 1px solid var(--crt-border);
+  background: transparent;
+  color: var(--crt-fg);
+  font: inherit;
+  font-size: 1em;
+  text-align: left;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.seashell-crt .ss-card-lang-option:last-child {
+  border-bottom: none;
+}
+
+.seashell-crt .ss-card-lang-option:active,
+.seashell-crt .ss-card-lang-option--selected {
+  background: var(--crt-cell-hover);
+}
+
+.seashell-crt .ss-cell--disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.seashell-crt .ss-cell__before {
+  flex: none;
+}
+
+.seashell-crt .ss-cell__title-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.seashell-crt .ss-menu-globe {
+  color: var(--crt-fg-dim);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.seashell-crt .ss-cell__main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.seashell-crt .ss-cell__title {
+  font-size: 1em;
+  line-height: var(--ss-line-tight, 1.4);
+}
+
+.seashell-crt .ss-cell__subtitle {
+  font-size: var(--ss-font-size-secondary, 0.95em);
+  line-height: var(--ss-line-tight, 1.4);
+  color: var(--crt-fg-dim);
+}
+
+.seashell-crt .ss-cell__chevron {
+  flex: none;
+  color: var(--crt-fg-dim);
+  font-size: 1.467em;
+  line-height: 1;
+  opacity: 0.75;
+}
+
+.seashell-crt .ss-avatar {
+  display: block;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 1px solid var(--crt-border);
+}
+
+.seashell-crt .ss-avatar--fallback {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  object-fit: unset;
+  background: color-mix(in srgb, var(--crt-fg) 12%, transparent);
+  color: var(--crt-fg);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.seashell-crt .ss-text {
+  margin: 0;
+  font-size: 1em;
+  line-height: var(--ss-line-body, 1.58);
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 0;
+  letter-spacing: normal;
+  font: inherit;
+  font-size: 1em;
+  line-height: var(--ss-line-tight, 1.4);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-btn--m {
+  min-height: var(--ss-space-cell-min, 52px);
+}
+
+.seashell-crt .ss-btn--stretched {
+  width: 100%;
+}
+
+.seashell-crt .ss-btn--flat,
+.seashell-crt .ss-group__content > .ss-btn--stretched,
+.seashell-crt .ss-form-stack > .ss-btn--stretched,
+.seashell-crt .ss-form-item__control > .ss-btn--stretched,
+.seashell-crt .seashell-dict-card-actions .ss-btn,
+.seashell-crt .seashell-confirm-shell__body .ss-btn,
+.seashell-crt .seashell-wordsets-shell__body .ss-btn {
+  display: flex;
+  width: 100%;
+  min-height: var(--ss-space-cell-min, 52px);
+  padding: 10px 0;
+  border: none;
+  border-bottom: 1px solid var(--crt-cell-border);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 1em;
+  font-weight: 400;
+  letter-spacing: normal;
+  justify-content: flex-start;
+  text-align: left;
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-btn--flat:last-child,
+.seashell-crt .ss-group__content > .ss-btn--stretched:last-child,
+.seashell-crt .ss-form-stack > .ss-btn--stretched:last-child,
+.seashell-crt .ss-form-item__control > .ss-btn--stretched:last-child,
+.seashell-crt .seashell-dict-card-actions .ss-btn:last-child,
+.seashell-crt .seashell-confirm-shell__body .ss-btn:last-child,
+.seashell-crt .seashell-wordsets-shell__body .ss-btn:last-child {
+  border-bottom: none;
+}
+
+.seashell-crt .ss-btn--flat.ss-btn--primary,
+.seashell-crt .ss-group__content > .ss-btn--stretched.ss-btn--primary,
+.seashell-crt .ss-form-stack > .ss-btn--stretched.ss-btn--primary,
+.seashell-crt .seashell-dict-card-actions .ss-btn--primary,
+.seashell-crt .seashell-confirm-shell__body .ss-btn--primary {
+  color: var(--crt-fg);
+  font-weight: 400;
+}
+
+.seashell-crt .ss-btn--flat.ss-btn--secondary,
+.seashell-crt .ss-group__content > .ss-btn--stretched.ss-btn--secondary,
+.seashell-crt .ss-form-stack > .ss-btn--stretched.ss-btn--secondary,
+.seashell-crt .seashell-dict-card-actions .ss-btn--secondary,
+.seashell-crt .seashell-confirm-shell__body .ss-btn--secondary {
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-btn--flat.ss-btn--tertiary,
+.seashell-crt .ss-group__content > .ss-btn--stretched.ss-btn--tertiary,
+.seashell-crt .ss-form-stack > .ss-btn--stretched.ss-btn--tertiary,
+.seashell-crt .seashell-confirm-shell__body .ss-btn--tertiary {
+  color: var(--crt-fg-dim);
+}
+
+.seashell-crt .ss-btn--flat.ss-btn--negative,
+.seashell-crt .seashell-confirm-shell__body .ss-btn--negative {
+  color: var(--crt-fg);
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.seashell-crt .ss-btn--flat:active:not(:disabled),
+.seashell-crt .ss-group__content > .ss-btn--stretched:active:not(:disabled),
+.seashell-crt .ss-form-stack > .ss-btn--stretched:active:not(:disabled),
+.seashell-crt .ss-form-item__control > .ss-btn--stretched:active:not(:disabled),
+.seashell-crt .seashell-dict-card-actions .ss-btn:active:not(:disabled),
+.seashell-crt .seashell-confirm-shell__body .ss-btn:active:not(:disabled),
+.seashell-crt .seashell-wordsets-shell__body .ss-btn:active:not(:disabled) {
+  background: var(--crt-cell-hover);
+}
+
+.seashell-crt .ss-flat-link {
+  display: inline;
+  margin: 0;
+  padding: 0;
+  min-height: 0;
+  border: none;
+  background: none;
+  box-shadow: none;
+  font: inherit;
+  font-size: 1em;
+  line-height: var(--ss-line-tight, 1.4);
+  color: var(--crt-fg-dim);
+  cursor: pointer;
+  touch-action: manipulation;
+  text-align: inherit;
+}
+
+.seashell-crt .ss-flat-link:active {
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-flat-link:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.seashell-crt .ss-btn--primary:not(.ss-btn--flat) {
+  color: var(--crt-accent-text-on-fill);
+  border: 1px solid var(--crt-btn-primary-border);
+  background: var(--crt-btn-primary-bg);
+  box-shadow: inset 0 1px 0 var(--crt-header-inset);
+}
+
+.seashell-crt .ss-btn--secondary:not(.ss-btn--flat) {
+  color: var(--crt-fg);
+  border: 1px solid var(--crt-btn-secondary-border);
+  background: var(--crt-btn-secondary-bg);
+  box-shadow: inset 0 1px 0 var(--crt-header-inset);
+}
+
+.seashell-crt .seashell-dict-card-actions .ss-btn:disabled,
+.seashell-crt .ss-btn--flat:disabled {
+  opacity: 1;
+  color: var(--crt-fg-dim);
+  cursor: not-allowed;
+}
+
+.seashell-crt .ss-btn:disabled {
+  opacity: 1;
+  color: var(--crt-fg-dim);
+  cursor: not-allowed;
+}
+
+.seashell-crt .ss-form-item {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: var(--ss-space-cell-y, 12px) 0;
+  border-bottom: 1px solid var(--crt-cell-border);
+}
+
+.seashell-crt .ss-form-item:has(.ss-terminal-input) {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.seashell-crt .ss-form-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.seashell-crt .ss-form-stack > .ss-form-item {
+  border-bottom: none;
+  padding-top: 8px;
+  padding-bottom: 0;
+}
+
+.seashell-crt .ss-group__content > .ss-form-item:last-child {
+  border-bottom: none;
+}
+
+.seashell-crt .ss-form-item__top {
+  font-size: var(--ss-font-size-secondary, 0.95em);
+  line-height: var(--ss-line-tight, 1.4);
+  color: var(--crt-fg-dim);
+}
+
+.seashell-crt .ss-form-item__control {
+  display: block;
+}
+
+.seashell-crt .ss-select,
+.seashell-crt .ss-slider {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.seashell-crt .ss-select {
+  min-height: 36px;
+  padding: 6px 10px;
+  background: var(--crt-input-bg);
+  color: var(--crt-fg);
+  border: 1px solid var(--crt-border);
+  border-radius: 0;
+  font: inherit;
+}
+
+.seashell-crt .ss-slider {
+  accent-color: var(--crt-accent);
+}
+
+.seashell-crt .ss-switch {
+  width: 22px;
+  height: 22px;
+  accent-color: var(--crt-accent);
+  flex-shrink: 0;
+}
+
+.seashell-crt .ss-switch-row {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  gap: 10px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.seashell-crt .ss-switch-row__label {
+  font-size: 1em;
+  line-height: var(--ss-line-tight, 1.4);
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-placeholder {
+  padding: 16px 0;
+  color: var(--crt-fg-dim);
+  text-align: center;
+}
+
+.seashell-crt .ss-stub-note {
+  margin: 0;
+  padding: 14px 0;
+  font-size: 0.967em;
+  line-height: var(--ss-line-body, 1.58);
+  color: var(--crt-fg-dim);
+}
+
+.seashell-crt .ss-box {
+  display: block;
+}
+
+.seashell-crt .ss-text--bold {
+  font-weight: 600;
+}
+
+.seashell-crt .ss-footnote {
+  margin: 0;
+  font-size: var(--ss-font-size-secondary, 0.95em);
+  line-height: var(--ss-line-body, 1.58);
+  color: var(--crt-fg-dim);
+  opacity: 0.95;
+}
+
+.seashell-crt .ss-hint {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.seashell-crt .ss-hint__text {
+  line-height: var(--ss-line-body, 1.58);
+}
+
+.seashell-crt .ss-hint__btn {
+  align-self: flex-start;
+  min-height: 0;
+  padding: 0;
+  font-weight: 400;
+  color: var(--crt-fg-dim);
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.seashell-crt .ss-hint-collapsed {
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.seashell-crt .ss-hint-collapsed__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 24px;
+  min-height: 24px;
+  padding: 2px 4px;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--crt-fg-dim);
+  font-size: 1em;
+  font-weight: 400;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: none;
+  opacity: 0.75;
+}
+
+.seashell-crt .ss-hint-collapsed__toggle:hover {
+  opacity: 1;
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-panel-header__side--after .ss-hint-collapsed {
+  margin-top: 0;
+  position: relative;
+}
+
+.seashell-segmented {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--crt-cell-border);
+}
+
+.seashell-segmented__item {
+  flex: 1;
+  min-height: var(--ss-space-cell-min, 52px);
+  padding: 12px 8px;
+  border: none;
+  background: transparent;
+  color: var(--crt-fg-dim);
+  font: inherit;
+  font-size: 1em;
+  font-weight: 400;
+  line-height: var(--ss-line-tight, 1.4);
+  letter-spacing: normal;
+  text-align: center;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.seashell-segmented__item.is-active {
+  color: var(--crt-fg);
+  font-weight: 400;
+  box-shadow: inset 0 -2px 0 var(--crt-accent);
+}
+
+.seashell-example-swipe {
+  touch-action: pan-y;
+  cursor: grab;
+}
+
+.seashell-example-swipe:active {
+  cursor: grabbing;
+}
+
+.seashell-example-flip {
+  touch-action: pan-y;
+  perspective: 900px;
+}
+
+.seashell-example-flip--active {
+  cursor: grab;
+  touch-action: pan-y pinch-zoom;
+}
+
+.seashell-example-flip--active:active {
+  cursor: grabbing;
+}
+
+.seashell-example-flip__page {
+  transform-origin: center center;
+  will-change: transform, opacity;
+}
+
+.seashell-example-flip__page--transition {
+  transition:
+    transform 0.24s ease,
+    opacity 0.24s ease;
+}
+
+.seashell-example-flip__page--enter-next {
+  animation: seashell-example-enter-next 0.28s ease forwards;
+}
+
+.seashell-example-flip__page--enter-prev {
+  animation: seashell-example-enter-prev 0.28s ease forwards;
+}
+
+@keyframes seashell-example-enter-next {
+  from {
+    transform: translateX(36px) rotateY(-14deg);
+    opacity: 0.25;
+  }
+  to {
+    transform: translateX(0) rotateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes seashell-example-enter-prev {
+  from {
+    transform: translateX(-36px) rotateY(14deg);
+    opacity: 0.25;
+  }
+  to {
+    transform: translateX(0) rotateY(0);
+    opacity: 1;
+  }
+}
+
+html[dir='rtl'] .seashell-example-flip__page--enter-next {
+  animation-name: seashell-example-enter-next-rtl;
+}
+
+html[dir='rtl'] .seashell-example-flip__page--enter-prev {
+  animation-name: seashell-example-enter-prev-rtl;
+}
+
+@keyframes seashell-example-enter-next-rtl {
+  from {
+    transform: translateX(-36px) rotateY(14deg);
+    opacity: 0.25;
+  }
+  to {
+    transform: translateX(0) rotateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes seashell-example-enter-prev-rtl {
+  from {
+    transform: translateX(36px) rotateY(-14deg);
+    opacity: 0.25;
+  }
+  to {
+    transform: translateX(0) rotateY(0);
+    opacity: 1;
+  }
+}
+
+.seashell-pinch-area {
+  width: 100%;
+  max-width: 100%;
+  overflow: visible;
+  touch-action: auto;
+}
+
+.seashell-pinch-area.is-zoomed {
+  overflow: hidden;
+  touch-action: none;
+}
+
+.seashell-pinch-area.is-pinching {
+  touch-action: none;
+}
+
+.seashell-pinch-area__inner {
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seashell-pinch-area__inner {
+    will-change: auto;
+  }
+}
+
+.seashell-pinch-viewport {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.seashell-pinch-viewport.is-zoomed {
+  overflow: auto;
+  touch-action: pan-x pan-y;
+  overscroll-behavior: contain;
+}
+
+.seashell-pinch-spacer {
+  position: relative;
+  width: 100%;
+  min-height: 100dvh;
+}
+
+.seashell-pinch-surface {
+  will-change: transform;
+  transform-origin: 0 0;
+}
+
+.seashell-pinch-content {
+  min-height: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.seashell-pinch-viewport.is-pinching,
+.seashell-pinch-viewport.is-pinching .seashell-pinch-surface {
+  touch-action: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seashell-pinch-surface {
+    will-change: auto;
+  }
+}
+
+.seashell-speak-aloud {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.seashell-dict-more-actions {
+  width: 100%;
+}
+
+.seashell-dict-more-actions__toggle.is-open {
+  color: var(--crt-fg-dim);
+  border-bottom: none !important;
+}
+
+.seashell-dict-more-actions__panel {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.seashell-dict-more-actions__panel > .ss-practice-ad:last-child,
+.seashell-dict-more-actions__panel > .ss-btn--flat:last-child,
+.seashell-dict-more-actions__panel > .ss-btn--stretched:last-child {
+  border-bottom: none;
+}
+
+.seashell-speak-aloud__btn.is-heard-open {
+  border-bottom: none !important;
+}
+
+.seashell-speak-aloud__heard {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.28s ease;
+  width: 100%;
+}
+
+.seashell-speak-aloud__heard.is-open {
+  grid-template-rows: 1fr;
+}
+
+.seashell-speak-aloud__heard-in {
+  overflow: hidden;
+  min-height: 0;
+  padding: 0 12px;
+  border: 1px solid var(--crt-cell-border);
+  border-top: none;
+  background: var(--crt-bg-elev, rgba(255, 255, 255, 0.04));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.seashell-speak-aloud__heard.is-open .seashell-speak-aloud__heard-in {
+  padding: 10px 12px 12px;
+}
+
+.seashell-speak-aloud__heard-label {
+  display: block;
+  margin: 0;
+  opacity: 0.72;
+  line-height: var(--ss-line-tight, 1.4);
+}
+
+.seashell-speak-aloud__heard-text {
+  display: block;
+  margin-top: 6px;
+  line-height: 1.45;
+}
+
+.seashell-speak-aloud__heard-in.is-speak-match {
+  animation: ss-speak-match-flash 2.6s ease-out forwards;
+}
+
+@keyframes ss-speak-match-flash {
+  0% {
+    background: var(--crt-bg-elev, rgba(255, 255, 255, 0.04));
+    border-color: var(--crt-cell-border);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+
+  16% {
+    background: color-mix(in srgb, #d8e0ea 42%, var(--crt-bg-elev, rgba(255, 255, 255, 0.04)));
+    border-color: color-mix(in srgb, #e2eaf4 72%, var(--crt-cell-border));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.28),
+      0 0 24px -2px color-mix(in srgb, #eef3f8 58%, transparent);
+  }
+
+  52% {
+    background: color-mix(in srgb, #ccd6e2 28%, var(--crt-bg-elev, rgba(255, 255, 255, 0.04)));
+    border-color: color-mix(in srgb, #d8e2ec 52%, var(--crt-cell-border));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      0 0 18px -4px color-mix(in srgb, #e8eef4 42%, transparent);
+  }
+
+  100% {
+    background: var(--crt-bg-elev, rgba(255, 255, 255, 0.04));
+    border-color: var(--crt-cell-border);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seashell-speak-aloud__heard-in.is-speak-match {
+    animation: none;
+    background: color-mix(in srgb, #d0dae4 22%, var(--crt-bg-elev, rgba(255, 255, 255, 0.04)));
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.16),
+      0 0 0 1px color-mix(in srgb, #dce4ee 38%, transparent);
+  }
+
+  .seashell-example-flip__page--enter-next,
+  .seashell-example-flip__page--enter-prev {
+    animation: none;
+  }
+
+  .seashell-example-flip__page--transition {
+    transition: none;
+  }
+}
+
+.seashell-crt .ss-cell__after .ss-hint-collapsed {
+  margin-top: 0;
+  position: relative;
+}
+
+.seashell-crt .ss-cell__after .ss-hint--inline.ss-hint {
+  right: 0;
+}
+
+.seashell-inline-action-row,
+.seashell-crt .ss-box.seashell-inline-action-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  width: 100%;
+}
+
+.seashell-inline-action-row__main,
+.seashell-crt .seashell-inline-action-row__main.ss-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  display: flex;
+}
+
+.seashell-crt .seashell-inline-action-row .ss-card-lang-trigger {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  color: var(--crt-fg);
+  border: none;
+  border-bottom: 1px solid var(--crt-cell-border);
+  background: transparent;
+  box-shadow: none;
+  font-size: 1em;
+  font-weight: 400;
+  padding: 10px 0;
+  min-height: var(--ss-space-cell-min, 52px);
+}
+
+.seashell-crt .seashell-inline-action-row .ss-hint-collapsed {
+  margin-top: 0;
+  flex: 0 0 auto;
+  width: auto;
+}
+
+.seashell-crt .ss-hint--inline.ss-hint-collapsed {
+  margin-top: 0;
+  flex-shrink: 0;
+}
+
+.seashell-crt .ss-hint--inline.ss-hint {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 8px);
+  z-index: 4;
+  width: min(300px, calc(100vw - 32px));
+  margin-top: 0;
+  padding: 10px 12px;
+  border: 1px solid color-mix(in srgb, var(--crt-fg-dim) 22%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--crt-bg) 92%, var(--crt-panel));
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
+}
+
+.seashell-crt .ss-hint--subtle.ss-hint .ss-hint__text,
+.seashell-crt .ss-hint--subtle.ss-hint .ss-footnote {
+  color: var(--crt-fg-dim);
+}
+
+.seashell-crt .ss-hint--subtle.ss-hint .ss-hint__btn {
+  border-color: color-mix(in srgb, var(--crt-fg-dim) 35%, transparent);
+  background: transparent;
+  color: var(--crt-fg-dim);
+  box-shadow: none;
+}
+
+.seashell-crt .ss-hint--subtle.ss-hint .ss-hint__btn:hover:not(:disabled) {
+  color: var(--crt-fg);
+  border-color: color-mix(in srgb, var(--crt-fg-dim) 55%, transparent);
+  filter: none;
+}
+
+.seashell-crt .ss-separator {
+  margin: 0;
+  border: none;
+  border-top: 1px solid var(--crt-border);
+  opacity: 0.55;
+}
+
+.seashell-crt .ss-btn--l {
+  min-height: var(--ss-space-cell-min, 52px);
+}
+
+.seashell-crt .ss-btn--s {
+  min-height: 32px;
+  padding: 0 8px;
+  font-size: 1em;
+}
+
+.seashell-crt .ss-btn--tertiary {
+  color: var(--crt-fg-dim);
+  border: none;
+  background: transparent;
+  box-shadow: none;
+  font-size: 1em;
+}
+
+.seashell-crt .ss-btn--negative {
+  color: #f0b4b4;
+  border-color: rgba(180, 80, 80, 0.45);
+}
+
+.seashell-crt .ss-btn--loading {
+  position: relative;
+}
+
+.seashell-crt .ss-btn__shimmer {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.2em;
+}
+
+.seashell-crt .ss-btn__shimmer .seashell-shimmer {
+  font-size: 1em;
+  letter-spacing: normal;
+}
+
+.seashell-crt .ss-terminal-input {
+  display: flex;
+  align-items: baseline;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 0;
+  padding-block: 4px 6px;
+  padding-inline: 0 4px;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--crt-cell-border);
+  border-radius: 0;
+  transition:
+    background 0.28s ease,
+    border-color 0.28s ease,
+    box-shadow 0.28s ease;
+}
+
+.seashell-crt .ss-terminal-input:focus-within {
+  border-bottom-color: color-mix(in srgb, var(--crt-accent) 48%, var(--crt-cell-border));
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--crt-accent) 5.5%, transparent) 0%,
+    transparent 68%
+  );
+  box-shadow: 0 5px 16px -10px color-mix(in srgb, var(--crt-accent) 32%, transparent);
+}
+
+.seashell-crt .ss-terminal-input--multiline {
+  align-items: flex-start;
+  padding-block: 6px 8px;
+}
+
+.seashell-crt .ss-terminal-input--multiline .ss-terminal-input__cursor {
+  align-self: flex-start;
+  margin-top: 0.12em;
+}
+
+.seashell-crt .ss-terminal-input__cursor {
+  flex: none;
+  display: inline-block;
+  width: 0.45em;
+  min-width: 6px;
+  height: 1em;
+  margin-inline-end: 4px;
+  margin-inline-start: 0;
+  align-self: center;
+  background: var(--crt-fg-dim);
+  border-radius: 1px;
+  user-select: none;
+  pointer-events: none;
+  animation: ss-terminal-cursor-glow 2.2s ease-in-out infinite;
+}
+
+@keyframes ss-terminal-cursor-glow {
+  0%,
+  100% {
+    opacity: 0.16;
+    background: var(--crt-fg-dim);
+    box-shadow: none;
+  }
+
+  50% {
+    opacity: 1;
+    background: var(--crt-fg);
+    box-shadow:
+      0 0 8px color-mix(in srgb, var(--crt-accent) 55%, transparent),
+      0 0 2px color-mix(in srgb, var(--crt-fg) 35%, transparent);
+  }
+}
+
+.seashell-crt .ss-terminal-input--filled .ss-terminal-input__cursor {
+  opacity: 0;
+  visibility: hidden;
+  animation: none;
+}
+
+.seashell-crt .ss-terminal-input:not(.ss-terminal-input--filled) .ss-input,
+.seashell-crt .ss-terminal-input:not(.ss-terminal-input--filled) .ss-textarea {
+  caret-color: transparent;
+}
+
+.seashell-crt .ss-terminal-input--disabled .ss-terminal-input__cursor {
+  animation: none;
+  opacity: 0.35;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seashell-crt .ss-terminal-input__cursor {
+    animation: none;
+    opacity: 0.55;
+    background: var(--crt-fg-dim);
+  }
+}
+
+.seashell-crt .ss-terminal-input:has(.ss-input--ltr),
+.seashell-crt .ss-terminal-input:has(.ss-textarea--ltr) {
+  direction: ltr;
+}
+
+.seashell-crt .ss-input,
+.seashell-crt .ss-textarea {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--crt-fg);
+  border: none;
+  border-radius: 0;
+  font: inherit;
+  line-height: var(--ss-line-tight, 1.4);
+  caret-color: var(--crt-accent);
+  outline: none;
+  box-shadow: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.seashell-crt .ss-input:focus,
+.seashell-crt .ss-input:focus-visible,
+.seashell-crt .ss-textarea:focus,
+.seashell-crt .ss-textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.seashell-crt .ss-textarea {
+  min-height: 60px;
+  resize: vertical;
+}
+
+.seashell-crt .ss-textarea--compact {
+  min-height: 0;
+  max-height: 5.5em;
+  resize: none;
+  overflow-y: auto;
+}
+
+.seashell-crt .ss-locale-check {
+  color: var(--crt-accent);
+  flex-shrink: 0;
+}
+
+.seashell-crt .ss-cell__after {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seashell-crt .ss-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 1em;
+}
+
+.seashell-crt .ss-checkbox input {
+  margin-top: 3px;
+  accent-color: var(--crt-accent);
+}
+
+.seashell-crt .ss-modal-dismiss {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  color: var(--crt-fg);
+  font-size: 1.2em;
+  cursor: pointer;
+}
+
+.seashell-wordsets-shell__head .ss-modal-dismiss {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.seashell-card-lang-shell__head .ss-modal-dismiss {
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.seashell-crt .ss-snackbar {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 10001;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: min(92vw, 420px);
+  padding: 12px 14px;
+  background: var(--crt-bg-elev);
+  border: 1px solid var(--crt-border);
+  box-shadow: 0 8px 32px var(--crt-shell-shadow);
+  font-size: var(--ss-font-size-secondary, 0.95em);
+  line-height: var(--ss-line-tight, 1.42);
+}
+
+.seashell-crt .ss-snackbar__close {
+  border: none;
+  background: transparent;
+  color: var(--crt-fg-dim);
+  cursor: pointer;
+  font-size: 1.067em;
+}
+
+.seashell-crt .seashell-dict-delete-btn {
+  min-height: 0;
+  flex-shrink: 0;
+  padding: 0;
+  font-size: 1em;
+}
+
+.seashell-crt .ss-practice-echo-fix {
+  color: var(--crt-practice-fix-fg);
+  background: var(--crt-practice-fix-bg);
+  border-radius: 2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+.seashell-crt .ss-practice-text {
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.seashell-crt .ss-streaming-text--active {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.seashell-crt .ss-streaming-text__cursor {
+  display: inline-block;
+  width: 0.45em;
+  min-width: 6px;
+  height: 1em;
+  margin-inline-start: 1px;
+  vertical-align: text-bottom;
+  background: color-mix(in srgb, var(--crt-fg) 72%, #c0c0c0);
+  border-radius: 1px;
+  box-shadow: 0 0 6px color-mix(in srgb, #c0c0c0 45%, transparent);
+  animation: ss-streaming-cursor-blink 1.1s ease-in-out infinite;
+}
+
+.seashell-crt .ss-streaming-text .ss-streaming-text__cursor {
+  margin-inline-start: 0;
+}
+
+@keyframes ss-streaming-cursor-blink {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+
+  50% {
+    opacity: 1;
+    box-shadow:
+      0 0 10px color-mix(in srgb, #d8d8d8 65%, transparent),
+      0 0 3px color-mix(in srgb, var(--crt-fg) 40%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seashell-crt .ss-streaming-text__cursor {
+    animation: none;
+    opacity: 0.85;
+  }
+}
+
+.seashell-crt .ss-practice-word {
+  cursor: pointer;
+  border-radius: 2px;
+  touch-action: manipulation;
+}
+
+.seashell-crt .ss-practice-word--selected {
+  background: var(--crt-practice-word-selected);
+  box-shadow: 0 0 0 1px var(--crt-practice-word-selected-border);
+}
+
+.seashell-crt .ss-practice-ad {
+  margin: 8px 12px 16px;
+  padding: 10px 12px;
+  border: 1px dashed var(--crt-border-muted, rgba(127, 127, 127, 0.35));
+  border-radius: 6px;
+  text-align: center;
+  opacity: 0.72;
+}
+
+.seashell-crt .ss-practice-ad__banner {
+  font-size: var(--ss-font-size-caption, 0.9em);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.seashell-crt .ss-practice-ad__banner--muted {
+  opacity: 0.55;
+}
+
+html.seashell-ad-active .seashell-crt .ss-panel-root {
+  padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
+}
+
+.seashell-crt .ss-practice-ad__reward-hint {
+  margin-top: 6px;
+  font-size: var(--ss-font-size-micro, 0.875em);
+  opacity: 0.85;
+}
+
+/* RTL: العربية، فارسی — sans-serif + без letter-spacing (моноширинный ломает вязь) */
+html[dir='rtl'] .seashell-crt {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Naskh Arabic',
+    'Noto Sans Arabic', Tahoma, sans-serif;
+  letter-spacing: normal;
+}
+
+/* Кириллица / CJK — тот же принцип: без monospace-fallback (визуально крупнее латиницы) */
+html[lang='ru'] .seashell-crt,
+html[lang='uk'] .seashell-crt {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Noto Sans',
+    'Noto Sans Cyrillic', sans-serif;
+  letter-spacing: normal;
+}
+
+html[lang='ja'] .seashell-crt,
+html[lang='ko'] .seashell-crt {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Noto Sans',
+    'Noto Sans CJK JP', 'Noto Sans CJK KR', sans-serif;
+  letter-spacing: normal;
+}
+
+.seashell-crt .ss-native-name {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Noto Sans',
+    'Noto Sans Cyrillic', 'Noto Sans Arabic', sans-serif;
+  letter-spacing: normal;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+  font-size: inherit;
+  line-height: inherit;
+  font-weight: inherit;
+}
+
+.seashell-crt .ss-cell__title .ss-native-name,
+.seashell-crt .ss-cell__subtitle .ss-native-name,
+.seashell-crt .ss-card-lang-option .ss-native-name,
+.seashell-crt .ss-card-lang-trigger__value .ss-native-name {
+  font-size: inherit;
+  line-height: inherit;
+}
+
+html[dir='rtl'] .seashell-crt .seashell-segmented__item,
+html[dir='rtl'] .seashell-crt .ss-btn,
+html[lang='ru'] .seashell-crt .seashell-segmented__item,
+html[lang='ru'] .seashell-crt .ss-btn,
+html[lang='uk'] .seashell-crt .seashell-segmented__item,
+html[lang='uk'] .seashell-crt .ss-btn,
+html[lang='ja'] .seashell-crt .seashell-segmented__item,
+html[lang='ja'] .seashell-crt .ss-btn,
+html[lang='ko'] .seashell-crt .seashell-segmented__item,
+html[lang='ko'] .seashell-crt .ss-btn,
+html[dir='rtl'] .seashell-crt .ss-cell__title,
+html[lang='ru'] .seashell-crt .ss-cell__title,
+html[lang='uk'] .seashell-crt .ss-cell__title,
+html[lang='ja'] .seashell-crt .ss-cell__title,
+html[lang='ko'] .seashell-crt .ss-cell__title,
+html[dir='rtl'] .seashell-crt .ss-cell__subtitle,
+html[lang='ru'] .seashell-crt .ss-cell__subtitle,
+html[lang='uk'] .seashell-crt .ss-cell__subtitle,
+html[lang='ja'] .seashell-crt .ss-cell__subtitle,
+html[lang='ko'] .seashell-crt .ss-cell__subtitle,
+html[dir='rtl'] .seashell-crt .ss-group-title,
+html[lang='ru'] .seashell-crt .ss-group-title,
+html[lang='uk'] .seashell-crt .ss-group-title,
+html[lang='ja'] .seashell-crt .ss-group-title,
+html[lang='ko'] .seashell-crt .ss-group-title,
+html[dir='rtl'] .seashell-crt .ss-text,
+html[lang='ru'] .seashell-crt .ss-text,
+html[lang='uk'] .seashell-crt .ss-text,
+html[lang='ja'] .seashell-crt .ss-text,
+html[lang='ko'] .seashell-crt .ss-text,
+html[dir='rtl'] .seashell-crt .ss-footnote,
+html[lang='ru'] .seashell-crt .ss-footnote,
+html[lang='uk'] .seashell-crt .ss-footnote,
+html[lang='ja'] .seashell-crt .ss-footnote,
+html[lang='ko'] .seashell-crt .ss-footnote,
+html[dir='rtl'] .seashell-crt .ss-form-item__top,
+html[lang='ru'] .seashell-crt .ss-form-item__top,
+html[lang='uk'] .seashell-crt .ss-form-item__top,
+html[lang='ja'] .seashell-crt .ss-form-item__top,
+html[lang='ko'] .seashell-crt .ss-form-item__top,
+html[dir='rtl'] .seashell-crt .ss-panel-header__content,
+html[lang='ru'] .seashell-crt .ss-panel-header__content,
+html[lang='uk'] .seashell-crt .ss-panel-header__content,
+html[lang='ja'] .seashell-crt .ss-panel-header__content,
+html[lang='ko'] .seashell-crt .ss-panel-header__content,
+html[dir='rtl'] .seashell-crt .ss-hint__text,
+html[lang='ru'] .seashell-crt .ss-hint__text,
+html[lang='uk'] .seashell-crt .ss-hint__text,
+html[lang='ja'] .seashell-crt .ss-hint__text,
+html[lang='ko'] .seashell-crt .ss-hint__text,
+html[dir='rtl'] .seashell-crt .ss-flat-link,
+html[lang='ru'] .seashell-crt .ss-flat-link,
+html[lang='uk'] .seashell-crt .ss-flat-link,
+html[lang='ja'] .seashell-crt .ss-flat-link,
+html[lang='ko'] .seashell-crt .ss-flat-link,
+html[dir='rtl'] .seashell-crt .ss-terminal-input .ss-input:not(.ss-input--ltr),
+html[lang='ru'] .seashell-crt .ss-terminal-input .ss-input:not(.ss-input--ltr),
+html[lang='uk'] .seashell-crt .ss-terminal-input .ss-input:not(.ss-input--ltr),
+html[lang='ja'] .seashell-crt .ss-terminal-input .ss-input:not(.ss-input--ltr),
+html[lang='ko'] .seashell-crt .ss-terminal-input .ss-input:not(.ss-input--ltr),
+html[dir='rtl'] .seashell-crt .ss-terminal-input .ss-textarea:not(.ss-textarea--ltr),
+html[lang='ru'] .seashell-crt .ss-terminal-input .ss-textarea:not(.ss-textarea--ltr),
+html[lang='uk'] .seashell-crt .ss-terminal-input .ss-textarea:not(.ss-textarea--ltr),
+html[lang='ja'] .seashell-crt .ss-terminal-input .ss-textarea:not(.ss-textarea--ltr),
+html[lang='ko'] .seashell-crt .ss-terminal-input .ss-textarea:not(.ss-textarea--ltr) {
+  letter-spacing: normal;
+  font-feature-settings: 'liga' 1, 'calt' 1;
+}
+
+html[dir='rtl'] .seashell-crt .seashell-bootlog {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', Courier, monospace;
+  letter-spacing: 0.015em;
+}
+
+html[lang='ru'] .seashell-crt .seashell-bootlog,
+html[lang='uk'] .seashell-crt .seashell-bootlog,
+html[lang='ja'] .seashell-crt .seashell-bootlog,
+html[lang='ko'] .seashell-crt .seashell-bootlog {
+  font-family: 'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', Courier, monospace;
+  letter-spacing: 0.015em;
+}
+
+html[dir='rtl'] .seashell-crt .ss-panel-header {
+  direction: rtl;
+}
+
+html[dir='rtl'] .seashell-crt .ss-cell {
+  text-align: right;
+}
+
+html[dir='rtl'] .seashell-crt .ss-cell--selected {
+  box-shadow: inset -3px 0 0 var(--crt-accent);
+}
+
+html[dir='rtl'] .seashell-crt .ss-cell__main,
+html[dir='rtl'] .seashell-crt .ss-form-item__top,
+html[dir='rtl'] .seashell-crt .ss-footnote,
+html[dir='rtl'] .seashell-crt .ss-text,
+html[dir='rtl'] .seashell-crt .ss-group-title {
+  text-align: right;
+}
+
+html[dir='rtl'] .seashell-crt .ss-select {
+  text-align: right;
+}
+
+html[dir='rtl'] .seashell-crt .ss-textarea--ltr,
+html[dir='rtl'] .seashell-crt .ss-input--ltr {
+  direction: ltr;
+  text-align: left;
+}
+
+html[dir='rtl'] .seashell-crt .ss-terminal-input:not(:has(.ss-input--ltr)):not(:has(.ss-textarea--ltr)) {
+  direction: rtl;
+}
+
+html[dir='rtl'] .seashell-crt .ss-terminal-input .ss-input:not(.ss-input--ltr),
+html[dir='rtl'] .seashell-crt .ss-terminal-input .ss-textarea:not(.ss-textarea--ltr) {
+  text-align: start;
+}
+
+html[dir='rtl'] .seashell-crt .ss-terminal-input__cursor {
+  align-self: center;
+}
+
+html[dir='rtl'] .seashell-crt .ss-terminal-input:has(.ss-input--ltr),
+html[dir='rtl'] .seashell-crt .ss-terminal-input:has(.ss-textarea--ltr) {
+  direction: ltr;
+}
+
+html[dir='rtl'] .seashell-crt .ss-terminal-input--multiline .ss-terminal-input__cursor {
+  align-self: flex-start;
+  margin-top: 0.12em;
+}
+
+html[dir='rtl'] .seashell-crt .ss-modal-dismiss {
+  left: auto;
+  right: 2px;
+}
+
+html[dir='rtl'] .seashell-crt .seashell-wordsets-shell__head .ss-modal-dismiss {
+  left: auto;
+  right: 2px;
+}
+
+html[dir='rtl'] .seashell-crt .seashell-card-lang-shell__head .ss-modal-dismiss {
+  left: auto;
+  right: 2px;
+}
+
+/* Android Telegram WebView: fake terminal cursor + hidden caret confuse IME placement. */
+@media (hover: none) and (pointer: coarse) {
+  .seashell-crt .ss-terminal-input:focus-within .ss-terminal-input__cursor {
+    display: none;
+  }
+
+  .seashell-crt .ss-terminal-input:focus-within .ss-input,
+  .seashell-crt .ss-terminal-input:focus-within .ss-textarea {
+    caret-color: var(--crt-accent);
+  }
+
+  .seashell-crt .ss-form-item:has(.ss-input:focus, .ss-textarea:focus) {
+    scroll-margin-bottom: calc(var(--ss-keyboard-gap, 0px) + 72px);
+  }
+
+  .seashell-crt .ss-input,
+  .seashell-crt .ss-textarea {
+    transform: translateZ(0);
+  }
+}

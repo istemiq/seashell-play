@@ -1,0 +1,310 @@
+[
+  {
+    "id": 161,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "slay",
+    "past_simple": "slew",
+    "past_participle": "slain",
+    "translation": "убивать, уничтожать (обычно чудовищ или врагов)",
+    "transcription": "sleɪ",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "The knight slew the dragon and saved the village.",
+        "ru": "Рыцарь убил дракона и спас деревню."
+      },
+      {
+        "form": "past_participle",
+        "en": "Thousands were slain in that ancient war.",
+        "ru": "Тысячи были убиты в той древней войне."
+      }
+    ]
+  },
+  {
+    "id": 162,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "stride",
+    "past_simple": "strode",
+    "past_participle": "stridden",
+    "translation": "шагать размашисто, мерить шагами",
+    "transcription": "straɪd",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "He strode confidently into the meeting room.",
+        "ru": "Он уверенно вошел (шагнул) в комнату для совещаний."
+      },
+      {
+        "form": "past_participle",
+        "en": "She has stridden across the field to greet us.",
+        "ru": "Она пересекла поле размашистым шагом, чтобы поприветствовать нас."
+      }
+    ]
+  },
+  {
+    "id": 163,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "strew",
+    "past_simple": "strewed",
+    "past_participle": "strewn",
+    "translation": "посыпать, разбрасывать, усеивать",
+    "transcription": "struː",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "They strewed flower petals along the path.",
+        "ru": "Они разбросали лепестки цветов по тропинке."
+      },
+      {
+        "form": "past_participle",
+        "en": "The clothes were strewn all over the floor.",
+        "ru": "Одежда была разбросана по всему полу."
+      }
+    ]
+  },
+  {
+    "id": 164,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "forsake",
+    "past_simple": "forsook",
+    "past_participle": "forsaken",
+    "translation": "оставлять, покидать, отрекаться",
+    "transcription": "fɔːˈseɪk",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "He forsook his old friends when he became rich.",
+        "ru": "Он оставил своих старых друзей, когда разбогател."
+      },
+      {
+        "form": "past_participle",
+        "en": "She felt completely abandoned and forsaken.",
+        "ru": "Она чувствовала себя совершенно брошенной и покинутой."
+      }
+    ]
+  },
+  {
+    "id": 165,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "forswear",
+    "past_simple": "forswore",
+    "past_participle": "forsworn",
+    "translation": "отрекаться, давать ложную клятву",
+    "transcription": "fɔːˈsweə",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "He forswore his allegiance to the old king.",
+        "ru": "Он отрекся от своей верности старому королю."
+      },
+      {
+        "form": "past_participle",
+        "en": "The witness has forsworn himself in court.",
+        "ru": "Свидетель дал ложные показания (совершил лжесвидетельство) в суде."
+      }
+    ]
+  },
+  {
+    "id": 166,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "bespeak",
+    "past_simple": "bespoke",
+    "past_participle": "bespoken",
+    "translation": "заказывать заранее; свидетельствовать (о чём-л.)",
+    "transcription": "bɪˈspiːk",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "His elegant suit bespoke his high status.",
+        "ru": "Его элегантный костюм свидетельствовал о его высоком статусе."
+      },
+      {
+        "form": "past_participle",
+        "en": "This software was bespoken for a specific client.",
+        "ru": "Это программное обеспечение было сделано на заказ для конкретного клиента."
+      }
+    ]
+  },
+  {
+    "id": 167,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "shoe",
+    "past_simple": "shod",
+    "past_participle": "shod",
+    "translation": "обувать, подковывать",
+    "transcription": "ʃuː",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "The blacksmith shod the horse yesterday.",
+        "ru": "Кузнец подковал лошадь вчера."
+      },
+      {
+        "form": "past_participle",
+        "en": "His feet were shod in heavy leather boots.",
+        "ru": "Его ноги были обуты в тяжелые кожаные сапоги."
+      }
+    ]
+  },
+  {
+    "id": 168,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "string",
+    "past_simple": "strung",
+    "past_participle": "strung",
+    "translation": "натягивать струну, нанизывать",
+    "transcription": "strɪŋ",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "She strung the pearls carefully onto the wire.",
+        "ru": "Она аккуратно нанизала жемчуг на проволоку."
+      },
+      {
+        "form": "past_participle",
+        "en": "The guitar was strung with expensive nylon.",
+        "ru": "На гитару были натянуты дорогие нейлоновые струны."
+      }
+    ]
+  },
+  {
+    "id": 169,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "sublet",
+    "past_simple": "sublet",
+    "past_participle": "sublet",
+    "translation": "сдавать в субаренду",
+    "transcription": "ˌsʌbˈlet",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "He sublet the apartment while he was away.",
+        "ru": "Он сдал квартиру в субаренду, пока его не было."
+      },
+      {
+        "form": "past_participle",
+        "en": "The office space has been sublet to another firm.",
+        "ru": "Офисное помещение было сдано в субаренду другой фирме."
+      }
+    ]
+  },
+  {
+    "id": 170,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "mislay",
+    "past_simple": "mislaid",
+    "past_participle": "mislaid",
+    "translation": "положить не на место, затерять",
+    "transcription": "ˌmɪsˈleɪ",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "I mislaid my keys somewhere in the office.",
+        "ru": "Я куда-то засунул (положил не на место) свои ключи в офисе."
+      },
+      {
+        "form": "past_participle",
+        "en": "The important file has been mislaid again.",
+        "ru": "Важный файл снова куда-то затерялся."
+      }
+    ]
+  },
+  {
+    "id": 171,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "overdo",
+    "past_simple": "overdid",
+    "past_participle": "overdone",
+    "translation": "переусердствовать, переборщить",
+    "transcription": "ˌəʊvəˈduː",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "He overdid the exercise and hurt his back.",
+        "ru": "Он переусердствовал с упражнениями и повредил спину."
+      },
+      {
+        "form": "past_participle",
+        "en": "The steak was completely overdone and dry.",
+        "ru": "Стейк был совершенно пережарен (передержан) и высушен."
+      }
+    ]
+  },
+  {
+    "id": 172,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "outgrow",
+    "past_simple": "outgrew",
+    "past_participle": "outgrown",
+    "translation": "вырастать из одежды/привычки",
+    "transcription": "ˌaʊtˈɡrəʊ",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "The child quickly outgrew his winter coat.",
+        "ru": "Ребенок быстро вырос из своего зимнего пальто."
+      },
+      {
+        "form": "past_participle",
+        "en": "He has outgrown his childhood fears.",
+        "ru": "Он уже перерос свои детские страхи."
+      }
+    ]
+  },
+  {
+    "id": 173,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "partake",
+    "past_simple": "partook",
+    "past_participle": "partaken",
+    "translation": "принимать участие, отведать (пищу/напитки)",
+    "transcription": "pɑːˈteɪk",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "They partook of the traditional ceremony.",
+        "ru": "Они приняли участие в традиционной церемонии."
+      },
+      {
+        "form": "past_participle",
+        "en": "We have partaken of their hospitality tonight.",
+        "ru": "Сегодня вечером мы вкусили (разделили) их гостеприимство."
+      }
+    ]
+  },
+  {
+    "id": 174,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "withhold",
+    "past_simple": "withheld",
+    "past_participle": "withheld",
+    "translation": "удерживать, скрывать информацию, не выдавать",
+    "transcription": "wɪðˈhəʊld",
+    "examples": [
+      {
+        "form": "past_simple",
+        "en": "The suspect withheld crucial evidence from us.",
+        "ru": "Подозреваемый скрыл от нас ключевые улики."
+      },
+      {
+        "form": "past_participle",
+        "en": "Taxes are automatically withheld from his salary.",
+        "ru": "Налоги автоматически удерживаются из его зарплаты."
+      }
+    ]
+  }
+]

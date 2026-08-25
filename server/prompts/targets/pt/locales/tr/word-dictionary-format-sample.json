@@ -1,0 +1,46 @@
+{
+  "headwordEn": "água",
+  "glossRu": "água [ˈaɡwɐ] — madde olarak su; içme suyu; nötr",
+  "examples": [
+    {
+      "text": "Preciso de um copo de água.",
+      "translation": "Bir bardak suya ihtiyacım var. — nötr"
+    },
+    {
+      "text": "A água está quente o suficiente para o chá?",
+      "translation": "Su çay için yeterince sıcak mı? — nötr"
+    },
+    {
+      "text": "Caminhamos à beira da água.",
+      "translation": "Suyun kenarında yürüdük. — nötr"
+    },
+    {
+      "text": "Cortaram a água no bairro a manhã inteira.",
+      "translation": "Sabah boyunca su kesildi. — nötr"
+    },
+    {
+      "text": "Posso pegar um pouco de água, por favor?",
+      "translation": "Biraz su alabilir miyim, lütfen? — nötr"
+    },
+    {
+      "text": "Tem água? Estou com muita sede.",
+      "translation": "Su var mı? Susuzluktan ölüyorum. — informal"
+    },
+    {
+      "text": "A prefeitura garantirá o fornecimento ininterrupto de água potável.",
+      "translation": "Belediye kesintisiz içme suyu teminini sağlamalıdır. — resmi"
+    },
+    {
+      "text": "Analisaram a água para verificar se era segura.",
+      "translation": "Suyu güvenlik açısından test ettiler. — nötr"
+    },
+    {
+      "text": "Economize água quando escovar os dentes.",
+      "translation": "Dişlerini fırçalarken su tasarrufu yap. — informal"
+    },
+    {
+      "text": "A água doce é importante para a saúde.",
+      "translation": "Tatlı su sağlık için önemlidir. — nötr"
+    }
+  ]
+}

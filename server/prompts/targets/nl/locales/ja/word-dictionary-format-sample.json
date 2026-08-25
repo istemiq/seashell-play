@@ -1,0 +1,46 @@
+{
+  "headwordEn": "water",
+  "glossRu": "water [ˈʋaːtər] — 物質としての水；飲料水；中立",
+  "examples": [
+    {
+      "text": "Ik heb een glas water nodig.",
+      "translation": "コップ一杯の水が必要です。 — 中立"
+    },
+    {
+      "text": "Is het water warm genoeg voor thee?",
+      "translation": "お茶にするにはお湯は十分熱いですか。 — 中立"
+    },
+    {
+      "text": "We liepen langs het water.",
+      "translation": "水辺に沿って歩きました。 — 中立"
+    },
+    {
+      "text": "Het water viel de hele ochtend uit in de buurt.",
+      "translation": "午前中ずっと断水でした。 — 中立"
+    },
+    {
+      "text": "Mag ik wat water, alsjeblieft?",
+      "translation": "水を少しいただけますか。 — 中立"
+    },
+    {
+      "text": "Heb je water? Ik heb erg veel dorst.",
+      "translation": "水ある？喉がカラカラだ。 — カジュアル"
+    },
+    {
+      "text": "De gemeente zal zorgen voor een ononderbroken drinkwatervoorziening.",
+      "translation": "市は途切れない飲料水の供給を確保しなければならない。 — フォーマル"
+    },
+    {
+      "text": "Ze hebben het water getest om te controleren of het veilig was.",
+      "translation": "彼らは水の安全性を検査した。 — 中立"
+    },
+    {
+      "text": "Bespaar water als je je tanden poetst.",
+      "translation": "歯を磨くときは水を節約しなさい。 — カジュアル"
+    },
+    {
+      "text": "Zoet water is belangrijk voor de gezondheid.",
+      "translation": "淡水は健康にとって重要だ。 — 中立"
+    }
+  ]
+}

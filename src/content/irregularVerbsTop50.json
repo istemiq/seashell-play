@@ -1,0 +1,502 @@
+[
+  {
+    "id": 1,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "be",
+    "past_simple": "was/were",
+    "past_participle": "been",
+    "translation": "быть",
+    "transcription": "biː"
+  },
+  {
+    "id": 2,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "do",
+    "past_simple": "did",
+    "past_participle": "done",
+    "translation": "делать",
+    "transcription": "duː"
+  },
+  {
+    "id": 3,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "go",
+    "past_simple": "went",
+    "past_participle": "gone",
+    "translation": "идти, ехать",
+    "transcription": "ɡəʊ"
+  },
+  {
+    "id": 4,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "see",
+    "past_simple": "saw",
+    "past_participle": "seen",
+    "translation": "видеть",
+    "transcription": "siː"
+  },
+  {
+    "id": 5,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "eat",
+    "past_simple": "ate",
+    "past_participle": "eaten",
+    "translation": "есть, кушать",
+    "transcription": "iːt"
+  },
+  {
+    "id": 6,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "fall",
+    "past_simple": "fell",
+    "past_participle": "fallen",
+    "translation": "падать",
+    "transcription": "fɔːl"
+  },
+  {
+    "id": 7,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "give",
+    "past_simple": "gave",
+    "past_participle": "given",
+    "translation": "давать",
+    "transcription": "ɡɪv"
+  },
+  {
+    "id": 8,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "take",
+    "past_simple": "took",
+    "past_participle": "taken",
+    "translation": "брать",
+    "transcription": "teɪk"
+  },
+  {
+    "id": 9,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "write",
+    "past_simple": "wrote",
+    "past_participle": "written",
+    "translation": "писать",
+    "transcription": "raɪt"
+  },
+  {
+    "id": 10,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "speak",
+    "past_simple": "spoke",
+    "past_participle": "spoken",
+    "translation": "говорить",
+    "transcription": "spiːk"
+  },
+  {
+    "id": 11,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "choose",
+    "past_simple": "chose",
+    "past_participle": "chosen",
+    "translation": "выбирать",
+    "transcription": "tʃuːz"
+  },
+  {
+    "id": 12,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "break",
+    "past_simple": "broke",
+    "past_participle": "broken",
+    "translation": "ломать",
+    "transcription": "breɪk"
+  },
+  {
+    "id": 13,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "fly",
+    "past_simple": "flew",
+    "past_participle": "flown",
+    "translation": "летать",
+    "transcription": "flaɪ"
+  },
+  {
+    "id": 14,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "know",
+    "past_simple": "knew",
+    "past_participle": "known",
+    "translation": "знать",
+    "transcription": "nəʊ"
+  },
+  {
+    "id": 15,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "grow",
+    "past_simple": "grew",
+    "past_participle": "grown",
+    "translation": "расти",
+    "transcription": "ɡrəʊ"
+  },
+  {
+    "id": 16,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "throw",
+    "past_simple": "threw",
+    "past_participle": "thrown",
+    "translation": "бросать",
+    "transcription": "θrəʊ"
+  },
+  {
+    "id": 17,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "draw",
+    "past_simple": "drew",
+    "past_participle": "drawn",
+    "translation": "рисовать",
+    "transcription": "drɔː"
+  },
+  {
+    "id": 18,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "show",
+    "past_simple": "showed",
+    "past_participle": "shown",
+    "translation": "показывать",
+    "transcription": "ʃəʊ"
+  },
+  {
+    "id": 19,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "begin",
+    "past_simple": "began",
+    "past_participle": "begun",
+    "translation": "начинать",
+    "transcription": "bɪˈɡɪn"
+  },
+  {
+    "id": 20,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "drink",
+    "past_simple": "drank",
+    "past_participle": "drunk",
+    "translation": "пить",
+    "transcription": "drɪŋk"
+  },
+  {
+    "id": 21,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "swim",
+    "past_simple": "swam",
+    "past_participle": "swum",
+    "translation": "плавать",
+    "transcription": "swɪm"
+  },
+  {
+    "id": 22,
+    "block": "top_50",
+    "pattern": "ABC",
+    "infinitive": "run",
+    "past_simple": "ran",
+    "past_participle": "run",
+    "translation": "бежать",
+    "transcription": "rʌn"
+  },
+  {
+    "id": 23,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "have",
+    "past_simple": "had",
+    "past_participle": "had",
+    "translation": "иметь",
+    "transcription": "hæv"
+  },
+  {
+    "id": 24,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "say",
+    "past_simple": "said",
+    "past_participle": "said",
+    "translation": "сказать",
+    "transcription": "seɪ"
+  },
+  {
+    "id": 25,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "make",
+    "past_simple": "made",
+    "past_participle": "made",
+    "translation": "делать, создавать",
+    "transcription": "meɪk"
+  },
+  {
+    "id": 26,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "get",
+    "past_simple": "got",
+    "past_participle": "got",
+    "translation": "получать, становиться",
+    "transcription": "ɡet"
+  },
+  {
+    "id": 27,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "tell",
+    "past_simple": "told",
+    "past_participle": "told",
+    "translation": "рассказывать",
+    "transcription": "tel"
+  },
+  {
+    "id": 28,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "sell",
+    "past_simple": "sold",
+    "past_participle": "sold",
+    "translation": "продавать",
+    "transcription": "sel"
+  },
+  {
+    "id": 29,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "think",
+    "past_simple": "thought",
+    "past_participle": "thought",
+    "translation": "думать",
+    "transcription": "θɪŋk"
+  },
+  {
+    "id": 30,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "bring",
+    "past_simple": "brought",
+    "past_participle": "brought",
+    "translation": "приносить",
+    "transcription": "brɪŋ"
+  },
+  {
+    "id": 31,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "buy",
+    "past_simple": "bought",
+    "past_participle": "bought",
+    "translation": "покупать",
+    "transcription": "baɪ"
+  },
+  {
+    "id": 32,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "catch",
+    "past_simple": "caught",
+    "past_participle": "caught",
+    "translation": "ловить",
+    "transcription": "kætʃ"
+  },
+  {
+    "id": 33,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "keep",
+    "past_simple": "kept",
+    "past_participle": "kept",
+    "translation": "держать, сохранять",
+    "transcription": "kiːp"
+  },
+  {
+    "id": 34,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "leave",
+    "past_simple": "left",
+    "past_participle": "left",
+    "translation": "оставлять, уходить",
+    "transcription": "liːv"
+  },
+  {
+    "id": 35,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "sleep",
+    "past_simple": "slept",
+    "past_participle": "slept",
+    "translation": "спать",
+    "transcription": "sliːp"
+  },
+  {
+    "id": 36,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "feel",
+    "past_simple": "felt",
+    "past_participle": "felt",
+    "translation": "чувствовать",
+    "transcription": "fiːl"
+  },
+  {
+    "id": 37,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "meet",
+    "past_simple": "met",
+    "past_participle": "met",
+    "translation": "встречать",
+    "transcription": "miːt"
+  },
+  {
+    "id": 38,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "lead",
+    "past_simple": "led",
+    "past_participle": "led",
+    "translation": "вести за собой",
+    "transcription": "liːd"
+  },
+  {
+    "id": 39,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "find",
+    "past_simple": "found",
+    "past_participle": "found",
+    "translation": "находить",
+    "transcription": "faɪnd"
+  },
+  {
+    "id": 40,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "hear",
+    "past_simple": "heard",
+    "past_participle": "heard",
+    "translation": "слышать",
+    "transcription": "hɪə"
+  },
+  {
+    "id": 41,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "lose",
+    "past_simple": "lost",
+    "past_participle": "lost",
+    "translation": "терять",
+    "transcription": "luːz"
+  },
+  {
+    "id": 42,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "pay",
+    "past_simple": "paid",
+    "past_participle": "paid",
+    "translation": "платить",
+    "transcription": "peɪ"
+  },
+  {
+    "id": 43,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "spend",
+    "past_simple": "spent",
+    "past_participle": "spent",
+    "translation": "тратить",
+    "transcription": "spend"
+  },
+  {
+    "id": 44,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "send",
+    "past_simple": "sent",
+    "past_participle": "sent",
+    "translation": "отправлять",
+    "transcription": "send"
+  },
+  {
+    "id": 45,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "build",
+    "past_simple": "built",
+    "past_participle": "built",
+    "translation": "строить",
+    "transcription": "bɪld"
+  },
+  {
+    "id": 46,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "understand",
+    "past_simple": "understood",
+    "past_participle": "understood",
+    "translation": "понимать",
+    "transcription": "ˌʌndəˈstænd"
+  },
+  {
+    "id": 47,
+    "block": "top_50",
+    "pattern": "ABB",
+    "infinitive": "win",
+    "past_simple": "won",
+    "past_participle": "won",
+    "translation": "побеждать",
+    "transcription": "wɪn"
+  },
+  {
+    "id": 48,
+    "block": "top_50",
+    "pattern": "AAA",
+    "infinitive": "put",
+    "past_simple": "put",
+    "past_participle": "put",
+    "translation": "класть",
+    "transcription": "pʊt"
+  },
+  {
+    "id": 49,
+    "block": "top_50",
+    "pattern": "AAA",
+    "infinitive": "let",
+    "past_simple": "let",
+    "past_participle": "let",
+    "translation": "позволять",
+    "transcription": "let"
+  },
+  {
+    "id": 50,
+    "block": "top_50",
+    "pattern": "AAA",
+    "infinitive": "cut",
+    "past_simple": "cut",
+    "past_participle": "cut",
+    "translation": "резать",
+    "transcription": "kʌt"
+  }
+]

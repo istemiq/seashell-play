@@ -1,0 +1,46 @@
+{
+  "headwordEn": "eau",
+  "glossRu": "eau [o] — الماء كمادة؛ ماء للشرب؛ محايد",
+  "examples": [
+    {
+      "text": "J'ai besoin d'un verre d'eau.",
+      "translation": "أحتاج إلى كوب من الماء. — محايد"
+    },
+    {
+      "text": "L'eau est-elle assez chaude pour le thé ?",
+      "translation": "هل الماء ساخن بما يكفي للشاي؟ — محايد"
+    },
+    {
+      "text": "Nous avons marché le long de l'eau.",
+      "translation": "سرنا على طول الماء. — محايد"
+    },
+    {
+      "text": "L'eau a été coupée dans le quartier toute la matinée.",
+      "translation": "قطعوا الماء طوال الصباح. — محايد"
+    },
+    {
+      "text": "Puis-je avoir un peu d'eau, s'il vous plaît ?",
+      "translation": "هل يمكنني بعض الماء، من فضلك؟ — محايد"
+    },
+    {
+      "text": "Tu as de l'eau ? J'ai très soif.",
+      "translation": "هل يوجد ماء؟ أموت من العطش. — غير رسمي"
+    },
+    {
+      "text": "La municipalité garantira un approvisionnement ininterrompu en eau potable.",
+      "translation": "يجب على البلدية ضمان إمدادات مستمرة من مياه الشرب. — رسمي"
+    },
+    {
+      "text": "Ils ont testé l'eau pour vérifier qu'elle était sûre.",
+      "translation": "اختبروا الماء من أجل السلامة. — محايد"
+    },
+    {
+      "text": "Économisez l'eau quand vous vous brossez les dents.",
+      "translation": "وفّر الماء عندما تنظف أسنانك. — غير رسمي"
+    },
+    {
+      "text": "L'eau douce est importante pour la santé.",
+      "translation": "الماء العذب مهم للصحة. — محايد"
+    }
+  ]
+}

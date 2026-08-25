@@ -1,0 +1,46 @@
+{
+  "headwordEn": "vand",
+  "glossRu": "vand [van] — вода как вещество; питьевая вода; нейтр.",
+  "examples": [
+    {
+      "text": "Jeg har brug for et glas vand.",
+      "translation": "Мне нужен стакан воды. — нейтр."
+    },
+    {
+      "text": "Er vandet varmt nok til te?",
+      "translation": "Вода достаточно горячая для чая? — нейтр."
+    },
+    {
+      "text": "Vi gik langs vandet.",
+      "translation": "Мы шли вдоль воды. — нейтр."
+    },
+    {
+      "text": "Vandet blev afbrudt i kvarteret hele morgenen.",
+      "translation": "Воду отключили на всё утро. — нейтр."
+    },
+    {
+      "text": "Kan jeg få noget vand, tak?",
+      "translation": "Можно немного воды, пожалуйста? — нейтр."
+    },
+    {
+      "text": "Har du vand? Jeg er meget tørstig.",
+      "translation": "Есть водичка? Умираю от жажды. — неформ."
+    },
+    {
+      "text": "Kommunen skal sikre uafbrudt forsyning af drikkevand.",
+      "translation": "Муниципалитет обязан обеспечить бесперебойное снабжение питьевой водой. — офиц."
+    },
+    {
+      "text": "De testede vandet for at sikre, at det var sikkert.",
+      "translation": "Они проверили воду на безопасность. — нейтр."
+    },
+    {
+      "text": "Spar vand, når du børster tænder.",
+      "translation": "Экономь воду, когда чистишь зубы. — неформ."
+    },
+    {
+      "text": "Ferskvand er vigtigt for sundheden.",
+      "translation": "Пресная вода важна для здоровья. — нейтр."
+    }
+  ]
+}

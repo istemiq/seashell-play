@@ -1,0 +1,43 @@
+# Локальный API + Postgres для seashell_tg_clean.
+# server/ — junction на ../seashell_tg/server (один код бэкенда).
+#
+# Перед первым запуском: server/.env (скопируй из server/.env.example в seashell_tg).
+# Только Postgres: npm run db
+# API + БД в Docker: npm run compose
+# Фронт + API на хосте: npm run dev (Vite проксирует /api и /tts → :3001)
+
+services:
+  db:
+    image: postgres:16-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_USER: seashell
+      POSTGRES_PASSWORD: seashell
+      POSTGRES_DB: seashell
+    volumes:
+      - seashell-pg-clean:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U seashell -d seashell']
+      interval: 3s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3001'
+    env_file:
+      - ./server/.env
+    environment:
+      DATABASE_URL: postgresql://seashell:seashell@db:5432/seashell
+      TELEGRAM_ALLOW_LOCALHOST_HEADER: '1'
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  seashell-pg-clean:

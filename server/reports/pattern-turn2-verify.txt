@@ -1,0 +1,55 @@
+Summary: 3/5 passed
+
+Pattern turn-2 verify — 2026-08-05T19:41:26.116Z
+
+=== ru/ru — wrong skeleton (pain, not duration+activity) FAIL ===
+Anchor: Я всю ночь этим занимаюсь
+User turn2: У меня болит спина от долгого сидения.
+Expected corrections: yes | got: yes
+Reply looks like new pattern lesson: YES (bad)
+echo: У меня болит спина от долгого сидения.
+corrections: В вашем предложении другая структура: нет временного отрезка + указательного местоимения + глагола в настоящем времени. Нужно повторить модель, как в примере «Я всю ночь этим занимаюсь». Например: «Я весь вечер этим увлекаюсь».
+reply:
+Попробуйте ещё раз с той же структурой: местоимение + временной отрезок + указательное местоимение + глагол в настоящем времени. Например: «Она весь день этим интересуется». Напишите своё предложение по этому образцу.
+
+=== ru/ru — same skeleton, new topic FAIL ===
+Anchor: Я всю ночь этим занимаюсь
+User turn2: Я весь день этим занимаюсь.
+Expected corrections: no | got: no
+Reply looks like new pattern lesson: YES (bad)
+echo: Я весь день этим занимаюсь.
+corrections: null
+reply:
+Отлично! Ты правильно использовал структуру «весь день + этим + занимаюсь». Вот ещё пример:
+• «Он весь день этим увлекается» → «Она весь день этим увлекается»
+Попробуй написать ещё одно предложение с такой же структурой, но на другую тему.
+
+=== ru/en — wrong skeleton PASS ===
+Anchor: I've been doing it all night
+User turn2: My back hurts from sitting so long.
+Expected corrections: yes | got: yes
+Reply looks like new pattern lesson: no
+echo: null
+corrections: Это не соответствует шаблону Present Perfect Continuous. Вместо этого вы использовали Present Simple. Нужно: 'have been' + глагол с -ing + время. Пример: «I've been working on this project all day.»
+reply:
+Попробуйте снова с шаблоном Present Perfect Continuous. Напишите предложение, как в примере выше.
+
+=== en/ru — wrong skeleton (UI English) PASS ===
+Anchor: Я всю ночь этим занимаюсь
+User turn2: У меня болит спина от долгого сидения.
+Expected corrections: yes | got: yes
+Reply looks like new pattern lesson: no
+echo: У меня болит спина от долгого сидения.
+corrections: The anchor pattern is '[Subject] + [Time duration] + [Pronoun/Object] + [Verb in present tense]'. Your sentence uses a different structure (pain + cause). Try mirroring: 'Я [time] [activity] занимаюсь.' Example: 'Я весь день этим занимаюсь.'
+reply:
+Focus on the original pattern: duration + activity. • «Он всю неделю этим занимается.» → «Она все утро этим занимается.» Напишите предложение по образцу: время + занятие.
+
+=== en/en — matching present perfect continuous PASS ===
+Anchor: I've been doing it all night
+User turn2: She's been reading that book all morning.
+Expected corrections: no | got: no
+Reply looks like new pattern lesson: no
+echo: She's been reading that book all morning.
+corrections: null
+reply:
+Good! Same pattern as the anchor. • «They’ve been painting the house all weekend.» → «You’ve been learning English for years.» Now, write another sentence with the same structure (present perfect continuous + time phrase).

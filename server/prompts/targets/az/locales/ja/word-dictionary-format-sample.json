@@ -1,0 +1,46 @@
+{
+  "headwordEn": "su",
+  "glossRu": "su [su] — 物質としての水；飲料水；中立",
+  "examples": [
+    {
+      "text": "Mənə bir stəkan su lazımdır.",
+      "translation": "コップ一杯の水が必要です。 — 中立"
+    },
+    {
+      "text": "Çay üçün su kif qədər istidir?",
+      "translation": "お茶にするにはお湯は十分熱いですか。 — 中立"
+    },
+    {
+      "text": "Biz su kənarında gəzdik.",
+      "translation": "水辺に沿って歩きました。 — 中立"
+    },
+    {
+      "text": "Bütün səhər su kəsildi.",
+      "translation": "午前中ずっと断水でした。 — 中立"
+    },
+    {
+      "text": "Bir az su ala bilərəmmi?",
+      "translation": "水を少しいただけますか。 — 中立"
+    },
+    {
+      "text": "Su var? Çox susamışam.",
+      "translation": "水ある？喉がカラカラだ。 — カジュアル"
+    },
+    {
+      "text": "Bələdiyyə fasiləsiz içməli su təchizatını təmin edəcək.",
+      "translation": "市は途切れない飲料水の供給を確保しなければならない。 — フォーマル"
+    },
+    {
+      "text": "Onlar təhlükəsizlik üçün suyu yoxladılar.",
+      "translation": "彼らは水の安全性を検査した。 — 中立"
+    },
+    {
+      "text": "Dişlərini fırçalayarkən suya qənaət et.",
+      "translation": "歯を磨くときは水を節約しなさい。 — カジュアル"
+    },
+    {
+      "text": "Şirin su sağlamlıq üçün vacibdir.",
+      "translation": "淡水は健康にとって重要だ。 — 中立"
+    }
+  ]
+}

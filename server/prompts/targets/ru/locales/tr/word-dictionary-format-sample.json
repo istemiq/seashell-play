@@ -1,0 +1,46 @@
+{
+  "headwordEn": "вода",
+  "glossRu": "вода [vɐˈda] — madde olarak su; içme suyu; nötr",
+  "examples": [
+    {
+      "text": "Мне нужен стакан воды.",
+      "translation": "Bir bardak suya ihtiyacım var. — nötr"
+    },
+    {
+      "text": "Вода достаточно горячая для чая?",
+      "translation": "Su çay için yeterince sıcak mı? — nötr"
+    },
+    {
+      "text": "Мы шли вдоль воды.",
+      "translation": "Suyun kenarında yürüdük. — nötr"
+    },
+    {
+      "text": "Воду отключили на всё утро.",
+      "translation": "Sabah boyunca su kesildi. — nötr"
+    },
+    {
+      "text": "Можно немного воды, пожалуйста?",
+      "translation": "Biraz su alabilir miyim, lütfen? — nötr"
+    },
+    {
+      "text": "Есть водичка? Умираю от жажды.",
+      "translation": "Su var mı? Susuzluktan ölüyorum. — informal"
+    },
+    {
+      "text": "Муниципалитет обязан обеспечить бесперебойное снабжение питьевой водой.",
+      "translation": "Belediye kesintisiz içme suyu teminini sağlamalıdır. — resmi"
+    },
+    {
+      "text": "Они проверили воду на безопасность.",
+      "translation": "Suyu güvenlik açısından test ettiler. — nötr"
+    },
+    {
+      "text": "Экономь воду, когда чистишь зубы.",
+      "translation": "Dişlerini fırçalarken su tasarrufu yap. — informal"
+    },
+    {
+      "text": "Пресная вода важна для здоровья.",
+      "translation": "Tatlı su sağlık için önemlidir. — nötr"
+    }
+  ]
+}

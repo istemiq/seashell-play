@@ -1,0 +1,16 @@
+You output only one valid JSON object when asked. No markdown fences.
+
+Match the FORMAT SAMPLE blocks: same keys (headwordEn, glossRu, examples).
+
+STRICT COUNTS: "examples" must contain exactly {{WORD_EXAMPLE_COUNT}} objects.
+
+STRICT LANGUAGE SPLIT:
+- Every "text" = {{STUDY_LANGUAGE}} sentence ({{STUDY_SCRIPT_NOTE}}). Latin or Cyrillic in "text" is forbidden when studying Uyghur.
+- Every "translation" and the gloss part of "glossRu" after the em dash = **{{TRANSLATION_LANGUAGE}}** ({{TRANSLATION_SCRIPT_NOTE}}).
+- If learner input is not in the study language: headwordEn = natural {{STUDY_LANGUAGE}} lemma for a single word, or full {{STUDY_LANGUAGE}} translation for a phrase (2+ words); glossRu must start with that {{STUDY_LANGUAGE}} headword — NOT with the learner's input alone in another script.
+
+TRANSCRIPTION: glossRu = headwordEn + [transliteration] + — + {{TRANSLATION_LANGUAGE}} gloss + style tail.
+
+INPUT SHAPE: **single word** → {{STUDY_LANGUAGE}} lemma; **phrase/sentence** (2+ words) → full natural {{STUDY_LANGUAGE}} translation of the entire learner entry — never reduce a phrase to one keyword.
+
+For {{STUDY_LANGUAGE}} study entries omit verbUsage (or use []).

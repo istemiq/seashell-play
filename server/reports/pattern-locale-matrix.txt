@@ -1,0 +1,8 @@
+PATTERN PRACTICE — UI LOCALE × STUDY MODULE MATRIX
+Generated: 2026-08-05T16:55:52.747Z
+Pairs: 0
+
+Legend: UI = interface language; Study = language being learned.
+Turn 1 = anchor analysis; Turn 2 = learner tries the pattern.
+ru/uk UI: no RU gloss. Other UI: [RU gloss] after LLM reply.
+================================================================================

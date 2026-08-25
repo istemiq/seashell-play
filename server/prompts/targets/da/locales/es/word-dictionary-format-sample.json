@@ -1,0 +1,46 @@
+{
+  "headwordEn": "vand",
+  "glossRu": "vand [van] — agua como sustancia; agua potable; neutro",
+  "examples": [
+    {
+      "text": "Jeg har brug for et glas vand.",
+      "translation": "Necesito un vaso de agua. — neutro"
+    },
+    {
+      "text": "Er vandet varmt nok til te?",
+      "translation": "¿El agua está lo bastante caliente para el té? — neutro"
+    },
+    {
+      "text": "Vi gik langs vandet.",
+      "translation": "Caminamos junto al agua. — neutro"
+    },
+    {
+      "text": "Vandet blev afbrudt i kvarteret hele morgenen.",
+      "translation": "Cortaron el agua toda la mañana. — neutro"
+    },
+    {
+      "text": "Kan jeg få noget vand, tak?",
+      "translation": "¿Me das un poco de agua, por favor? — neutro"
+    },
+    {
+      "text": "Har du vand? Jeg er meget tørstig.",
+      "translation": "¿Hay agüita? Me muero de sed. — informal"
+    },
+    {
+      "text": "Kommunen skal sikre uafbrudt forsyning af drikkevand.",
+      "translation": "El municipio debe garantizar el suministro ininterrumpido de agua potable. — formal"
+    },
+    {
+      "text": "De testede vandet for at sikre, at det var sikkert.",
+      "translation": "Comprobaron la seguridad del agua. — neutro"
+    },
+    {
+      "text": "Spar vand, når du børster tænder.",
+      "translation": "Ahorra agua cuando te laves los dientes. — informal"
+    },
+    {
+      "text": "Ferskvand er vigtigt for sundheden.",
+      "translation": "El agua dulce es importante para la salud. — neutro"
+    }
+  ]
+}

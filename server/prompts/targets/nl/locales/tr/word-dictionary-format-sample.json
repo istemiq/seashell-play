@@ -1,0 +1,46 @@
+{
+  "headwordEn": "water",
+  "glossRu": "water [ˈʋaːtər] — madde olarak su; içme suyu; nötr",
+  "examples": [
+    {
+      "text": "Ik heb een glas water nodig.",
+      "translation": "Bir bardak suya ihtiyacım var. — nötr"
+    },
+    {
+      "text": "Is het water warm genoeg voor thee?",
+      "translation": "Su çay için yeterince sıcak mı? — nötr"
+    },
+    {
+      "text": "We liepen langs het water.",
+      "translation": "Suyun kenarında yürüdük. — nötr"
+    },
+    {
+      "text": "Het water viel de hele ochtend uit in de buurt.",
+      "translation": "Sabah boyunca su kesildi. — nötr"
+    },
+    {
+      "text": "Mag ik wat water, alsjeblieft?",
+      "translation": "Biraz su alabilir miyim, lütfen? — nötr"
+    },
+    {
+      "text": "Heb je water? Ik heb erg veel dorst.",
+      "translation": "Su var mı? Susuzluktan ölüyorum. — informal"
+    },
+    {
+      "text": "De gemeente zal zorgen voor een ononderbroken drinkwatervoorziening.",
+      "translation": "Belediye kesintisiz içme suyu teminini sağlamalıdır. — resmi"
+    },
+    {
+      "text": "Ze hebben het water getest om te controleren of het veilig was.",
+      "translation": "Suyu güvenlik açısından test ettiler. — nötr"
+    },
+    {
+      "text": "Bespaar water als je je tanden poetst.",
+      "translation": "Dişlerini fırçalarken su tasarrufu yap. — informal"
+    },
+    {
+      "text": "Zoet water is belangrijk voor de gezondheid.",
+      "translation": "Tatlı su sağlık için önemlidir. — nötr"
+    }
+  ]
+}

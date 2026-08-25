@@ -1,0 +1,46 @@
+{
+  "headwordEn": "eau",
+  "glossRu": "eau [o] — آب به‌عنوان ماده؛ آب آشامیدنی؛ خنثی",
+  "examples": [
+    {
+      "text": "J'ai besoin d'un verre d'eau.",
+      "translation": "به یک لیوان آب نیاز دارم. — خنثی"
+    },
+    {
+      "text": "L'eau est-elle assez chaude pour le thé ?",
+      "translation": "آیا آب برای چای به اندازه کافی گرم است؟ — خنثی"
+    },
+    {
+      "text": "Nous avons marché le long de l'eau.",
+      "translation": "کنار آب راه رفتیم. — خنثی"
+    },
+    {
+      "text": "L'eau a été coupée dans le quartier toute la matinée.",
+      "translation": "آب تمام صبح قطع بود. — خنثی"
+    },
+    {
+      "text": "Puis-je avoir un peu d'eau, s'il vous plaît ?",
+      "translation": "می‌توانم کمی آب بگیرم، لطفاً؟ — خنثی"
+    },
+    {
+      "text": "Tu as de l'eau ? J'ai très soif.",
+      "translation": "آبی هست؟ از تشنگی دارم می‌میرم. — غیررسمی"
+    },
+    {
+      "text": "La municipalité garantira un approvisionnement ininterrompu en eau potable.",
+      "translation": "شهرداری باید تأمین بی‌وقفه آب آشامیدنی را تضمین کند. — رسمی"
+    },
+    {
+      "text": "Ils ont testé l'eau pour vérifier qu'elle était sûre.",
+      "translation": "آب را از نظر ایمنی آزمایش کردند. — خنثی"
+    },
+    {
+      "text": "Économisez l'eau quand vous vous brossez les dents.",
+      "translation": "وقتی دندان‌هایت را می‌شیوی آب صرفه‌جویی کن. — غیررسمی"
+    },
+    {
+      "text": "L'eau douce est importante pour la santé.",
+      "translation": "آب شیرین برای سلامتی مهم است. — خنثی"
+    }
+  ]
+}

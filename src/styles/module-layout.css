@@ -1,0 +1,184 @@
+/**
+ * Общие отступы и типографика модулей (практика, словарь, настройки и т.д.).
+ * Использует токены из theme-vars.css — масштабируются с --ss-font-scale.
+ */
+
+.seashell-crt .ss-center-load {
+  display: flex;
+  justify-content: center;
+  padding: var(--ss-space-loading, 28px);
+}
+
+.seashell-crt .ss-center-load--compact {
+  padding: var(--ss-space-group, 16px);
+}
+
+.seashell-crt .ss-vpad-cell {
+  padding: var(--ss-space-cell-y, 12px) 0;
+}
+
+.seashell-crt .ss-vpad-block {
+  padding: var(--ss-space-block, 10px) 0;
+}
+
+.seashell-crt .ss-vpad-block-sm {
+  padding: var(--ss-space-inline-sm, 8px) 0 var(--ss-space-block, 10px);
+}
+
+.seashell-crt .ss-pad-bottom-xs {
+  padding: 0 0 var(--ss-space-inline-sm, 8px);
+}
+
+.seashell-crt .ss-practice-turn {
+  margin-bottom: var(--ss-space-turn, 18px);
+}
+
+.seashell-crt .ss-practice-turn .ss-separator {
+  margin: var(--ss-space-separator, 14px) 0;
+}
+
+.seashell-crt .ss-practice-compose {
+  padding: var(--ss-space-inline-sm, 8px) 0 var(--ss-space-stack, 16px);
+  display: flex;
+  justify-content: flex-start;
+}
+
+.seashell-crt .ss-practice-compose--empty {
+  padding: var(--ss-space-loading, 28px);
+  justify-content: center;
+}
+
+.seashell-crt .ss-practice-prose {
+  margin-top: 4px;
+  line-height: var(--ss-line-body, 1.58);
+}
+
+.seashell-crt .ss-practice-prose--pre {
+  white-space: pre-wrap;
+}
+
+.seashell-crt .ss-mt-xs {
+  margin-top: 4px;
+}
+
+.seashell-crt .ss-mt-6 {
+  margin-top: 6px;
+}
+
+.seashell-crt .ss-mt-sm {
+  margin-top: var(--ss-space-inline-sm, 8px);
+}
+
+.seashell-crt .ss-mt-md {
+  margin-top: var(--ss-space-block, 10px);
+}
+
+.seashell-crt .ss-mt-lg {
+  margin-top: 12px;
+}
+
+.seashell-crt .ss-mt-xl {
+  margin-top: 14px;
+}
+
+.seashell-crt .ss-mb-sm {
+  margin-bottom: var(--ss-space-inline-sm, 8px);
+}
+
+.seashell-crt .ss-mb-md {
+  margin-bottom: var(--ss-space-block, 10px);
+}
+
+.seashell-crt .ss-block {
+  display: block;
+}
+
+.seashell-crt .ss-opacity-soft {
+  opacity: 0.88;
+}
+
+.seashell-crt .ss-opacity-muted {
+  opacity: 0.72;
+}
+
+.seashell-crt .ss-opacity-subtle {
+  opacity: 0.92;
+}
+
+.seashell-crt .ss-opacity-strong {
+  opacity: 0.95;
+}
+
+.seashell-crt .ss-opacity-dim {
+  opacity: 0.9;
+}
+
+.seashell-crt .ss-text-dim {
+  color: var(--crt-fg-dim);
+}
+
+.seashell-crt .ss-verb-usage-block + .ss-verb-usage-block {
+  margin-top: 14px;
+}
+
+.seashell-crt .ss-confirm-title {
+  line-height: var(--ss-line-tight, 1.4);
+}
+
+.seashell-crt .ss-confirm-message {
+  margin-top: var(--ss-space-block, 10px);
+  line-height: var(--ss-line-body, 1.58);
+  opacity: 0.9;
+}
+
+.seashell-crt .ss-privacy-list {
+  line-height: var(--ss-line-body, 1.58);
+  margin: 0 0 var(--ss-space-inline-sm, 8px);
+  padding-left: 1.125em;
+}
+
+.seashell-crt .ss-privacy-list li {
+  margin-bottom: 6px;
+}
+
+.seashell-crt .ss-dict-header-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.seashell-crt .ss-dict-set-names {
+  opacity: 0.72;
+  font-weight: 400;
+}
+
+.seashell-crt .ss-dict-separator {
+  margin: 12px 0;
+}
+
+.seashell-crt .ss-dict-separator--lg {
+  margin: 18px 0;
+}
+
+.seashell-crt .ss-verb-usage-block {
+  margin-top: 14px;
+}
+
+.seashell-crt .ss-verb-usage-block:first-of-type {
+  margin-top: var(--ss-space-block, 10px);
+}
+
+.seashell-crt .ss-center-load--y {
+  display: flex;
+  justify-content: center;
+  padding: var(--ss-space-group, 16px) 0;
+}
+
+.seashell-crt .ss-mt-actions {
+  margin-top: 20px;
+}
+
+.seashell-crt .ss-readme-legal-group {
+  margin-bottom: var(--ss-space-inline-sm, 8px);
+}

@@ -1,0 +1,28 @@
+You help {{LEARNER_AUDIENCE}}. Produce **one** JSON object for: "{{INPUT}}"
+
+**Field languages (mandatory)**
+- `text` — **only a {{STUDY_LANGUAGE}} sentence** ({{STUDY_SCRIPT_NOTE}}). Do NOT put {{TRANSLATION_LANGUAGE}} sentences in `text`. The learner studies **{{STUDY_LANGUAGE}}**: examples are {{STUDY_LANGUAGE}} phrases with `headwordEn`.
+- `translation` — **{{TRANSLATION_LANGUAGE}}** translation of the same {{STUDY_LANGUAGE}} sentence from `text`, plus the style tail as in the sample.
+
+{{INPUT_MODE_RULES}}
+
+**Task**
+- Keys: `headwordEn`, `glossRu`, `examples`. Do **not** add `verbUsage` for {{STUDY_LANGUAGE}} study entries.
+- In `examples` exactly **{{WORD_EXAMPLE_COUNT}}** objects. Each has only `text` and `translation`.
+- At the end of each `translation` and in `glossRu` add the style tail **as in the sample**: {{REGISTER_TAIL_EXAMPLES}}.
+{{REGISTER_TAGS_GUIDE}}
+
+**Transcription**
+- In `glossRu`, immediately after `headwordEn` (before « — »), add IPA in square brackets: `water [sample] — …`.
+
+{{LEGAL_CONTENT_NOTE}}
+
+**Critical split ({{STUDY_LANGUAGE}} study module)**
+- `headwordEn` and every `text` = **{{STUDY_LANGUAGE}}** ({{STUDY_SCRIPT_NOTE}}).
+- `translation` and the gloss part after « — » = **{{TRANSLATION_LANGUAGE}}** only ({{TRANSLATION_SCRIPT_NOTE}}). Never copy the {{STUDY_LANGUAGE}} sentence into `translation`.
+
+**Sample: common word** (do not copy water or its phrases — only key shape and {{WORD_EXAMPLE_COUNT}} examples):
+
+{{FORMAT_SAMPLE}}
+
+Output: **only** valid JSON for one object, no markdown, no text before or after.

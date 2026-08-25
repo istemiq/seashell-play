@@ -1,0 +1,882 @@
+[
+  {
+    "id": 87,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "fight",
+    "past_simple": "fought",
+    "past_participle": "fought",
+    "translation": "бороться, драться",
+    "transcription": "faɪt"
+  },
+  {
+    "id": 88,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "seek",
+    "past_simple": "sought",
+    "past_participle": "sought",
+    "translation": "искать, стремиться к чему-то",
+    "transcription": "siːk"
+  },
+  {
+    "id": 89,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "bleed",
+    "past_simple": "bled",
+    "past_participle": "bled",
+    "translation": "кровоточить",
+    "transcription": "bliːd"
+  },
+  {
+    "id": 90,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "creep",
+    "past_simple": "crept",
+    "past_participle": "crept",
+    "translation": "ползать, красться",
+    "transcription": "kriːp"
+  },
+  {
+    "id": 91,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "weep",
+    "past_simple": "wept",
+    "past_participle": "wept",
+    "translation": "рыдать, плакать",
+    "transcription": "wiːp"
+  },
+  {
+    "id": 92,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "deal",
+    "past_simple": "dealt",
+    "past_participle": "dealt",
+    "translation": "иметь дело, вести бизнес",
+    "transcription": "diːl"
+  },
+  {
+    "id": 93,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "slide",
+    "past_simple": "slid",
+    "past_participle": "slid",
+    "translation": "скользить",
+    "transcription": "slaɪd"
+  },
+  {
+    "id": 94,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "stick",
+    "past_simple": "stuck",
+    "past_participle": "stuck",
+    "translation": "приклеивать, застревать",
+    "transcription": "stɪk"
+  },
+  {
+    "id": 95,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "swing",
+    "past_simple": "swung",
+    "past_participle": "swung",
+    "translation": "качаться, раскачивать",
+    "transcription": "swɪŋ"
+  },
+  {
+    "id": 96,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "sting",
+    "past_simple": "stung",
+    "past_participle": "stung",
+    "translation": "жалить",
+    "transcription": "stɪŋ"
+  },
+  {
+    "id": 97,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "bind",
+    "past_simple": "bound",
+    "past_participle": "bound",
+    "translation": "связывать, обязывать",
+    "transcription": "baɪnd"
+  },
+  {
+    "id": 98,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "grind",
+    "past_simple": "ground",
+    "past_participle": "ground",
+    "translation": "молоть, перемалывать",
+    "transcription": "ɡraɪnd"
+  },
+  {
+    "id": 99,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "wind",
+    "past_simple": "wound",
+    "past_participle": "wound",
+    "translation": "заводить часы, извиваться",
+    "transcription": "waɪnd"
+  },
+  {
+    "id": 100,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "lay",
+    "past_simple": "laid",
+    "past_participle": "laid",
+    "translation": "класть, накрывать на стол",
+    "transcription": "leɪ"
+  },
+  {
+    "id": 101,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "kneel",
+    "past_simple": "knelt",
+    "past_participle": "knelt",
+    "translation": "стоять на коленях",
+    "transcription": "niːl"
+  },
+  {
+    "id": 102,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "freeze",
+    "past_simple": "froze",
+    "past_participle": "frozen",
+    "translation": "замерзать, замораживать",
+    "transcription": "friːz"
+  },
+  {
+    "id": 103,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "swear",
+    "past_simple": "swore",
+    "past_participle": "sworn",
+    "translation": "клясться, ругаться матом",
+    "transcription": "sweə"
+  },
+  {
+    "id": 104,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "forgive",
+    "past_simple": "forgave",
+    "past_participle": "forgiven",
+    "translation": "прощать",
+    "transcription": "fəˈɡɪv"
+  },
+  {
+    "id": 105,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "forbid",
+    "past_simple": "forbade",
+    "past_participle": "forbidden",
+    "translation": "запрещать",
+    "transcription": "fəˈbɪd"
+  },
+  {
+    "id": 106,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "blow",
+    "past_simple": "blew",
+    "past_participle": "blown",
+    "translation": "дуть",
+    "transcription": "bləʊ"
+  },
+  {
+    "id": 107,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "shrink",
+    "past_simple": "shrank",
+    "past_participle": "shrunk",
+    "translation": "сжиматься, уменьшаться в размере",
+    "transcription": "ʃrɪŋk"
+  },
+  {
+    "id": 108,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "stink",
+    "past_simple": "stank",
+    "past_participle": "stunk",
+    "translation": "вонять",
+    "transcription": "stɪŋk"
+  },
+  {
+    "id": 109,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "spring",
+    "past_simple": "sprang",
+    "past_participle": "sprung",
+    "translation": "прыгать, внезапно возникать",
+    "transcription": "sprɪŋ"
+  },
+  {
+    "id": 110,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "tear",
+    "past_simple": "tore",
+    "past_participle": "torn",
+    "translation": "рвать ткань или бумагу",
+    "transcription": "teə"
+  },
+  {
+    "id": 111,
+    "block": "advanced",
+    "pattern": "AAA",
+    "infinitive": "broadcast",
+    "past_simple": "broadcast",
+    "past_participle": "broadcast",
+    "translation": "транслировать, вещать",
+    "transcription": "ˈbrɔːdkɑːst"
+  },
+  {
+    "id": 112,
+    "block": "advanced",
+    "pattern": "AAA",
+    "infinitive": "spread",
+    "past_simple": "spread",
+    "past_participle": "spread",
+    "translation": "распространять, распространяться",
+    "transcription": "spred"
+  },
+  {
+    "id": 113,
+    "block": "advanced",
+    "pattern": "AAA",
+    "infinitive": "split",
+    "past_simple": "split",
+    "past_participle": "split",
+    "translation": "разделять, расщеплять",
+    "transcription": "splɪt"
+  },
+  {
+    "id": 114,
+    "block": "advanced",
+    "pattern": "AAA",
+    "infinitive": "upset",
+    "past_simple": "upset",
+    "past_participle": "upset",
+    "translation": "расстраивать, опрокидывать",
+    "transcription": "ʌpˈset"
+  },
+  {
+    "id": 115,
+    "block": "advanced",
+    "pattern": "AAA",
+    "infinitive": "quit",
+    "past_simple": "quit",
+    "past_participle": "quit",
+    "translation": "бросать привычку, увольняться",
+    "transcription": "kwɪt"
+  },
+  {
+    "id": 116,
+    "block": "advanced",
+    "pattern": "AAA",
+    "infinitive": "bet",
+    "past_simple": "bet",
+    "past_participle": "bet",
+    "translation": "делать ставку, спорить",
+    "transcription": "bet"
+  },
+  {
+    "id": 117,
+    "block": "advanced",
+    "pattern": "AAA",
+    "infinitive": "burst",
+    "past_simple": "burst",
+    "past_participle": "burst",
+    "translation": "лопаться, взрываться",
+    "transcription": "bɜːst"
+  },
+  {
+    "id": 118,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "awake",
+    "past_simple": "awoke",
+    "past_participle": "awoken",
+    "translation": "будить, просыпаться",
+    "transcription": "əˈweɪk"
+  },
+  {
+    "id": 119,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "bend",
+    "past_simple": "bent",
+    "past_participle": "bent",
+    "translation": "гнуть, сгибаться",
+    "transcription": "bend"
+  },
+  {
+    "id": 120,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "cling",
+    "past_simple": "clung",
+    "past_participle": "clung",
+    "translation": "цепляться, держаться",
+    "transcription": "klɪŋ"
+  },
+  {
+    "id": 121,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "flee",
+    "past_simple": "fled",
+    "past_participle": "fled",
+    "translation": "спасаться бегством",
+    "transcription": "fliː"
+  },
+  {
+    "id": 122,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "fling",
+    "past_simple": "flung",
+    "past_participle": "flung",
+    "translation": "швырять",
+    "transcription": "flɪŋ"
+  },
+  {
+    "id": 123,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "lean",
+    "past_simple": "leant",
+    "past_participle": "leant",
+    "translation": "наклониться, прислоняться",
+    "transcription": "liːn"
+  },
+  {
+    "id": 124,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "leap",
+    "past_simple": "leapt",
+    "past_participle": "leapt",
+    "translation": "прыгать, совершать скачок",
+    "transcription": "liːp"
+  },
+  {
+    "id": 125,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "swell",
+    "past_simple": "swelled",
+    "past_participle": "swollen",
+    "translation": "опухать, раздуваться, увеличиваться",
+    "transcription": "swel"
+  },
+  {
+    "id": 126,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "strive",
+    "past_simple": "strove",
+    "past_participle": "striven",
+    "translation": "стремиться, прилагать усилия",
+    "transcription": "straɪv"
+  },
+  {
+    "id": 127,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "shear",
+    "past_simple": "sheared",
+    "past_participle": "shorn",
+    "translation": "стричь (шерсть), срезать",
+    "transcription": "ʃɪə"
+  },
+  {
+    "id": 128,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "sling",
+    "past_simple": "slung",
+    "past_participle": "slung",
+    "translation": "швырять, вешать через плечо",
+    "transcription": "slɪŋ"
+  },
+  {
+    "id": 129,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "slink",
+    "past_simple": "slunk",
+    "past_participle": "slunk",
+    "translation": "красться, идти крадучись",
+    "transcription": "slɪŋk"
+  },
+  {
+    "id": 130,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "slit",
+    "past_simple": "slit",
+    "past_participle": "slit",
+    "translation": "делать продольный надрез",
+    "transcription": "slɪt"
+  },
+  {
+    "id": 131,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "speed",
+    "past_simple": "sped",
+    "past_participle": "sped",
+    "translation": "мчаться, ускорять",
+    "transcription": "spiːd"
+  },
+  {
+    "id": 132,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "spill",
+    "past_simple": "spilt",
+    "past_participle": "spilt",
+    "translation": "проливать, разливать",
+    "transcription": "spɪl"
+  },
+  {
+    "id": 133,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "spin",
+    "past_simple": "spun",
+    "past_participle": "spun",
+    "translation": "вращать, крутить",
+    "transcription": "spɪn"
+  },
+  {
+    "id": 134,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "spoil",
+    "past_simple": "spoilt",
+    "past_participle": "spoilt",
+    "translation": "портить, баловать",
+    "transcription": "spɔɪl"
+  },
+  {
+    "id": 135,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "sweep",
+    "past_simple": "swept",
+    "past_participle": "swept",
+    "translation": "мести, подметать",
+    "transcription": "swiːp"
+  },
+  {
+    "id": 136,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "thrust",
+    "past_simple": "thrust",
+    "past_participle": "thrust",
+    "translation": "толкать, вонзать",
+    "transcription": "θrʌst"
+  },
+  {
+    "id": 137,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "tread",
+    "past_simple": "trod",
+    "past_participle": "trodden",
+    "translation": "ступать, наступать",
+    "transcription": "tred"
+  },
+  {
+    "id": 138,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "shed",
+    "past_simple": "shed",
+    "past_participle": "shed",
+    "translation": "проливать, сбрасывать, избавляться",
+    "transcription": "ʃed"
+  },
+  {
+    "id": 139,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "weave",
+    "past_simple": "wove",
+    "past_participle": "woven",
+    "translation": "ткать, плести",
+    "transcription": "wiːv"
+  },
+  {
+    "id": 140,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "wed",
+    "past_simple": "wed",
+    "past_participle": "wed",
+    "translation": "выдавать замуж, жениться",
+    "transcription": "wed"
+  },
+  {
+    "id": 141,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "undergo",
+    "past_simple": "underwent",
+    "past_participle": "undergone",
+    "translation": "проходить через, переносить (испытание, операцию)",
+    "transcription": "ˌʌndəˈɡəʊ"
+  },
+  {
+    "id": 142,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "wring",
+    "past_simple": "wrung",
+    "past_participle": "wrung",
+    "translation": "выжимать скручиванием",
+    "transcription": "rɪŋ"
+  },
+  {
+    "id": 143,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "arise",
+    "past_simple": "arose",
+    "past_participle": "arisen",
+    "translation": "возникать, появляться",
+    "transcription": "əˈraɪz"
+  },
+  {
+    "id": 144,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "bear",
+    "past_simple": "bore",
+    "past_participle": "borne",
+    "translation": "нести, терпеть, выносить",
+    "transcription": "beə"
+  },
+  {
+    "id": 145,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "befall",
+    "past_simple": "befell",
+    "past_participle": "befallen",
+    "translation": "случаться, происходить",
+    "transcription": "bɪˈfɔːl"
+  },
+  {
+    "id": 146,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "beget",
+    "past_simple": "begot",
+    "past_participle": "begotten",
+    "translation": "порождать",
+    "transcription": "bɪˈɡet"
+  },
+  {
+    "id": 147,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "behold",
+    "past_simple": "beheld",
+    "past_participle": "beheld",
+    "translation": "созерцать, увидеть",
+    "transcription": "bɪˈhəʊld"
+  },
+  {
+    "id": 148,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "beseech",
+    "past_simple": "besought",
+    "past_participle": "besought",
+    "translation": "умолять, упрашивать",
+    "transcription": "bɪˈsiːtʃ"
+  },
+  {
+    "id": 149,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "beset",
+    "past_simple": "beset",
+    "past_participle": "beset",
+    "translation": "окружать, осаждать",
+    "transcription": "bɪˈset"
+  },
+  {
+    "id": 150,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "betake",
+    "past_simple": "betook",
+    "past_participle": "betaken",
+    "translation": "отправляться, прибегать к чему-то",
+    "transcription": "bɪˈteɪk"
+  },
+  {
+    "id": 151,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "bethink",
+    "past_simple": "bethought",
+    "past_participle": "bethought",
+    "translation": "вспомнить, подумать",
+    "transcription": "bɪˈθɪŋk"
+  },
+  {
+    "id": 152,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "bid",
+    "past_simple": "bid",
+    "past_participle": "bid",
+    "translation": "предлагать цену на аукционе",
+    "transcription": "bɪd"
+  },
+  {
+    "id": 153,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "chide",
+    "past_simple": "chid",
+    "past_participle": "chidden",
+    "translation": "ругать, бранить",
+    "transcription": "tʃaɪd"
+  },
+  {
+    "id": 154,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "cleave",
+    "past_simple": "clove",
+    "past_participle": "cloven",
+    "translation": "рассекать, расщеплять",
+    "transcription": "kliːv"
+  },
+  {
+    "id": 155,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "clothe",
+    "past_simple": "clad",
+    "past_participle": "clad",
+    "translation": "одевать, облекать",
+    "transcription": "kləʊð"
+  },
+  {
+    "id": 156,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "dwell",
+    "past_simple": "dwelt",
+    "past_participle": "dwelt",
+    "translation": "жить, обитать, подробно разбирать",
+    "transcription": "dwel"
+  },
+  {
+    "id": 157,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "gird",
+    "past_simple": "girt",
+    "past_participle": "girt",
+    "translation": "опоясывать",
+    "transcription": "ɡɜːd"
+  },
+  {
+    "id": 158,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "hew",
+    "past_simple": "hewed",
+    "past_participle": "hewn",
+    "translation": "рубить, тесать",
+    "transcription": "hjuː"
+  },
+  {
+    "id": 159,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "lade",
+    "past_simple": "laded",
+    "past_participle": "laden",
+    "translation": "нагружать грузом",
+    "transcription": "leɪd"
+  },
+  {
+    "id": 160,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "smite",
+    "past_simple": "smote",
+    "past_participle": "smitten",
+    "translation": "поражать, разбивать",
+    "transcription": "smaɪt"
+  },
+  {
+    "id": 161,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "slay",
+    "past_simple": "slew",
+    "past_participle": "slain",
+    "translation": "убивать, уничтожать (обычно чудовищ или врагов)",
+    "transcription": "sleɪ"
+  },
+  {
+    "id": 162,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "stride",
+    "past_simple": "strode",
+    "past_participle": "stridden",
+    "translation": "шагать размашисто, мерить шагами",
+    "transcription": "straɪd"
+  },
+  {
+    "id": 163,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "strew",
+    "past_simple": "strewed",
+    "past_participle": "strewn",
+    "translation": "посыпать, разбрасывать, усеивать",
+    "transcription": "struː"
+  },
+  {
+    "id": 164,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "forsake",
+    "past_simple": "forsook",
+    "past_participle": "forsaken",
+    "translation": "оставлять, покидать, отрекаться",
+    "transcription": "fɔːˈseɪk"
+  },
+  {
+    "id": 165,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "forswear",
+    "past_simple": "forswore",
+    "past_participle": "forsworn",
+    "translation": "отрекаться, давать ложную клятву",
+    "transcription": "fɔːˈsweə"
+  },
+  {
+    "id": 166,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "bespeak",
+    "past_simple": "bespoke",
+    "past_participle": "bespoken",
+    "translation": "заказывать заранее; свидетельствовать (о чём-л.)",
+    "transcription": "bɪˈspiːk"
+  },
+  {
+    "id": 167,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "shoe",
+    "past_simple": "shod",
+    "past_participle": "shod",
+    "translation": "обувать, подковывать",
+    "transcription": "ʃuː"
+  },
+  {
+    "id": 168,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "string",
+    "past_simple": "strung",
+    "past_participle": "strung",
+    "translation": "натягивать струну, нанизывать",
+    "transcription": "strɪŋ"
+  },
+  {
+    "id": 169,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "sublet",
+    "past_simple": "sublet",
+    "past_participle": "sublet",
+    "translation": "сдавать в субаренду",
+    "transcription": "ˌsʌbˈlet"
+  },
+  {
+    "id": 170,
+    "block": "advanced",
+    "pattern": "ABB",
+    "infinitive": "mislay",
+    "past_simple": "mislaid",
+    "past_participle": "mislaid",
+    "translation": "положить не на место, затерять",
+    "transcription": "ˌmɪsˈleɪ"
+  },
+  {
+    "id": 171,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "overdo",
+    "past_simple": "overdid",
+    "past_participle": "overdone",
+    "translation": "переусердствовать, переборщить",
+    "transcription": "ˌəʊvəˈduː"
+  },
+  {
+    "id": 172,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "outgrow",
+    "past_simple": "outgrew",
+    "past_participle": "outgrown",
+    "translation": "вырастать из одежды/привычки",
+    "transcription": "ˌaʊtˈɡrəʊ"
+  },
+  {
+    "id": 173,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "partake",
+    "past_simple": "partook",
+    "past_participle": "partaken",
+    "translation": "принимать участие, отведать (пищу/напитки)",
+    "transcription": "pɑːˈteɪk"
+  },
+  {
+    "id": 174,
+    "block": "advanced",
+    "pattern": "ABC",
+    "infinitive": "withhold",
+    "past_simple": "withheld",
+    "past_participle": "withheld",
+    "translation": "удерживать, скрывать информацию, не выдавать",
+    "transcription": "wɪðˈhəʊld"
+  }
+]

@@ -1,0 +1,261 @@
+========================================================================================
+Dictionary locale report
+========================================================================================
+Generated: 2026-08-01T17:25:19.256Z
+LLM: (dry-run)
+Studies: fi
+Content locales: ru
+Input types: word, phrase
+Planned LLM calls: 2
+
+========================================================================================
+STUDY: fi (Finnish)  |  LOCALE: ru  |  word: «vesi»  |  DRY-RUN
+========================================================================================
+
+--- SYSTEM PROMPT ---
+You output only one valid JSON object when asked. No markdown fences.
+
+Match the FORMAT SAMPLE blocks: same keys (headwordEn, glossRu, examples).
+
+STRICT COUNTS: "examples" must contain exactly 10 objects.
+
+STRICT LANGUAGE SPLIT:
+- Every "text" = Finnish sentence (Latin letters for the sentence words). Wrong script in "text" is forbidden when studying Finnish.
+- Every "translation" and the gloss part of "glossRu" after the em dash = **русский** (Cyrillic for the main gloss/translation of that same English sentence).
+- If learner input is not in the study language: headwordEn = natural Finnish lemma for a single word, or full Finnish translation for a phrase (2+ words); glossRu must start with that Finnish headword — NOT with the learner's input alone in another script.
+
+TRANSCRIPTION: glossRu = headwordEn + [IPA] + — + русский gloss + style tail.
+
+INPUT SHAPE: **single word** → Finnish lemma; **phrase/sentence** (2+ words) → full natural Finnish translation of the entire learner entry — never reduce a phrase to one keyword.
+
+For Finnish study entries omit verbUsage (or use []).
+
+--- USER PROMPT ---
+You help русскоязычным ученикам английского. Produce **one** JSON object for: "vesi"
+
+**Field languages (mandatory)**
+- `text` — **only a Finnish sentence** (Latin letters for the sentence words). Do NOT put русский sentences in `text`. The learner studies **Finnish**: examples are Finnish phrases with `headwordEn`.
+- `translation` — **русский** translation of the same Finnish sentence from `text`, plus the style tail as in the sample.
+
+**Ввод ученика** — `headwordEn` = естественная **Finnish** лемма или полный перевод фразы; `glossRu` на русском.
+
+**Task**
+- Keys: `headwordEn`, `glossRu`, `examples`. Do **not** add `verbUsage` for Finnish study entries.
+- In `examples` exactly **10** objects. Each has only `text` and `translation`.
+- At the end of each `translation` and in `glossRu` add the style tail **as in the sample**: ` — нейтр.; BrE/AmE`, ` — разг.; BrE/AmE`, ` — форм.; BrE/AmE`, ` — книжн.; BrE/AmE`.
+- **Пометки стиля (не ставь «нейтр.» по умолчанию):**
+  - `нейтр.` — бытовая нейтральная речь
+  - `разг.` — разговорная, непринуждённая речь
+  - `форм.` — официальная, деловая, научная, медицинская, юридическая, техническая лексика
+  - `книжн.` — книжный, возвышенный литературный стиль
+  - `высок.` — высокий, торжественный стиль
+  - `поэт.` — поэтический, образный стиль
+  - `устар.` — устаревшее, архаичное слово или оборот
+  - `сленг` — сленг, молодёжная или групповая лексика
+  - `груб.` — грубое, просторечное слово (без мата в примерах)
+  - `прост.` — просторечие, низкий разговорный регистр
+  - `проф.` — профессиональный жаргон узкой сферы
+  - `спец.` — узкоспециальная терминология
+  - `диал.` — диалектное, региональное слово или оборот
+  - `эвф.` — эвфемизм, смягчённое выражение
+  - `ирон.` — ироническое употребление
+  - `таб.` — табуированная лексика (помечай, но не цитируй в примерах)
+- В `glossRu` укажи **типичный стиль слова**; в каждом `translation` — стиль **этой фразы**. Можно 1–2 пометки через «; » (напр. ` — форм.; спец.; BrE/AmE`). BrE/AmE — при заметном различии произношения/орфографии.
+
+**Transcription**
+- In `glossRu`, immediately after `headwordEn` (before « — »), add IPA in square brackets: `vesi [sample] — …`.
+
+Контент: законный учебный тон для РФ, 16+, без экстремизма, ненависти, оскорблений религий, сексуального контента с несовершеннолетними, инструкций по преступлениям и наркотикам; без мата.
+
+**Critical split (Finnish study module)**
+- `headwordEn` and every `text` = **Finnish** (Latin letters for the sentence words).
+- `translation` and the gloss part after « — » = **русский** only (русский for the gloss/translation of that same Finnish sentence). Never copy the Finnish sentence into `translation`.
+
+**Sample: common word** (do not copy vesi or its phrases — only key shape and 10 examples):
+
+**Sample locale note:** The JSON below shows structure only. Every "translation" and the gloss meaning after « — » MUST be in русский, even if the sample shows another language.
+
+{
+  "headwordEn": "vesi",
+  "glossRu": "vesi [sample] — вода как вещество; питьевая вода; нейтр.",
+  "examples": [
+    {
+      "text": "Tarvitsen lasillisen vettä.",
+      "translation": "Мне нужен стакан воды. — нейтр."
+    },
+    {
+      "text": "Vesi on kylmää.",
+      "translation": "Вода холодная. — нейтр."
+    },
+    {
+      "text": "Onko sinulla vettä?",
+      "translation": "У вас есть вода? — нейтр."
+    },
+    {
+      "text": "Tarvitsen lasillisen vettä.",
+      "translation": "Мне нужен стакан воды. — нейтр."
+    },
+    {
+      "text": "Vesi on kylmää.",
+      "translation": "Вода холодная. — нейтр."
+    },
+    {
+      "text": "Onko sinulla vettä?",
+      "translation": "У вас есть вода? — нейтр."
+    },
+    {
+      "text": "Tarvitsen lasillisen vettä.",
+      "translation": "Мне нужен стакан воды. — нейтр."
+    },
+    {
+      "text": "Vesi on kylmää.",
+      "translation": "Вода холодная. — нейтр."
+    },
+    {
+      "text": "Onko sinulla vettä?",
+      "translation": "У вас есть вода? — нейтр."
+    },
+    {
+      "text": "Tarvitsen lasillisen vettä.",
+      "translation": "Мне нужен стакан воды. — нейтр."
+    }
+  ]
+}
+
+Output: **only** valid JSON for one object, no markdown, no text before or after.
+
+
+--- LLM RESPONSE ---
+(skipped: --dry-run)
+
+========================================================================================
+STUDY: fi (Finnish)  |  LOCALE: ru  |  phrase: «Tarvitsen lasillisen vettä.»  |  DRY-RUN
+========================================================================================
+
+--- SYSTEM PROMPT ---
+You output only one valid JSON object when asked. No markdown fences.
+
+Match the FORMAT SAMPLE blocks: same keys (headwordEn, glossRu, examples).
+
+STRICT COUNTS: "examples" must contain exactly 10 objects.
+
+STRICT LANGUAGE SPLIT:
+- Every "text" = Finnish sentence (Latin letters for the sentence words). Wrong script in "text" is forbidden when studying Finnish.
+- Every "translation" and the gloss part of "glossRu" after the em dash = **русский** (Cyrillic for the main gloss/translation of that same English sentence).
+- If learner input is not in the study language: headwordEn = natural Finnish lemma for a single word, or full Finnish translation for a phrase (2+ words); glossRu must start with that Finnish headword — NOT with the learner's input alone in another script.
+
+TRANSCRIPTION: glossRu = headwordEn + [IPA] + — + русский gloss + style tail.
+
+INPUT SHAPE: **single word** → Finnish lemma; **phrase/sentence** (2+ words) → full natural Finnish translation of the entire learner entry — never reduce a phrase to one keyword.
+
+For Finnish study entries omit verbUsage (or use []).
+
+--- USER PROMPT ---
+**PHRASE ENTRY** («Tarvitsen lasillisen vettä.»): translate/adapt the **entire** learner input; headwordEn must be a multi-word English phrase, not one keyword.
+
+You help русскоязычным ученикам английского. Produce **one** JSON object for: "Tarvitsen lasillisen vettä."
+
+**Field languages (mandatory)**
+- `text` — **only a Finnish sentence** (Latin letters for the sentence words). Do NOT put русский sentences in `text`. The learner studies **Finnish**: examples are Finnish phrases with `headwordEn`.
+- `translation` — **русский** translation of the same Finnish sentence from `text`, plus the style tail as in the sample.
+
+**Ввод ученика** — `headwordEn` = естественная **Finnish** лемма или полный перевод фразы; `glossRu` на русском.
+
+**Task**
+- Keys: `headwordEn`, `glossRu`, `examples`. Do **not** add `verbUsage` for Finnish study entries.
+- In `examples` exactly **10** objects. Each has only `text` and `translation`.
+- At the end of each `translation` and in `glossRu` add the style tail **as in the sample**: ` — нейтр.; BrE/AmE`, ` — разг.; BrE/AmE`, ` — форм.; BrE/AmE`, ` — книжн.; BrE/AmE`.
+- **Пометки стиля (не ставь «нейтр.» по умолчанию):**
+  - `нейтр.` — бытовая нейтральная речь
+  - `разг.` — разговорная, непринуждённая речь
+  - `форм.` — официальная, деловая, научная, медицинская, юридическая, техническая лексика
+  - `книжн.` — книжный, возвышенный литературный стиль
+  - `высок.` — высокий, торжественный стиль
+  - `поэт.` — поэтический, образный стиль
+  - `устар.` — устаревшее, архаичное слово или оборот
+  - `сленг` — сленг, молодёжная или групповая лексика
+  - `груб.` — грубое, просторечное слово (без мата в примерах)
+  - `прост.` — просторечие, низкий разговорный регистр
+  - `проф.` — профессиональный жаргон узкой сферы
+  - `спец.` — узкоспециальная терминология
+  - `диал.` — диалектное, региональное слово или оборот
+  - `эвф.` — эвфемизм, смягчённое выражение
+  - `ирон.` — ироническое употребление
+  - `таб.` — табуированная лексика (помечай, но не цитируй в примерах)
+- В `glossRu` укажи **типичный стиль слова**; в каждом `translation` — стиль **этой фразы**. Можно 1–2 пометки через «; » (напр. ` — форм.; спец.; BrE/AmE`). BrE/AmE — при заметном различии произношения/орфографии.
+
+**Transcription**
+- In `glossRu`, immediately after `headwordEn` (before « — »), add IPA in square brackets: `vesi [sample] — …`.
+
+Контент: законный учебный тон для РФ, 16+, без экстремизма, ненависти, оскорблений религий, сексуального контента с несовершеннолетними, инструкций по преступлениям и наркотикам; без мата.
+
+**Critical split (Finnish study module)**
+- `headwordEn` and every `text` = **Finnish** (Latin letters for the sentence words).
+- `translation` and the gloss part after « — » = **русский** only (русский for the gloss/translation of that same Finnish sentence). Never copy the Finnish sentence into `translation`.
+
+**Sample: common word** (do not copy vesi or its phrases — only key shape and 10 examples):
+
+**Sample locale note:** The JSON below shows structure only. Every "translation" and the gloss meaning after « — » MUST be in русский, even if the sample shows another language.
+
+{
+  "headwordEn": "vesi",
+  "glossRu": "vesi [sample] — вода как вещество; питьевая вода; нейтр.",
+  "examples": [
+    {
+      "text": "Tarvitsen lasillisen vettä.",
+      "translation": "Мне нужен стакан воды. — нейтр."
+    },
+    {
+      "text": "Vesi on kylmää.",
+      "translation": "Вода холодная. — нейтр."
+    },
+    {
+      "text": "Onko sinulla vettä?",
+      "translation": "У вас есть вода? — нейтр."
+    },
+    {
+      "text": "Tarvitsen lasillisen vettä.",
+      "translation": "Мне нужен стакан воды. — нейтр."
+    },
+    {
+      "text": "Vesi on kylmää.",
+      "translation": "Вода холодная. — нейтр."
+    },
+    {
+      "text": "Onko sinulla vettä?",
+      "translation": "У вас есть вода? — нейтр."
+    },
+    {
+      "text": "Tarvitsen lasillisen vettä.",
+      "translation": "Мне нужен стакан воды. — нейтр."
+    },
+    {
+      "text": "Vesi on kylmää.",
+      "translation": "Вода холодная. — нейтр."
+    },
+    {
+      "text": "Onko sinulla vettä?",
+      "translation": "У вас есть вода? — нейтр."
+    },
+    {
+      "text": "Tarvitsen lasillisen vettä.",
+      "translation": "Мне нужен стакан воды. — нейтр."
+    }
+  ]
+}
+
+Output: **only** valid JSON for one object, no markdown, no text before or after.
+
+
+CRITICAL PHRASE INPUT («Tarvitsen lasillisen vettä.»): headwordEn MUST be the full natural English translation (several words). Examples: «Ben doctorum» → «I am a doctor», «Ben müşterim» → «I am a customer». Returning only one keyword like «doctor» or «customer» is WRONG.
+
+--- LLM RESPONSE ---
+(skipped: --dry-run)
+
+========================================================================================
+Summary
+========================================================================================
+Finished: 2026-08-01T17:25:19.265Z
+Total sections: 2
+Needs review: 0
+Report file: C:\Users\Пайчармик\seashell_tg_clean\reports\sample-dry-run.txt

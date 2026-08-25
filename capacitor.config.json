@@ -1,0 +1,18 @@
+{
+  "appId": "ru.sishel.seashell",
+  "appName": "Seashell",
+  "webDir": "build",
+  "android": {
+    "allowMixedContent": true
+  },
+  "server": {
+    "androidScheme": "https"
+  },
+  "plugins": {
+    "GoogleAuth": {
+      "scopes": ["profile", "email"],
+      "serverClientId": "",
+      "forceCodeForRefreshToken": false
+    }
+  }
+}

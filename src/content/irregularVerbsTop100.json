@@ -1,0 +1,362 @@
+[
+  {
+    "id": 51,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "read",
+    "past_simple": "read",
+    "past_participle": "read",
+    "translation": "читать",
+    "transcription": "riːd"
+  },
+  {
+    "id": 52,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "mean",
+    "past_simple": "meant",
+    "past_participle": "meant",
+    "translation": "значить, иметь в виду",
+    "transcription": "miːn"
+  },
+  {
+    "id": 53,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "dream",
+    "past_simple": "dreamt",
+    "past_participle": "dreamt",
+    "translation": "мечтать, видеть сны",
+    "transcription": "driːm"
+  },
+  {
+    "id": 54,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "learn",
+    "past_simple": "learnt",
+    "past_participle": "learnt",
+    "translation": "учить, узнавать",
+    "transcription": "lɜːn"
+  },
+  {
+    "id": 55,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "lend",
+    "past_simple": "lent",
+    "past_participle": "lent",
+    "translation": "одалживать кому-то",
+    "transcription": "lend"
+  },
+  {
+    "id": 56,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "burn",
+    "past_simple": "burnt",
+    "past_participle": "burnt",
+    "translation": "гореть, жечь",
+    "transcription": "bɜːn"
+  },
+  {
+    "id": 57,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "shoot",
+    "past_simple": "shot",
+    "past_participle": "shot",
+    "translation": "стрелять, снимать видео",
+    "transcription": "ʃuːt"
+  },
+  {
+    "id": 58,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "light",
+    "past_simple": "lit",
+    "past_participle": "lit",
+    "translation": "зажигать, освещать",
+    "transcription": "laɪt"
+  },
+  {
+    "id": 59,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "sit",
+    "past_simple": "sat",
+    "past_participle": "sat",
+    "translation": "сидеть",
+    "transcription": "sɪt"
+  },
+  {
+    "id": 60,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "spit",
+    "past_simple": "spat",
+    "past_participle": "spat",
+    "translation": "плевать",
+    "transcription": "spɪt"
+  },
+  {
+    "id": 61,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "stand",
+    "past_simple": "stood",
+    "past_participle": "stood",
+    "translation": "стоять",
+    "transcription": "stænd"
+  },
+  {
+    "id": 62,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "forget",
+    "past_simple": "forgot",
+    "past_participle": "forgotten",
+    "translation": "забывать",
+    "transcription": "fəˈɡet"
+  },
+  {
+    "id": 63,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "hang",
+    "past_simple": "hung",
+    "past_participle": "hung",
+    "translation": "висеть, вешать",
+    "transcription": "hæŋ"
+  },
+  {
+    "id": 64,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "dig",
+    "past_simple": "dug",
+    "past_participle": "dug",
+    "translation": "копать",
+    "transcription": "dɪɡ"
+  },
+  {
+    "id": 65,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "strike",
+    "past_simple": "struck",
+    "past_participle": "struck",
+    "translation": "ударять, бастовать",
+    "transcription": "straɪk"
+  },
+  {
+    "id": 66,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "hold",
+    "past_simple": "held",
+    "past_participle": "held",
+    "translation": "держать",
+    "transcription": "həʊld"
+  },
+  {
+    "id": 67,
+    "block": "top_100",
+    "pattern": "ABB",
+    "infinitive": "feed",
+    "past_simple": "fed",
+    "past_participle": "fed",
+    "translation": "кормить",
+    "transcription": "fiːd"
+  },
+  {
+    "id": 68,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "drive",
+    "past_simple": "drove",
+    "past_participle": "driven",
+    "translation": "водить машину",
+    "transcription": "draɪv"
+  },
+  {
+    "id": 69,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "ride",
+    "past_simple": "rode",
+    "past_participle": "ridden",
+    "translation": "ездить верхом, на велосипеде",
+    "transcription": "raɪd"
+  },
+  {
+    "id": 70,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "rise",
+    "past_simple": "rose",
+    "past_participle": "risen",
+    "translation": "подниматься, возрастать",
+    "transcription": "raɪz"
+  },
+  {
+    "id": 71,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "shake",
+    "past_simple": "shook",
+    "past_participle": "shaken",
+    "translation": "трясти",
+    "transcription": "ʃeɪk"
+  },
+  {
+    "id": 72,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "sing",
+    "past_simple": "sang",
+    "past_participle": "sung",
+    "translation": "петь",
+    "transcription": "sɪŋ"
+  },
+  {
+    "id": 73,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "ring",
+    "past_simple": "rang",
+    "past_participle": "rung",
+    "translation": "звонить, звенеть",
+    "transcription": "rɪŋ"
+  },
+  {
+    "id": 74,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "sink",
+    "past_simple": "sank",
+    "past_participle": "sunk",
+    "translation": "тонуть, погружаться",
+    "transcription": "sɪŋk"
+  },
+  {
+    "id": 75,
+    "block": "top_100",
+    "pattern": "ABA",
+    "infinitive": "become",
+    "past_simple": "became",
+    "past_participle": "become",
+    "translation": "становиться",
+    "transcription": "bɪˈkʌm"
+  },
+  {
+    "id": 76,
+    "block": "top_100",
+    "pattern": "ABA",
+    "infinitive": "come",
+    "past_simple": "came",
+    "past_participle": "come",
+    "translation": "приходить",
+    "transcription": "kʌm"
+  },
+  {
+    "id": 77,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "wear",
+    "past_simple": "wore",
+    "past_participle": "worn",
+    "translation": "носить одежду",
+    "transcription": "weə"
+  },
+  {
+    "id": 78,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "steal",
+    "past_simple": "stole",
+    "past_participle": "stolen",
+    "translation": "красть",
+    "transcription": "stiːl"
+  },
+  {
+    "id": 79,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "wake",
+    "past_simple": "woke",
+    "past_participle": "woken",
+    "translation": "просыпаться",
+    "transcription": "weɪk"
+  },
+  {
+    "id": 80,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "hide",
+    "past_simple": "hid",
+    "past_participle": "hidden",
+    "translation": "прятать, прятаться",
+    "transcription": "haɪd"
+  },
+  {
+    "id": 81,
+    "block": "top_100",
+    "pattern": "ABC",
+    "infinitive": "bite",
+    "past_simple": "bit",
+    "past_participle": "bitten",
+    "translation": "кусать",
+    "transcription": "baɪt"
+  },
+  {
+    "id": 82,
+    "block": "top_100",
+    "pattern": "AAA",
+    "infinitive": "cost",
+    "past_simple": "cost",
+    "past_participle": "cost",
+    "translation": "стоить",
+    "transcription": "kɒst"
+  },
+  {
+    "id": 83,
+    "block": "top_100",
+    "pattern": "AAA",
+    "infinitive": "shut",
+    "past_simple": "shut",
+    "past_participle": "shut",
+    "translation": "закрывать",
+    "transcription": "ʃʌt"
+  },
+  {
+    "id": 84,
+    "block": "top_100",
+    "pattern": "AAA",
+    "infinitive": "hit",
+    "past_simple": "hit",
+    "past_participle": "hit",
+    "translation": "ударять",
+    "transcription": "hɪt"
+  },
+  {
+    "id": 85,
+    "block": "top_100",
+    "pattern": "AAA",
+    "infinitive": "hurt",
+    "past_simple": "hurt",
+    "past_participle": "hurt",
+    "translation": "причинять боль, болеть",
+    "transcription": "hɜːt"
+  },
+  {
+    "id": 86,
+    "block": "top_100",
+    "pattern": "AAA",
+    "infinitive": "set",
+    "past_simple": "set",
+    "past_participle": "set",
+    "translation": "устанавливать, настраивать",
+    "transcription": "set"
+  }
+]

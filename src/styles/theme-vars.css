@@ -1,0 +1,102 @@
+/**
+ * Токены темы: по умолчанию светлая (модерация Telegram), тёмная — data-seashell-theme="dark".
+ */
+html {
+  color-scheme: light;
+  --ss-font-size-base: 17px;
+  --ss-font-scale: 1;
+  --ss-line-tight: 1.42;
+  --ss-line-body: 1.56;
+  --ss-space-group: 17px;
+  --ss-space-cell-y: 13px;
+  --ss-space-cell-min: 54px;
+  --ss-space-turn: 19px;
+  --ss-space-separator: 15px;
+  --ss-space-loading: 30px;
+  --ss-space-stack: 17px;
+  --ss-space-block: 11px;
+  --ss-space-inline-sm: 9px;
+  --ss-space-panel-bottom: 34px;
+  --ss-keyboard-gap: 0px;
+  --ss-shell-head-min: 54px;
+  --ss-font-size-secondary: 0.95em;
+  --ss-font-size-caption: 0.9em;
+  --ss-font-size-micro: 0.875em;
+  --ss-page-bg: #f8f9fa;
+  --crt-bg: #f8f9fa;
+  --crt-bg-elev: #f8f9fa;
+  --crt-fg: #1b2433;
+  --crt-fg-dim: #4a5568;
+  --crt-border: #d5dce8;
+  --crt-accent: #4a62b8;
+  --crt-accent-muted: rgba(74, 98, 184, 0.12);
+  --crt-accent-text-on-fill: #ffffff;
+  --crt-accent-hover-solid: #556fc6;
+  --crt-accent-active-solid: #3f54a0;
+  --crt-glow: rgba(74, 98, 184, 0.08);
+  --crt-input-bg: #ffffff;
+  --crt-overlay: rgba(15, 23, 42, 0.38);
+  --crt-shell-shadow: rgba(15, 23, 42, 0.14);
+  --crt-header-inset: rgba(255, 255, 255, 0.75);
+  --crt-cell-hover: rgba(74, 98, 184, 0.07);
+  --crt-cell-border: rgba(213, 220, 232, 0.95);
+  --crt-btn-primary-border: rgba(74, 98, 184, 0.35);
+  --crt-btn-primary-bg: linear-gradient(180deg, rgba(74, 98, 184, 0.92) 0%, rgba(74, 98, 184, 0.78) 100%);
+  --crt-btn-secondary-border: rgba(90, 102, 120, 0.22);
+  --crt-btn-secondary-bg: rgba(90, 102, 120, 0.06);
+  --crt-app-gradient: linear-gradient(180deg, #eef1f5 0%, #f8f9fa 42%, #f1f3f5 100%);
+  --crt-text-shadow: none;
+  --crt-practice-fix-fg: #b42318;
+  --crt-practice-fix-bg: rgba(220, 60, 50, 0.1);
+  --crt-practice-word-selected: rgba(74, 98, 184, 0.14);
+  --crt-practice-word-selected-border: rgba(74, 98, 184, 0.38);
+  --crt-home-lead: #3f54a0;
+  --crt-tagline-bg: linear-gradient(165deg, rgba(74, 98, 184, 0.07), rgba(248, 249, 250, 0.98));
+  --crt-tagline-inset: rgba(74, 98, 184, 0.05);
+  --crt-shimmer-a: rgba(90, 102, 120, 0.35);
+  --crt-shimmer-b: rgba(60, 72, 96, 0.72);
+  --crt-shimmer-c: rgba(40, 52, 72, 0.82);
+  --crt-shimmer-d: rgba(80, 92, 112, 0.5);
+  --crt-shimmer-e: rgba(110, 120, 140, 0.28);
+}
+
+html[data-seashell-theme='dark'] {
+  color-scheme: dark;
+  --ss-page-bg: #0a0e14;
+  --crt-bg: #0c1016;
+  --crt-bg-elev: #101620;
+  --crt-fg: #d1d9e6;
+  --crt-fg-dim: #6e7a90;
+  --crt-border: #232c3a;
+  --crt-accent: #6076bc;
+  --crt-accent-muted: rgba(96, 118, 188, 0.28);
+  --crt-accent-text-on-fill: #e6eaf2;
+  --crt-accent-hover-solid: #7088cc;
+  --crt-accent-active-solid: #4f63a8;
+  --crt-glow: rgba(92, 112, 175, 0.07);
+  --crt-input-bg: #0f141c;
+  --crt-overlay: rgba(4, 6, 10, 0.78);
+  --crt-shell-shadow: rgba(0, 0, 0, 0.45);
+  --crt-header-inset: rgba(70, 85, 110, 0.08);
+  --crt-cell-hover: rgba(205, 214, 228, 0.06);
+  --crt-cell-border: rgba(35, 44, 58, 0.55);
+  --crt-btn-primary-border: rgba(132, 154, 218, 0.35);
+  --crt-btn-primary-bg: linear-gradient(180deg, rgba(96, 118, 188, 0.42) 0%, rgba(96, 118, 188, 0.22) 100%);
+  --crt-btn-secondary-border: rgba(205, 214, 228, 0.16);
+  --crt-btn-secondary-bg: rgba(205, 214, 228, 0.07);
+  --crt-app-gradient: radial-gradient(120% 80% at 50% -20%, rgba(70, 95, 120, 0.07), transparent 45%),
+    linear-gradient(180deg, #080b10 0%, #0d1118 38%, #0a0e14 100%);
+  --crt-text-shadow: 0 0 1px rgba(216, 222, 233, 0.12);
+  --crt-practice-fix-fg: #f0a0a0;
+  --crt-practice-fix-bg: rgba(180, 50, 50, 0.18);
+  --crt-practice-word-selected: rgba(96, 118, 188, 0.38);
+  --crt-practice-word-selected-border: rgba(132, 154, 218, 0.45);
+  --crt-home-lead: #a8b8d9;
+  --crt-tagline-bg: linear-gradient(165deg, rgba(96, 118, 188, 0.05), rgba(0, 0, 0, 0.18));
+  --crt-tagline-inset: rgba(0, 0, 0, 0.18);
+  --crt-shimmer-a: rgba(170, 180, 195, 0.28);
+  --crt-shimmer-b: rgba(230, 240, 255, 0.72);
+  --crt-shimmer-c: rgba(255, 255, 255, 0.78);
+  --crt-shimmer-d: rgba(200, 210, 225, 0.45);
+  --crt-shimmer-e: rgba(150, 160, 175, 0.22);
+}

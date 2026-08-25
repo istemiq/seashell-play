@@ -1,0 +1,46 @@
+{
+  "headwordEn": "Wasser",
+  "glossRu": "Wasser [ˈvasɐ] — água como substância; água potável; neutro",
+  "examples": [
+    {
+      "text": "Ich brauche ein Glas Wasser.",
+      "translation": "Preciso de um copo de água. — neutro"
+    },
+    {
+      "text": "Ist das Wasser heiß genug für Tee?",
+      "translation": "A água está quente o suficiente para chá? — neutro"
+    },
+    {
+      "text": "Wir sind am Wasser entlang gelaufen.",
+      "translation": "Caminhámos ao longo da água. — neutro"
+    },
+    {
+      "text": "Das Wasser war den ganzen Morgen im Viertel abgestellt.",
+      "translation": "Cortaram a água durante toda a manhã. — neutro"
+    },
+    {
+      "text": "Kann ich bitte etwas Wasser haben?",
+      "translation": "Posso beber um pouco de água, por favor? — neutro"
+    },
+    {
+      "text": "Hast du Wasser? Ich habe großen Durst.",
+      "translation": "Tem água? Estou a morrer de sede. — informal"
+    },
+    {
+      "text": "Die Gemeinde wird eine ununterbrochene Trinkwasserversorgung gewährleisten.",
+      "translation": "O município deve garantir o fornecimento ininterrupto de água potável. — formal"
+    },
+    {
+      "text": "Sie haben das Wasser auf Sicherheit getestet.",
+      "translation": "Eles testaram a água quanto à segurança. — neutro"
+    },
+    {
+      "text": "Spare Wasser, wenn du dir die Zähne putzt.",
+      "translation": "Poupa água quando escovas os dentes. — informal"
+    },
+    {
+      "text": "Süßwasser ist wichtig für die Gesundheit.",
+      "translation": "A água doce é importante para a saúde. — neutro"
+    }
+  ]
+}

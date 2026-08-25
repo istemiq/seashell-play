@@ -1,0 +1,13 @@
+Деплой API (словарь + LLM + PostgreSQL) на бесплатный/дёшевый хост
+
+Минимум в server/.env:
+- DATABASE_URL
+- LLM_PROVIDER (deepseek или openrouter)
+- DEEPSEEK_API_KEY или OPENROUTER_API_KEY
+- VK_APP_SECRET или TELEGRAM_BOT_TOKEN
+- CORS_ORIGINS
+
+Кратко:
+1. Скопируй server/.env.example → server/.env
+2. Заполни ключи LLM и DATABASE_URL
+3. node index.js или pm2

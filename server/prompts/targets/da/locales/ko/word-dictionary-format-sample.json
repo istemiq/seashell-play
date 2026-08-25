@@ -1,0 +1,46 @@
+{
+  "headwordEn": "vand",
+  "glossRu": "vand [van] — 물질로서의 물; 식수; 중립",
+  "examples": [
+    {
+      "text": "Jeg har brug for et glas vand.",
+      "translation": "물 한 잔이 필요해요. — 중립"
+    },
+    {
+      "text": "Er vandet varmt nok til te?",
+      "translation": "물이 차 마시기에 충분히 뜨거운가요? — 중립"
+    },
+    {
+      "text": "Vi gik langs vandet.",
+      "translation": "우리는 물가를 따라 걸었어요. — 중립"
+    },
+    {
+      "text": "Vandet blev afbrudt i kvarteret hele morgenen.",
+      "translation": "아침 내내 수돗물이 끊겼어요. — 중립"
+    },
+    {
+      "text": "Kan jeg få noget vand, tak?",
+      "translation": "물 좀 주실 수 있나요? — 중립"
+    },
+    {
+      "text": "Har du vand? Jeg er meget tørstig.",
+      "translation": "물 있어요? 목 말라 죽겠어요. — 비격식"
+    },
+    {
+      "text": "Kommunen skal sikre uafbrudt forsyning af drikkevand.",
+      "translation": "지자체는 끊김 없는 식수 공급을 보장해야 합니다. — 격식"
+    },
+    {
+      "text": "De testede vandet for at sikre, at det var sikkert.",
+      "translation": "그들은 물의 안전성을 검사했어요. — 중립"
+    },
+    {
+      "text": "Spar vand, når du børster tænder.",
+      "translation": "양치할 때 물을 아껴 쓰세요. — 비격식"
+    },
+    {
+      "text": "Ferskvand er vigtigt for sundheden.",
+      "translation": "민물은 건강에 중요해요. — 중립"
+    }
+  ]
+}

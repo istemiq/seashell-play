@@ -1,0 +1,17 @@
+node_modules/
+build/
+dist/
+android/.gradle/
+android/app/build/
+android/build/
+android/.idea/
+*.log
+.env
+.env.local
+server/.env
+*.mp3
+video-*
+.DS_Store
+.idea/
+*.iml
+local.properties

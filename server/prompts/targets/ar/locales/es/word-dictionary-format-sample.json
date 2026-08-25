@@ -1,0 +1,46 @@
+{
+  "headwordEn": "ماء",
+  "glossRu": "ماء [māʾ] — agua como sustancia; agua potable; neutro",
+  "examples": [
+    {
+      "text": "أحتاج إلى كوب من الماء.",
+      "translation": "Necesito un vaso de agua. — neutro"
+    },
+    {
+      "text": "هل الماء ساخن بما يكفي للشاي؟",
+      "translation": "¿El agua está lo bastante caliente para el té? — neutro"
+    },
+    {
+      "text": "مشينا على طول الماء.",
+      "translation": "Caminamos junto al agua. — neutro"
+    },
+    {
+      "text": "انقطع الماء عن الحي طوال الصباح.",
+      "translation": "Cortaron el agua toda la mañana. — neutro"
+    },
+    {
+      "text": "هل يمكنني بعض الماء، من فضلك؟",
+      "translation": "¿Me das un poco de agua, por favor? — neutro"
+    },
+    {
+      "text": "عندك ماء؟ أنا عطشان جداً.",
+      "translation": "¿Hay agüita? Me muero de sed. — informal"
+    },
+    {
+      "text": "على البلدية ضمان إمداد مستمر بمياه الشرب.",
+      "translation": "El municipio debe garantizar el suministro ininterrumpido de agua potable. — formal"
+    },
+    {
+      "text": "فحصوا الماء للتأكد من سلامته.",
+      "translation": "Comprobaron la seguridad del agua. — neutro"
+    },
+    {
+      "text": "وفّر الماء عند تنظيف أسنانك.",
+      "translation": "Ahorra agua cuando te laves los dientes. — informal"
+    },
+    {
+      "text": "المياه العذبة مهمة للصحة.",
+      "translation": "El agua dulce es importante para la salud. — neutro"
+    }
+  ]
+}

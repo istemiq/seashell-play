@@ -1,0 +1,46 @@
+{
+  "headwordEn": "agua",
+  "glossRu": "agua [ˈaɣwa] — 物質としての水；飲料水；中立",
+  "examples": [
+    {
+      "text": "Necesito un vaso de agua.",
+      "translation": "コップ一杯の水が必要です。 — 中立"
+    },
+    {
+      "text": "¿Está el agua lo suficientemente caliente para el té?",
+      "translation": "お茶にするにはお湯は十分熱いですか。 — 中立"
+    },
+    {
+      "text": "Caminamos junto al agua.",
+      "translation": "水辺に沿って歩きました。 — 中立"
+    },
+    {
+      "text": "Cortaron el agua en el barrio toda la mañana.",
+      "translation": "午前中ずっと断水でした。 — 中立"
+    },
+    {
+      "text": "¿Me das un poco de agua, por favor?",
+      "translation": "水を少しいただけますか。 — 中立"
+    },
+    {
+      "text": "¿Tienes agua? Tengo mucha sed.",
+      "translation": "水ある？喉がカラカラだ。 — カジュアル"
+    },
+    {
+      "text": "El ayuntamiento garantizará el suministro ininterrumpido de agua potable.",
+      "translation": "市は途切れない飲料水の供給を確保しなければならない。 — フォーマル"
+    },
+    {
+      "text": "Analizaron el agua para comprobar que era segura.",
+      "translation": "彼らは水の安全性を検査した。 — 中立"
+    },
+    {
+      "text": "Ahorra agua cuando te laves los dientes.",
+      "translation": "歯を磨くときは水を節約しなさい。 — カジュアル"
+    },
+    {
+      "text": "El agua dulce es importante para la salud.",
+      "translation": "淡水は健康にとって重要だ。 — 中立"
+    }
+  ]
+}

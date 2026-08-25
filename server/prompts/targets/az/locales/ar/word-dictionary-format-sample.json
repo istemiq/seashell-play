@@ -1,0 +1,46 @@
+{
+  "headwordEn": "su",
+  "glossRu": "su [su] — الماء كمادة؛ ماء للشرب؛ محايد",
+  "examples": [
+    {
+      "text": "Mənə bir stəkan su lazımdır.",
+      "translation": "أحتاج إلى كوب من الماء. — محايد"
+    },
+    {
+      "text": "Çay üçün su kif qədər istidir?",
+      "translation": "هل الماء ساخن بما يكفي للشاي؟ — محايد"
+    },
+    {
+      "text": "Biz su kənarında gəzdik.",
+      "translation": "سرنا على طول الماء. — محايد"
+    },
+    {
+      "text": "Bütün səhər su kəsildi.",
+      "translation": "قطعوا الماء طوال الصباح. — محايد"
+    },
+    {
+      "text": "Bir az su ala bilərəmmi?",
+      "translation": "هل يمكنني بعض الماء، من فضلك؟ — محايد"
+    },
+    {
+      "text": "Su var? Çox susamışam.",
+      "translation": "هل يوجد ماء؟ أموت من العطش. — غير رسمي"
+    },
+    {
+      "text": "Bələdiyyə fasiləsiz içməli su təchizatını təmin edəcək.",
+      "translation": "يجب على البلدية ضمان إمدادات مستمرة من مياه الشرب. — رسمي"
+    },
+    {
+      "text": "Onlar təhlükəsizlik üçün suyu yoxladılar.",
+      "translation": "اختبروا الماء من أجل السلامة. — محايد"
+    },
+    {
+      "text": "Dişlərini fırçalayarkən suya qənaət et.",
+      "translation": "وفّر الماء عندما تنظف أسنانك. — غير رسمي"
+    },
+    {
+      "text": "Şirin su sağlamlıq üçün vacibdir.",
+      "translation": "الماء العذب مهم للصحة. — محايد"
+    }
+  ]
+}

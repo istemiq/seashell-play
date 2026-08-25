@@ -1,0 +1,574 @@
+========================================================================================
+Dictionary locale report
+========================================================================================
+Generated: 2026-08-01T18:27:50.450Z
+LLM: openrouter / deepseek/deepseek-chat
+Studies: ar, az, ca, cs, da, de, el, en, es, fa, fi, fr, he, hi, hu, id, it, ja, ko, nl, no, pl, pt, ro, ru, sr, sv, tr, ug, uk, ur, vi, zh
+Content locales: ar, en, es, fa, it, ja, ko, pt, ru, tr, uk
+Input types: word, phrase
+Planned LLM calls: 726
+
+========================================================================================
+STUDY: ar (Arabic)  |  LOCALE: ar  |  word: «ماء»  |  12855 ms
+========================================================================================
+
+--- SYSTEM PROMPT ---
+You output only one valid JSON object when asked. No markdown fences.
+
+Match the FORMAT SAMPLE blocks: same keys (headwordEn, glossRu, examples).
+
+STRICT COUNTS: "examples" must contain exactly 10 objects.
+
+STRICT LANGUAGE SPLIT:
+- Every "text" = Arabic sentence (Arabic script for the sentence words). Latin or Cyrillic in "text" is forbidden when studying Arabic.
+- Every "translation" and the gloss part of "glossRu" after the em dash = **العربية** (Arabic for the main gloss/translation of that same English sentence).
+- If learner input is not in the study language: headwordEn = natural Arabic lemma for a single word, or full Arabic translation for a phrase (2+ words); glossRu must start with that Arabic headword — NOT with the learner's input alone in another script.
+
+TRANSCRIPTION: glossRu = headwordEn + [transliteration] + — + العربية gloss + style tail.
+
+INPUT SHAPE: **single word** → Arabic lemma; **phrase/sentence** (2+ words) → full natural Arabic translation of the entire learner entry — never reduce a phrase to one keyword.
+
+For Arabic study entries omit verbUsage (or use []).
+
+--- USER PROMPT ---
+You help متعلمي الإنجليزية الناطقين بالعربية. Produce **one** JSON object for: "ماء"
+
+**Field languages (mandatory)**
+- `text` — **only a Arabic sentence** (Arabic script for the sentence words). Do NOT put العربية sentences in `text`. The learner studies **Arabic**: examples are Arabic phrases with `headwordEn`.
+- `translation` — **العربية** translation of the same Arabic sentence from `text`, plus the style tail as in the sample.
+
+**مدخل المتعلم (كلمة أو عبارة — احفظ المعنى كاملاً)**
+- لا تُختزل العبارة إلى كلمة مفتاحية واحدة.
+- **كلمة واحدة** — `headwordEn` = **lemma** عربية طبيعية.
+- **عبارة أو جملة** (كلمتان فأكثر) — `headwordEn` = **ترجمة عربية طبيعية للمدخل كاملاً**.
+- `glossRu`: `headwordEn` + نقل صوتي + المعنى **بالعربية**.
+
+**Task**
+- Keys: `headwordEn`, `glossRu`, `examples`. Do **not** add `verbUsage` for Arabic study entries.
+- In `examples` exactly **10** objects. Each has only `text` and `translation`.
+- At the end of each `translation` and in `glossRu` add the style tail **as in the sample**: ` — محايد; BrE/AmE`, ` — عامية; BrE/AmE`, ` — رسمي; BrE/AmE`, ` — أدبي; BrE/AmE`.
+- **Пометки стиля (не ставь «нейтр.» по умолчанию):**
+  - `محايد` — everyday neutral speech
+  - `عامية` — colloquial, casual speech
+  - `رسمي` — official, business, academic, medical, legal, technical
+  - `أدبي` — bookish, literary style
+  - `رسمي مرتفع` — elevated, solemn register
+  - `شعري` — poetic, figurative style
+  - `قديم` — archaic or dated word/phrase
+  - `عامية شباب` — slang, youth or in-group vocabulary
+  - `بذيء` — coarse/vulgar word (no profanity in examples)
+  - `فظ` — low colloquial / coarse everyday speech
+  - `مهني` — professional in-group jargon
+  - `تقني` — specialized terminology
+  - `لهجة` — dialectal or regional word/phrase
+  - `تجميل` — euphemistic expression
+  - `ساخر` — ironic usage
+  - `محظور` — taboo lexeme (mark it, do not quote slurs in examples)
+- В `glossRu` укажи **типичный стиль слова**; в каждом `translation` — стиль **этой фразы**. Можно 1–2 пометки через «; » (напр. ` — форм.; спец.; BrE/AmE`). BrE/AmE — при заметном различии произношения/орфографии.
+
+**Transcription**
+- In `glossRu`, immediately after `headwordEn` (before « — »), add romanization in square brackets: `ماء [māʾ] — …`.
+
+المحتوى: نبرة تعليمية مشروعة، 16+، بلا تطرف أو كراهية أو محتوى جنسي يشمل قاصرين أو تعليمات جرائم أو مخدرات؛ بلا ألفاظ بذيئة.
+
+**Critical split (Arabic study module)**
+- `headwordEn` and every `text` = **Arabic script** only.
+- `translation` and the gloss part after « — » = **العربية** only (العربية for the gloss/translation of that same Arabic sentence). Never copy the Arabic sentence into `translation`.
+
+**Sample: common word** (do not copy ماء or its phrases — only key shape and 10 examples):
+
+**Sample locale note:** The JSON below shows structure only. Every "translation" and the gloss meaning after « — » MUST be in العربية, even if the sample shows another language.
+
+{
+  "headwordEn": "ماء",
+  "glossRu": "ماء [māʾ] — الماء كمادة؛ ماء للشرب؛ محايد",
+  "examples": [
+    {
+      "text": "أحتاج إلى كوب من الماء.",
+      "translation": "أحتاج إلى كوب من الماء. — محايد"
+    },
+    {
+      "text": "هل الماء ساخن بما يكفي للشاي؟",
+      "translation": "هل الماء ساخن بما يكفي للشاي؟ — محايد"
+    },
+    {
+      "text": "مشينا على طول الماء.",
+      "translation": "سرنا على طول الماء. — محايد"
+    },
+    {
+      "text": "انقطع الماء عن الحي طوال الصباح.",
+      "translation": "قطعوا الماء طوال الصباح. — محايد"
+    },
+    {
+      "text": "هل يمكنني بعض الماء، من فضلك؟",
+      "translation": "هل يمكنني بعض الماء، من فضلك؟ — محايد"
+    },
+    {
+      "text": "عندك ماء؟ أنا عطشان جداً.",
+      "translation": "هل يوجد ماء؟ أموت من العطش. — غير رسمي"
+    },
+    {
+      "text": "على البلدية ضمان إمداد مستمر بمياه الشرب.",
+      "translation": "يجب على البلدية ضمان إمدادات مستمرة من مياه الشرب. — رسمي"
+    },
+    {
+      "text": "فحصوا الماء للتأكد من سلامته.",
+      "translation": "اختبروا الماء من أجل السلامة. — محايد"
+    },
+    {
+      "text": "وفّر الماء عند تنظيف أسنانك.",
+      "translation": "وفّر الماء عندما تنظف أسنانك. — غير رسمي"
+    },
+    {
+      "text": "المياه العذبة مهمة للصحة.",
+      "translation": "الماء العذب مهم للصحة. — محايد"
+    }
+  ]
+}
+
+Output: **only** valid JSON for one object, no markdown, no text before or after.
+
+
+REMINDER: every "text" MUST be an Arabic sentence (Arabic script). "translation" and gloss meaning MUST be in العربية. headwordEn must be the Arabic lemma/phrase in Arabic script.
+
+--- LLM RESPONSE (raw) ---
+```json
+{
+  "headwordEn": "ماء",
+  "glossRu": "ماء [māʾ] — سائل شفاف عديم اللون والرائحة؛ أساس الحياة؛ محايد",
+  "examples": [
+    {
+      "text": "الماء ضروري لبقاء الإنسان.",
+      "translation": "الماء ضروري لبقاء الإنسان. — محايد"
+    },
+    {
+      "text": "اشرب الماء بانتظام للحفاظ على صحتك.",
+      "translation": "اشرب الماء بانتظام للحفاظ على صحتك. — محايد"
+    },
+    {
+      "text": "تأكد من نظافة الماء قبل الشرب.",
+      "translation": "تأكد من نظافة الماء قبل الشرب. — محايد"
+    },
+    {
+      "text": "الماء يغطي معظم سطح الأرض.",
+      "translation": "الماء يغطي معظم سطح الأرض. — محايد"
+    },
+    {
+      "text": "لا تترك الصنبور مفتوحًا لتجنب إهدار الماء.",
+      "translation": "لا تترك الصنبور مفتوحًا لتجنب إهدار الماء. — محايد"
+    },
+    {
+      "text": "الماء البارد منعش في الصيف.",
+      "translation": "الماء البارد منعش في الصيف. — محايد"
+    },
+    {
+      "text": "يجب غلي الماء في المناطق الريفية.",
+      "translation": "يجب غلي الماء في المناطق الريفية. — محايد"
+    },
+    {
+      "text": "الماء المالح غير صالح للشرب.",
+      "translation": "الماء المالح غير صالح للشرب. — محايد"
+    },
+    {
+      "text": "تستخدم النباتات الماء في عملية التمثيل الضوئي.",
+      "translation": "تستخدم النباتات الماء في عملية التمثيل الضوئي. — رسمي"
+    },
+    {
+      "text": "احفظ الماء في زجاجات نظيفة.",
+      "translation": "احفظ الماء في زجاجات نظيفة. — محايد"
+    }
+  ]
+}
+```
+
+--- PARSED SUMMARY ---
+headwordEn: ماء
+glossRu: ماء [māʾ] — سائل شفاف عديم اللون والرائحة؛ أساس الحياة؛ محايد
+examples: 10
+  [0] text: الماء ضروري لبقاء الإنسان.
+      translation: الماء ضروري لبقاء الإنسان. (محايد)
+  [1] text: اشرب الماء بانتظام للحفاظ على صحتك.
+      translation: اشرب الماء بانتظام للحفاظ على صحتك. (محايد)
+  [2] text: تأكد من نظافة الماء قبل الشرب.
+      translation: تأكد من نظافة الماء قبل الشرب. (محايد)
+  … +7 more
+--- VALIDATION ---
+content locale (ar): OK
+study language (ar): OK
+
+========================================================================================
+STUDY: ar (Arabic)  |  LOCALE: ar  |  phrase: «أحتاج إلى كوب من الماء.»  |  31909 ms
+========================================================================================
+
+--- SYSTEM PROMPT ---
+You output only one valid JSON object when asked. No markdown fences.
+
+Match the FORMAT SAMPLE blocks: same keys (headwordEn, glossRu, examples).
+
+STRICT COUNTS: "examples" must contain exactly 10 objects.
+
+STRICT LANGUAGE SPLIT:
+- Every "text" = Arabic sentence (Arabic script for the sentence words). Latin or Cyrillic in "text" is forbidden when studying Arabic.
+- Every "translation" and the gloss part of "glossRu" after the em dash = **العربية** (Arabic for the main gloss/translation of that same English sentence).
+- If learner input is not in the study language: headwordEn = natural Arabic lemma for a single word, or full Arabic translation for a phrase (2+ words); glossRu must start with that Arabic headword — NOT with the learner's input alone in another script.
+
+TRANSCRIPTION: glossRu = headwordEn + [transliteration] + — + العربية gloss + style tail.
+
+INPUT SHAPE: **single word** → Arabic lemma; **phrase/sentence** (2+ words) → full natural Arabic translation of the entire learner entry — never reduce a phrase to one keyword.
+
+For Arabic study entries omit verbUsage (or use []).
+
+--- USER PROMPT ---
+**PHRASE ENTRY** («أحتاج إلى كوب من الماء.»): translate the **entire** learner input into natural Arabic; headwordEn must be an Arabic phrase or lemma in Arabic script.
+
+You help متعلمي الإنجليزية الناطقين بالعربية. Produce **one** JSON object for: "أحتاج إلى كوب من الماء."
+
+**Field languages (mandatory)**
+- `text` — **only a Arabic sentence** (Arabic script for the sentence words). Do NOT put العربية sentences in `text`. The learner studies **Arabic**: examples are Arabic phrases with `headwordEn`.
+- `translation` — **العربية** translation of the same Arabic sentence from `text`, plus the style tail as in the sample.
+
+**مدخل المتعلم (كلمة أو عبارة — احفظ المعنى كاملاً)**
+- لا تُختزل العبارة إلى كلمة مفتاحية واحدة.
+- **كلمة واحدة** — `headwordEn` = **lemma** عربية طبيعية.
+- **عبارة أو جملة** (كلمتان فأكثر) — `headwordEn` = **ترجمة عربية طبيعية للمدخل كاملاً**.
+- `glossRu`: `headwordEn` + نقل صوتي + المعنى **بالعربية**.
+
+**Task**
+- Keys: `headwordEn`, `glossRu`, `examples`. Do **not** add `verbUsage` for Arabic study entries.
+- In `examples` exactly **10** objects. Each has only `text` and `translation`.
+- At the end of each `translation` and in `glossRu` add the style tail **as in the sample**: ` — محايد; BrE/AmE`, ` — عامية; BrE/AmE`, ` — رسمي; BrE/AmE`, ` — أدبي; BrE/AmE`.
+- **Пометки стиля (не ставь «нейтр.» по умолчанию):**
+  - `محايد` — everyday neutral speech
+  - `عامية` — colloquial, casual speech
+  - `رسمي` — official, business, academic, medical, legal, technical
+  - `أدبي` — bookish, literary style
+  - `رسمي مرتفع` — elevated, solemn register
+  - `شعري` — poetic, figurative style
+  - `قديم` — archaic or dated word/phrase
+  - `عامية شباب` — slang, youth or in-group vocabulary
+  - `بذيء` — coarse/vulgar word (no profanity in examples)
+  - `فظ` — low colloquial / coarse everyday speech
+  - `مهني` — professional in-group jargon
+  - `تقني` — specialized terminology
+  - `لهجة` — dialectal or regional word/phrase
+  - `تجميل` — euphemistic expression
+  - `ساخر` — ironic usage
+  - `محظور` — taboo lexeme (mark it, do not quote slurs in examples)
+- В `glossRu` укажи **типичный стиль слова**; в каждом `translation` — стиль **этой фразы**. Можно 1–2 пометки через «; » (напр. ` — форм.; спец.; BrE/AmE`). BrE/AmE — при заметном различии произношения/орфографии.
+
+**Transcription**
+- In `glossRu`, immediately after `headwordEn` (before « — »), add romanization in square brackets: `ماء [māʾ] — …`.
+
+المحتوى: نبرة تعليمية مشروعة، 16+، بلا تطرف أو كراهية أو محتوى جنسي يشمل قاصرين أو تعليمات جرائم أو مخدرات؛ بلا ألفاظ بذيئة.
+
+**Critical split (Arabic study module)**
+- `headwordEn` and every `text` = **Arabic script** only.
+- `translation` and the gloss part after « — » = **العربية** only (العربية for the gloss/translation of that same Arabic sentence). Never copy the Arabic sentence into `translation`.
+
+**Sample: common word** (do not copy ماء or its phrases — only key shape and 10 examples):
+
+**Sample locale note:** The JSON below shows structure only. Every "translation" and the gloss meaning after « — » MUST be in العربية, even if the sample shows another language.
+
+{
+  "headwordEn": "ماء",
+  "glossRu": "ماء [māʾ] — الماء كمادة؛ ماء للشرب؛ محايد",
+  "examples": [
+    {
+      "text": "أحتاج إلى كوب من الماء.",
+      "translation": "أحتاج إلى كوب من الماء. — محايد"
+    },
+    {
+      "text": "هل الماء ساخن بما يكفي للشاي؟",
+      "translation": "هل الماء ساخن بما يكفي للشاي؟ — محايد"
+    },
+    {
+      "text": "مشينا على طول الماء.",
+      "translation": "سرنا على طول الماء. — محايد"
+    },
+    {
+      "text": "انقطع الماء عن الحي طوال الصباح.",
+      "translation": "قطعوا الماء طوال الصباح. — محايد"
+    },
+    {
+      "text": "هل يمكنني بعض الماء، من فضلك؟",
+      "translation": "هل يمكنني بعض الماء، من فضلك؟ — محايد"
+    },
+    {
+      "text": "عندك ماء؟ أنا عطشان جداً.",
+      "translation": "هل يوجد ماء؟ أموت من العطش. — غير رسمي"
+    },
+    {
+      "text": "على البلدية ضمان إمداد مستمر بمياه الشرب.",
+      "translation": "يجب على البلدية ضمان إمدادات مستمرة من مياه الشرب. — رسمي"
+    },
+    {
+      "text": "فحصوا الماء للتأكد من سلامته.",
+      "translation": "اختبروا الماء من أجل السلامة. — محايد"
+    },
+    {
+      "text": "وفّر الماء عند تنظيف أسنانك.",
+      "translation": "وفّر الماء عندما تنظف أسنانك. — غير رسمي"
+    },
+    {
+      "text": "المياه العذبة مهمة للصحة.",
+      "translation": "الماء العذب مهم للصحة. — محايد"
+    }
+  ]
+}
+
+Output: **only** valid JSON for one object, no markdown, no text before or after.
+
+
+REMINDER: every "text" MUST be an Arabic sentence (Arabic script). "translation" and gloss meaning MUST be in العربية. headwordEn must be the Arabic lemma/phrase in Arabic script.
+
+CRITICAL PHRASE INPUT («أحتاج إلى كوب من الماء.»): headwordEn MUST be the full natural Arabic translation in Arabic script (several words when needed). A single keyword alone is OK only if it is the natural Arabic lemma.
+
+--- LLM RESPONSE (raw) ---
+{
+  "headwordEn": "أحتاج إلى كوب من الماء",
+  "glossRu": "أحتاج إلى كوب من الماء [aḥtāj ilā kūb min al-māʾ] — التعبير عن الحاجة إلى كوب من الماء؛ محايد",
+  "examples": [
+    {
+      "text": "أحتاج إلى كوب من الماء.",
+      "translation": "أحتاج إلى كوب من الماء. — محايد"
+    },
+    {
+      "text": "هل يمكنني الحصول على كوب من الماء؟",
+      "translation": "هل يمكنني الحصول على كوب من الماء؟ — محايد"
+    },
+    {
+      "text": "أشعر بالعطش وأحتاج إلى كوب من الماء.",
+      "translation": "أشعر بالعطش وأحتاج إلى كوب من الماء. — محايد"
+    },
+    {
+      "text": "بعد التمرين، أحتاج إلى كوب من الماء.",
+      "translation": "بعد التمرين، أحتاج إلى كوب من الماء. — محايد"
+    },
+    {
+      "text": "أحتاج إلى كوب من الماء لشرب الدواء.",
+      "translation": "أحتاج إلى كوب من الماء لشرب الدواء. — محايد"
+    },
+    {
+      "text": "هل لديك كوب من الماء؟",
+      "translation": "هل لديك كوب من الماء؟ — محايد"
+    },
+    {
+      "text": "أحتاج إلى كوب من الماء البارد.",
+      "translation": "أحتاج إلى كوب من الماء البارد. — محايد"
+    },
+    {
+      "text": "أحتاج إلى كوب من الماء بعد المشي الطويل.",
+      "translation": "أحتاج إلى كوب من الماء بعد المشي الطويل. — محايد"
+    },
+    {
+      "text": "أحتاج إلى كوب من الماء قبل النوم.",
+      "translation": "أحتاج إلى كوب من الماء قبل النوم. — محايد"
+    },
+    {
+      "text": "أحتاج إلى كوب من الماء لترطيب حنجرتي.",
+      "translation": "أحتاج إلى كوب من الماء لترطيب حنجرتي. — محايد"
+    }
+  ]
+}
+
+--- PARSED SUMMARY ---
+headwordEn: أحتاج إلى كوب من الماء
+glossRu: أحتاج إلى كوب من الماء [aḥtāj ilā kūb min al-māʾ] — التعبير عن الحاجة إلى كوب من الماء؛ محايد
+examples: 10
+  [0] text: أحتاج إلى كوب من الماء.
+      translation: أحتاج إلى كوب من الماء. (محايد)
+  [1] text: هل يمكنني الحصول على كوب من الماء؟
+      translation: هل يمكنني الحصول على كوب من الماء؟ (محايد)
+  [2] text: أشعر بالعطش وأحتاج إلى كوب من الماء.
+      translation: أشعر بالعطش وأحتاج إلى كوب من الماء. (محايد)
+  … +7 more
+--- VALIDATION ---
+content locale (ar): OK
+study language (ar): OK
+
+========================================================================================
+STUDY: ar (Arabic)  |  LOCALE: en  |  word: «ماء»  |  12224 ms
+========================================================================================
+
+--- SYSTEM PROMPT ---
+You output only one valid JSON object when asked. No markdown fences.
+
+Match the FORMAT SAMPLE blocks: same keys (headwordEn, glossRu, examples).
+
+STRICT COUNTS: "examples" must contain exactly 10 objects.
+
+STRICT LANGUAGE SPLIT:
+- Every "text" = Arabic sentence (Arabic script for the sentence words). Latin or Cyrillic in "text" is forbidden when studying Arabic.
+- Every "translation" and the gloss part of "glossRu" after the em dash = **English** (English for the main gloss/translation of that same English sentence).
+- If learner input is not in the study language: headwordEn = natural Arabic lemma for a single word, or full Arabic translation for a phrase (2+ words); glossRu must start with that Arabic headword — NOT with the learner's input alone in another script.
+
+TRANSCRIPTION: glossRu = headwordEn + [transliteration] + — + English gloss + style tail.
+
+INPUT SHAPE: **single word** → Arabic lemma; **phrase/sentence** (2+ words) → full natural Arabic translation of the entire learner entry — never reduce a phrase to one keyword.
+
+For Arabic study entries omit verbUsage (or use []).
+
+--- USER PROMPT ---
+You help English-speaking learners of English. Produce **one** JSON object for: "ماء"
+
+**Field languages (mandatory)**
+- `text` — **only a Arabic sentence** (Arabic script for the sentence words). Do NOT put English sentences in `text`. The learner studies **Arabic**: examples are Arabic phrases with `headwordEn`.
+- `translation` — **English** translation of the same Arabic sentence from `text`, plus the style tail as in the sample.
+
+**Learner entry (word or phrase — keep the full meaning)**
+- Do not reduce a phrase to a single keyword.
+- **Single word** — `headwordEn` = natural Arabic **lemma** in Arabic script (e.g. `ماء`, `كتاب`).
+- **Phrase or sentence** (2+ words) — `headwordEn` = **full natural Arabic translation of the entire entry** in Arabic script, not one keyword. `text` examples teach that Arabic phrase.
+- `glossRu`: `headwordEn` + transliteration + **English** gloss/definition; you may note the original learner input in parentheses.
+
+**Task**
+- Keys: `headwordEn`, `glossRu`, `examples`. Do **not** add `verbUsage` for Arabic study entries.
+- In `examples` exactly **10** objects. Each has only `text` and `translation`.
+- At the end of each `translation` and in `glossRu` add the style tail **as in the sample**: ` — neutral; BrE/AmE`, ` — informal; BrE/AmE`, ` — formal; BrE/AmE`, ` — literary; BrE/AmE`.
+- **Style tags (do not default to neutral):**
+  - `neutral` — everyday neutral speech
+  - `informal` — colloquial, casual speech
+  - `formal` — official, business, academic, medical, legal, technical
+  - `literary` — bookish, literary style
+  - `elevated` — elevated, solemn register
+  - `poetic` — poetic, figurative style
+  - `archaic` — archaic or dated word/phrase
+  - `slang` — slang, youth or in-group vocabulary
+  - `vulgar` — coarse/vulgar word (no profanity in examples)
+  - `coarse` — low colloquial / coarse everyday speech
+  - `jargon` — professional in-group jargon
+  - `technical` — specialized terminology
+  - `dialectal` — dialectal or regional word/phrase
+  - `euphemistic` — euphemistic expression
+  - `ironic` — ironic usage
+  - `taboo` — taboo lexeme (mark it, do not quote slurs in examples)
+- In `glossRu`, tag the word's typical style; in each `translation`, tag that sentence. Use 1–2 tags separated by «; » (e.g. ` — formal; technical; BrE/AmE`). Add BrE/AmE when pronunciation/spelling differs.
+
+**Transcription**
+- In `glossRu`, immediately after `headwordEn` (before « — »), add romanization in square brackets: `ماء [māʾ] — …`.
+
+Content: lawful educational tone, 16+, no extremism, hate, harassment, sexual content involving minors, crime or drug instructions; no profanity.
+
+**Critical split (Arabic study module)**
+- `headwordEn` and every `text` = **Arabic script** only.
+- `translation` and the gloss part after « — » = **English** only (English for the gloss/translation of that same Arabic sentence). Never copy the Arabic sentence into `translation`.
+
+**Sample: common word** (do not copy ماء or its phrases — only key shape and 10 examples):
+
+{
+  "headwordEn": "ماء",
+  "glossRu": "ماء [māʾ] — water as a substance; drinking water; neutral",
+  "examples": [
+    {
+      "text": "أحتاج إلى كوب من الماء.",
+      "translation": "I need a glass of water. — neutral"
+    },
+    {
+      "text": "هل الماء ساخن بما يكفي للشاي؟",
+      "translation": "Is the water hot enough for tea? — neutral"
+    },
+    {
+      "text": "مشينا على طول الماء.",
+      "translation": "We walked along the water. — neutral"
+    },
+    {
+      "text": "انقطع الماء عن الحي طوال الصباح.",
+      "translation": "The water was cut off all morning. — neutral"
+    },
+    {
+      "text": "هل يمكنني بعض الماء، من فضلك؟",
+      "translation": "Can I get some water, please? — neutral"
+    },
+    {
+      "text": "عندك ماء؟ أنا عطشان جداً.",
+      "translation": "Got any water? I'm parched. — informal"
+    },
+    {
+      "text": "على البلدية ضمان إمداد مستمر بمياه الشرب.",
+      "translation": "The municipality shall ensure uninterrupted supply of potable water. — formal"
+    },
+    {
+      "text": "فحصوا الماء للتأكد من سلامته.",
+      "translation": "They tested the water for safety. — neutral"
+    },
+    {
+      "text": "وفّر الماء عند تنظيف أسنانك.",
+      "translation": "Save water when you brush your teeth. — informal"
+    },
+    {
+      "text": "المياه العذبة مهمة للصحة.",
+      "translation": "Fresh water is important for health. — neutral"
+    }
+  ]
+}
+
+Output: **only** valid JSON for one object, no markdown, no text before or after.
+
+
+REMINDER: every "text" MUST be an Arabic sentence (Arabic script). "translation" and gloss meaning MUST be in English. headwordEn must be the Arabic lemma/phrase in Arabic script.
+
+--- LLM RESPONSE (raw) ---
+```json
+{
+  "headwordEn": "ماء",
+  "glossRu": "ماء [māʾ] — water as a substance; drinking water; neutral",
+  "examples": [
+    {
+      "text": "أشرب الماء كل صباح لتبدأ يومي بنشاط.",
+      "translation": "I drink water every morning to start my day energetically. — neutral"
+    },
+    {
+      "text": "الماء في هذه الزجاجة نظيف وصالح للشرب.",
+      "translation": "The water in this bottle is clean and drinkable. — neutral"
+    },
+    {
+      "text": "لا تترك الصنبور مفتوحًا حتى لا يهدر الماء.",
+      "translation": "Don't leave the tap running to avoid wasting water. — informal"
+    },
+    {
+      "text": "يجب غلي الماء قبل الشرب في المناطق الريفية.",
+      "translation": "Water should be boiled before drinking in rural areas. — formal"
+    },
+    {
+      "text": "الماء هو أساس الحياة على الأرض.",
+      "translation": "Water is the foundation of life on Earth. — neutral"
+    },
+    {
+      "text": "عطشان! عندك ماء؟",
+      "translation": "Thirsty! Got any water? — informal"
+    },
+    {
+      "text": "تحتاج النباتات إلى الماء لتنمو بشكل صحي.",
+      "translation": "Plants need water to grow healthily. — neutral"
+    },
+    {
+      "text": "الماء المثلج منعش في أيام الصيف الحارة.",
+      "translation": "Iced water is refreshing on hot summer days. — neutral"
+    },
+    {
+      "text": "يجب ترشيد استهلاك الماء للحفاظ على الموارد.",
+      "translation": "Water consumption should be rationalized to preserve resources. — formal"
+    },
+    {
+      "text": "نسيت أن أحضر معي زجاجة الماء.",
+      "translation": "I forgot to bring my water bottle with me. — neutral"
+    }
+  ]
+}
+```
+
+--- PARSED SUMMARY ---
+headwordEn: ماء
+glossRu: ماء [māʾ] — water as a substance; drinking water; neutral
+examples: 10
+  [0] text: أشرب الماء كل صباح لتبدأ يومي بنشاط.
+      translation: I drink water every morning to start my day energetically. (neutral)
+  [1] text: الماء في هذه الزجاجة نظيف وصالح للشرب.
+      translation: The water in this bottle is clean and drinkable. (neutral)
+  [2] text: لا تترك الصنبور مفتوحًا حتى لا يهدر الماء.
+      translation: Don't leave the tap running to avoid wasting water. (informal)
+  … +7 more
+--- VALIDATION ---
+content locale (en): OK
+study language (ar): OK
+

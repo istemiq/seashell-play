@@ -1,0 +1,46 @@
+{
+  "headwordEn": "vand",
+  "glossRu": "vand [van] — 物質としての水；飲料水；中立",
+  "examples": [
+    {
+      "text": "Jeg har brug for et glas vand.",
+      "translation": "コップ一杯の水が必要です。 — 中立"
+    },
+    {
+      "text": "Er vandet varmt nok til te?",
+      "translation": "お茶にするにはお湯は十分熱いですか。 — 中立"
+    },
+    {
+      "text": "Vi gik langs vandet.",
+      "translation": "水辺に沿って歩きました。 — 中立"
+    },
+    {
+      "text": "Vandet blev afbrudt i kvarteret hele morgenen.",
+      "translation": "午前中ずっと断水でした。 — 中立"
+    },
+    {
+      "text": "Kan jeg få noget vand, tak?",
+      "translation": "水を少しいただけますか。 — 中立"
+    },
+    {
+      "text": "Har du vand? Jeg er meget tørstig.",
+      "translation": "水ある？喉がカラカラだ。 — カジュアル"
+    },
+    {
+      "text": "Kommunen skal sikre uafbrudt forsyning af drikkevand.",
+      "translation": "市は途切れない飲料水の供給を確保しなければならない。 — フォーマル"
+    },
+    {
+      "text": "De testede vandet for at sikre, at det var sikkert.",
+      "translation": "彼らは水の安全性を検査した。 — 中立"
+    },
+    {
+      "text": "Spar vand, når du børster tænder.",
+      "translation": "歯を磨くときは水を節約しなさい。 — カジュアル"
+    },
+    {
+      "text": "Ferskvand er vigtigt for sundheden.",
+      "translation": "淡水は健康にとって重要だ。 — 中立"
+    }
+  ]
+}

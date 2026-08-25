@@ -1,0 +1,46 @@
+{
+  "headwordEn": "eau",
+  "glossRu": "eau [o] — água como substância; água potável; neutro",
+  "examples": [
+    {
+      "text": "J'ai besoin d'un verre d'eau.",
+      "translation": "Preciso de um copo de água. — neutro"
+    },
+    {
+      "text": "L'eau est-elle assez chaude pour le thé ?",
+      "translation": "A água está quente o suficiente para chá? — neutro"
+    },
+    {
+      "text": "Nous avons marché le long de l'eau.",
+      "translation": "Caminhámos ao longo da água. — neutro"
+    },
+    {
+      "text": "L'eau a été coupée dans le quartier toute la matinée.",
+      "translation": "Cortaram a água durante toda a manhã. — neutro"
+    },
+    {
+      "text": "Puis-je avoir un peu d'eau, s'il vous plaît ?",
+      "translation": "Posso beber um pouco de água, por favor? — neutro"
+    },
+    {
+      "text": "Tu as de l'eau ? J'ai très soif.",
+      "translation": "Tem água? Estou a morrer de sede. — informal"
+    },
+    {
+      "text": "La municipalité garantira un approvisionnement ininterrompu en eau potable.",
+      "translation": "O município deve garantir o fornecimento ininterrupto de água potável. — formal"
+    },
+    {
+      "text": "Ils ont testé l'eau pour vérifier qu'elle était sûre.",
+      "translation": "Eles testaram a água quanto à segurança. — neutro"
+    },
+    {
+      "text": "Économisez l'eau quand vous vous brossez les dents.",
+      "translation": "Poupa água quando escovas os dentes. — informal"
+    },
+    {
+      "text": "L'eau douce est importante pour la santé.",
+      "translation": "A água doce é importante para a saúde. — neutro"
+    }
+  ]
+}

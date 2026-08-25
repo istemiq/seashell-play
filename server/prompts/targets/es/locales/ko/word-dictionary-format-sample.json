@@ -1,0 +1,46 @@
+{
+  "headwordEn": "agua",
+  "glossRu": "agua [ˈaɣwa] — 물질로서의 물; 식수; 중립",
+  "examples": [
+    {
+      "text": "Necesito un vaso de agua.",
+      "translation": "물 한 잔이 필요해요. — 중립"
+    },
+    {
+      "text": "¿Está el agua lo suficientemente caliente para el té?",
+      "translation": "물이 차 마시기에 충분히 뜨거운가요? — 중립"
+    },
+    {
+      "text": "Caminamos junto al agua.",
+      "translation": "우리는 물가를 따라 걸었어요. — 중립"
+    },
+    {
+      "text": "Cortaron el agua en el barrio toda la mañana.",
+      "translation": "아침 내내 수돗물이 끊겼어요. — 중립"
+    },
+    {
+      "text": "¿Me das un poco de agua, por favor?",
+      "translation": "물 좀 주실 수 있나요? — 중립"
+    },
+    {
+      "text": "¿Tienes agua? Tengo mucha sed.",
+      "translation": "물 있어요? 목 말라 죽겠어요. — 비격식"
+    },
+    {
+      "text": "El ayuntamiento garantizará el suministro ininterrumpido de agua potable.",
+      "translation": "지자체는 끊김 없는 식수 공급을 보장해야 합니다. — 격식"
+    },
+    {
+      "text": "Analizaron el agua para comprobar que era segura.",
+      "translation": "그들은 물의 안전성을 검사했어요. — 중립"
+    },
+    {
+      "text": "Ahorra agua cuando te laves los dientes.",
+      "translation": "양치할 때 물을 아껴 쓰세요. — 비격식"
+    },
+    {
+      "text": "El agua dulce es importante para la salud.",
+      "translation": "민물은 건강에 중요해요. — 중립"
+    }
+  ]
+}
