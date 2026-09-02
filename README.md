@@ -87,7 +87,7 @@ git commit -m "Initial Seashell Play: Capacitor Android + Google auth"
 Создай пустой репозиторий `seashell-play` на GitHub и:
 
 ```powershell
-git remote add origin https://github.com/YOUR_USER/seashell-play.git
+git remote add origin https://github.com/istemiq/seashell-play.git
 git push -u origin main
 ```
 
