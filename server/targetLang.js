@@ -26,6 +26,7 @@ export const TARGET_LANG_CODES = new Set([
   'hi',
   'ur',
   'az',
+  'ba',
   'ug',
   'vi',
   'cs',

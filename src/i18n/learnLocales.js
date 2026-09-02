@@ -6,6 +6,7 @@ export const DEFAULT_LEARN_LOCALE = 'en';
 export const LEARN_LOCALES = [
   { code: 'en', nativeName: 'English' },
   { code: 'ru', nativeName: 'Русский' },
+  { code: 'ba', nativeName: 'Башҡортса' },
   { code: 'ar', nativeName: 'العربية', rtl: true },
   { code: 'zh', nativeName: '中文' },
   { code: 'es', nativeName: 'Español' },

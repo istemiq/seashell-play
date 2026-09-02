@@ -7,6 +7,8 @@ export function PracticeEchoText({
   original,
   echo,
   selectedWord,
+  loadingWord = null,
+  addedWord = null,
   onSelectWord,
   className = 'ss-text ss-practice-text ss-practice-prose',
   style,
@@ -20,6 +22,8 @@ export function PracticeEchoText({
       <PracticeTappableParts
         parts={parts}
         selectedWord={selectedWord}
+        loadingWord={loadingWord}
+        addedWord={addedWord}
         onSelectWord={onSelectWord}
         className={className}
         style={style}

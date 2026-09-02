@@ -133,6 +133,7 @@ export async function runFreePracticeTurn({
   contentLocale,
   clientHistory,
   targetLang,
+  practiceLevel,
 }) {
   const locale = normalizeContentLocale(contentLocale);
   const study = normalizeTargetLang(targetLang ?? 'en');
@@ -154,6 +155,7 @@ export async function runFreePracticeTurn({
     historyBlock: ctx.historyBlock,
     contentLocale: locale,
     targetLang: study,
+    practiceLevel,
   });
 
   await persistAfterTurn(session, { isStart: false, userText, turn });
@@ -175,6 +177,7 @@ export async function runExpertPracticeTurn({
   sessionId,
   contentLocale,
   targetLang,
+  practiceLevel,
 }) {
   const locale = normalizeContentLocale(contentLocale);
   const study = normalizeTargetLang(targetLang ?? 'en');
@@ -223,6 +226,7 @@ export async function runExpertPracticeTurn({
     contentLocale: locale,
     expert,
     targetLang: study,
+    practiceLevel,
   });
 
   await persistAfterTurn(session, { isStart, userText, turn });
@@ -244,6 +248,7 @@ export async function runWordPracticeTurn({
   sessionId,
   contentLocale,
   targetLang,
+  practiceLevel,
 }) {
   const locale = normalizeContentLocale(contentLocale);
   const study = normalizeTargetLang(targetLang ?? 'en');
@@ -295,6 +300,7 @@ export async function runWordPracticeTurn({
     contentLocale: locale,
     wordMeta: wordRow,
     targetLang: study,
+    practiceLevel,
   });
 
   await persistAfterTurn(session, { isStart, userText, turn });
@@ -316,6 +322,7 @@ export async function runPatternPracticeTurn({
   sessionId,
   contentLocale,
   targetLang,
+  practiceLevel,
 }) {
   const locale = normalizeContentLocale(contentLocale);
   const study = normalizeTargetLang(targetLang ?? 'en');
@@ -360,6 +367,7 @@ export async function runPatternPracticeTurn({
     contentLocale: locale,
     patternSeed: seed,
     targetLang: study,
+    practiceLevel,
   });
 
   await persistAfterTurn(session, { isStart: false, userText: raw, turn });

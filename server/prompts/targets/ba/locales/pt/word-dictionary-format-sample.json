@@ -1,0 +1,46 @@
+{
+  "headwordEn": "вода",
+  "glossRu": "вода [ˈwɔdɐ] — água como substância; água potável; neutro",
+  "examples": [
+    {
+      "text": "Мені потрібен стакан води.",
+      "translation": "Preciso de um copo de água. — neutro"
+    },
+    {
+      "text": "Чи достатньо гаряча вода для чаю?",
+      "translation": "A água está quente o suficiente para chá? — neutro"
+    },
+    {
+      "text": "Ми йшли вздовж води.",
+      "translation": "Caminhámos ao longo da água. — neutro"
+    },
+    {
+      "text": "Воду вимкнули на все ранок.",
+      "translation": "Cortaram a água durante toda a manhã. — neutro"
+    },
+    {
+      "text": "Можна трохи води, будь ласка?",
+      "translation": "Posso beber um pouco de água, por favor? — neutro"
+    },
+    {
+      "text": "Є водичка? Помираю від спраги.",
+      "translation": "Tem água? Estou a morrer de sede. — informal"
+    },
+    {
+      "text": "Громада зобов'язана забезпечити безперебійне постачання питної води.",
+      "translation": "O município deve garantir o fornecimento ininterrupto de água potável. — formal"
+    },
+    {
+      "text": "Вони перевірили воду на безпеку.",
+      "translation": "Eles testaram a água quanto à segurança. — neutro"
+    },
+    {
+      "text": "Економь воду, коли чистиш зуби.",
+      "translation": "Poupa água quando escovas os dentes. — informal"
+    },
+    {
+      "text": "Прісна вода важлива для здоров'я.",
+      "translation": "A água doce é importante para a saúde. — neutro"
+    }
+  ]
+}

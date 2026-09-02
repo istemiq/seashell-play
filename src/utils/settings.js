@@ -24,6 +24,7 @@ import { applyPlCardLocaleStorageMigration } from '../modules/pl/plContentLocale
 import { applyHiCardLocaleStorageMigration } from '../modules/hi/hiContentLocale.js';
 import { applyUrCardLocaleStorageMigration } from '../modules/ur/urContentLocale.js';
 import { applyAzCardLocaleStorageMigration } from '../modules/az/azContentLocale.js';
+import { applyBaCardLocaleStorageMigration } from '../modules/ba/baContentLocale.js';
 import { applyUgCardLocaleStorageMigration } from '../modules/ug/ugContentLocale.js';
 import { applyViCardLocaleStorageMigration } from '../modules/vi/viContentLocale.js';
 import { applyCsCardLocaleStorageMigration } from '../modules/cs/csContentLocale.js';
@@ -33,7 +34,8 @@ import { applyIdCardLocaleStorageMigration } from '../modules/id/idContentLocale
 import { applyHeCardLocaleStorageMigration } from '../modules/he/heContentLocale.js';
 import { applyCaCardLocaleStorageMigration } from '../modules/ca/caContentLocale.js';
 import { applySrCardLocaleStorageMigration } from '../modules/sr/srContentLocale.js';
-import { isSuperAccountUser } from '../platform/superAccount.js';
+import { invalidateAuthHeadersCache } from '../api/buildAuthHeaders.js';
+import { normalizePracticeLevel } from './practiceLevel.js';
 import { resolvePlatformUserId } from '../platform/platformUser.js';
 
 const STORAGE_KEY = 'seashell_settings_v1';
@@ -55,6 +57,8 @@ export const DEFAULT_SETTINGS = {
   /** Per study-language TTS accent (en → en-GB, ru → ru-RU, …). */
   ttsLocaleByLearn: {},
   fontScale: 'normal',
+  /** CEFR-style dialogue/practice level: beginner | elementary | intermediate | upper | advanced */
+  practiceLevel: 'intermediate',
 };
 
 export function isTtsLocaleForLearn(learnCode, locale) {
@@ -144,6 +148,7 @@ const CARD_LOCALE_MIGRATIONS = {
   hi: applyHiCardLocaleStorageMigration,
   ur: applyUrCardLocaleStorageMigration,
   az: applyAzCardLocaleStorageMigration,
+  ba: applyBaCardLocaleStorageMigration,
   ug: applyUgCardLocaleStorageMigration,
   vi: applyViCardLocaleStorageMigration,
   cs: applyCsCardLocaleStorageMigration,
@@ -168,6 +173,7 @@ export function loadSettings() {
   if (!parsed || typeof parsed !== 'object') return { ...DEFAULT_SETTINGS };
   const merged = { ...DEFAULT_SETTINGS, ...parsed };
   merged.learnLocale = normalizeLearnLocale(merged.learnLocale);
+  merged.practiceLevel = normalizePracticeLevel(merged.practiceLevel);
   if (String(merged.ttsLocale || '').trim() === 'nb-NO') {
     merged.ttsLocale = 'no-NO';
     saveSettings(merged);
@@ -223,6 +229,10 @@ export function updateSettings(patch) {
   if (patch.ttsLocaleByLearn != null) {
     next.ttsLocaleByLearn = { ...(next.ttsLocaleByLearn || {}), ...patch.ttsLocaleByLearn };
     reconcileTtsLocaleForCurrentLearn(next);
+  }
+  if (patch.practiceLevel != null) {
+    next.practiceLevel = normalizePracticeLevel(patch.practiceLevel);
+    invalidateAuthHeadersCache();
   }
   saveSettings(next);
   if (typeof window !== 'undefined') {

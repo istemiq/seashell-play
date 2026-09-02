@@ -7,7 +7,13 @@ import './load-env.js';
 import express from 'express';
 import cors from 'cors';
 import { verifyVkLaunchParams } from './vkSignature.js';
-import { registerPlayAuthMiddleware } from './playAuth.js';
+import { verifyTelegramInitData } from './telegramAuth.js';
+import { tryGoogleIdTokenAuth, handleGoogleSession, tryPlayDevAuth } from './playAuth.js';
+import {
+  getUserProfileResponse,
+  setPlatformDisplayName,
+} from './platformUsersDb.js';
+import { tryPlayAppHeaderAuth } from './playAppAuth.js';
 import { assertAllowedUserContent } from './contentPolicy.js';
 import { WORD_EXAMPLE_COUNT } from './dictionaryConstants.js';
 import {
@@ -45,6 +51,7 @@ import {
 import { isValidExpertIdFormat, PRACTICE_EXPERT_START_MARKER } from './practiceExperts.js';
 import {
   listUserPracticeExperts,
+  resolveExpertDisplayTitle,
   createUserPracticeExpert,
   updateUserPracticeExpert,
   deleteUserPracticeExpert,
@@ -72,6 +79,7 @@ import {
 } from './limitsPolicy.js';
 import { normalizeContentLocale } from './promptLocales.js';
 import { resolveTargetLang, normalizeTargetLang } from './targetLang.js';
+import { normalizePracticeLevel } from './practiceLevel.js';
 import { isDictionaryGenerationReady, wordInputLooksLikeStudyLanguage } from './dictionaryStudyLang.js';
 import { llmProviderLabel, resolveLlmModel, resolveLlmProvider } from './llmProvider.js';
 import { enqueueLlm, llmQueueStats } from './llmQueue.js';
@@ -209,6 +217,19 @@ function isVkAppsHostingOrigin(origin) {
   }
 }
 
+/** Capacitor Android/iOS WebView (Seashell Play). */
+function isCapacitorAppOrigin(origin) {
+  try {
+    const u = new URL(origin);
+    const host = u.hostname.toLowerCase();
+    if (host !== 'localhost' && host !== '127.0.0.1') return false;
+    const proto = u.protocol.toLowerCase();
+    return proto === 'https:' || proto === 'http:' || proto === 'capacitor:';
+  } catch {
+    return false;
+  }
+}
+
 app.use(
   cors({
     origin(origin, cb) {
@@ -220,6 +241,7 @@ app.use(
       if (isProd && !ORIGINS) return cb(new Error('CORS blocked'), false);
       if (ORIGINS.includes(origin)) return cb(null, true);
       if (isVkAppsHostingOrigin(origin)) return cb(null, true);
+      if (isCapacitorAppOrigin(origin)) return cb(null, true);
       return cb(new Error('CORS blocked'), false);
     },
     credentials: false,
@@ -230,7 +252,10 @@ app.use(
       'X-UI-Locale',
       'X-Content-Locale',
       'X-Target-Lang',
+      'X-Practice-Level',
       'X-Learn-Locale',
+      'X-Google-Id-Token',
+      'X-Play-App-Secret',
     ],
   }),
 );
@@ -434,10 +459,95 @@ function isTelegramFrontRequest(req) {
   return false;
 }
 
-// Google Play auth (Google ID token). Telegram/VK auth removed in this repo.
-registerPlayAuthMiddleware(app);
+// Play + Google + Telegram initData + VK launch params (shared VPS API).
+app.post('/api/auth/google/session', (req, res) => {
+  void handleGoogleSession(req, res);
+});
+
+app.use(async (req, res, next) => {
+  if (tryPlayAppHeaderAuth(req)) {
+    return next();
+  }
+
+  if (tryPlayDevAuth(req, res)) {
+    if (req.vkUserId) return next();
+    return;
+  }
+
+  const googleHandled = await tryGoogleIdTokenAuth(req, res);
+  if (googleHandled) {
+    if (req.vkUserId) return next();
+    return;
+  }
+
+  if (tryTelegramInitDataAuth(req, res)) {
+    if (req.vkUserId) return next();
+    return;
+  }
+
+  const secret = String(process.env.VK_APP_SECRET ?? '').trim();
+  const lp = vkLaunchParamsFromHeader(req);
+
+  if (secret) {
+    if (!lp) {
+      if (tryVkReviewerProbe(req)) return next();
+      if (tryLocalhostHeaderAuth(req)) return next();
+      if (tryTelegramDevHeaderAuth(req)) return next();
+      if (isTelegramFrontRequest(req)) {
+        return res.status(401).json({ error: 'Missing X-Telegram-Init-Data header' });
+      }
+      return res.status(401).json({ error: 'Missing X-VK-Launch-Params header' });
+    }
+    const v = verifyVkLaunchParams(lp, secret);
+    if (!v.ok) {
+      if (tryVkReviewerProbe(req)) return next();
+      return res.status(401).json({ error: 'Invalid VK launch params signature' });
+    }
+    const uid = v.vkUserId != null ? parseInt(String(v.vkUserId), 10) : NaN;
+    if (!Number.isFinite(uid) || uid <= 0) {
+      if (tryVkReviewerProbe(req)) return next();
+      return res.status(401).json({ error: 'Missing or invalid vk_user_id in launch params' });
+    }
+    req.vkUserId = uid;
+    return next();
+  }
+
+  if (isProd) {
+    return res.status(503).json({ error: 'Server authentication is not configured' });
+  }
+  const uid = platformUserIdFromHeader(req);
+  if (!uid) return res.status(401).json({ error: 'Missing or invalid X-Platform-User-Id header' });
+  req.vkUserId = uid;
+  next();
+});
 
 app.use(vkReviewerProbeMiddleware);
+
+app.get('/api/user/profile', async (req, res) => {
+  try {
+    const profile = await getUserProfileResponse(req.vkUserId);
+    res.json(profile);
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ error: 'Failed to fetch profile' });
+  }
+});
+
+app.patch('/api/user/profile', async (req, res) => {
+  try {
+    const displayName = req.body?.displayName;
+    const pol = assertAllowedUserContent(String(displayName ?? ''));
+    if (!pol.ok) return res.status(400).json({ error: pol.error || 'Invalid display name' });
+    const saved = await setPlatformDisplayName(req.vkUserId, displayName);
+    res.json({ userId: req.vkUserId, displayName: saved, needsOnboarding: false });
+  } catch (e) {
+    if (e.status === 400 || e.status === 403 || e.status === 404) {
+      return res.status(e.status).json({ error: e.message });
+    }
+    console.error(e);
+    res.status(500).json({ error: 'Failed to update profile' });
+  }
+});
 
 app.get('/api/user/plan', async (req, res) => {
   try {
@@ -677,7 +787,19 @@ function resolveContentLocale(req) {
   const fromBody = req.body?.contentLocale;
   const fromHeader = req.headers['x-ui-locale'];
   const fromBodyUi = req.body?.uiLocale;
-  return normalizeContentLocale(fromContent || fromBody || fromHeader || fromBodyUi);
+  let loc = normalizeContentLocale(fromContent || fromBody || fromHeader || fromBodyUi);
+  const targetLang = normalizeTargetLang(resolveTargetLang(req));
+  // Bashkir cards: Russian gloss by default (Play UI may still send en).
+  if (targetLang === 'ba' && loc === 'en') {
+    loc = 'ru';
+  }
+  return loc;
+}
+
+function resolvePracticeLevel(req) {
+  const fromHeader = req.headers['x-practice-level'];
+  const fromBody = req.body?.practiceLevel;
+  return normalizePracticeLevel(fromHeader || fromBody);
 }
 
 /** UI language for labels (expert list). Prefer X-UI-Locale over content locale. */
@@ -764,6 +886,7 @@ app.post('/api/practice/turn', limitPractice, async (req, res) => {
       : null;
   const contentLocale = resolveContentLocale(req);
   const targetLang = resolveTargetLang(req);
+  const practiceLevel = resolvePracticeLevel(req);
   const clientHistory = Array.isArray(req.body?.history) ? req.body.history : null;
   try {
     const out = await enqueueLlm(
@@ -775,6 +898,7 @@ app.post('/api/practice/turn', limitPractice, async (req, res) => {
           contentLocale,
           clientHistory,
           targetLang,
+          practiceLevel,
         }),
       {
         label: `practice:${req.vkUserId}`,
@@ -803,8 +927,17 @@ app.get('/api/practice/sessions', async (req, res) => {
       modeRaw === 'free' || modeRaw === 'expert' || modeRaw === 'word' || modeRaw === 'pattern'
         ? modeRaw
         : undefined;
+    const uiLocale = resolveUiLocale(req);
     const sessions = await listPracticeSessions(req.vkUserId, { mode });
-    res.json({ sessions: sessions.map(mapPracticeSessionRow) });
+    const mapped = await Promise.all(
+      sessions.map(async (row) => ({
+        ...mapPracticeSessionRow(row),
+        expertTitle: row.expert_id
+          ? await resolveExpertDisplayTitle(row.expert_id, req.vkUserId, uiLocale)
+          : null,
+      })),
+    );
+    res.json({ sessions: mapped });
   } catch (e) {
     console.error(e);
     respondDatabaseError(res, e);
@@ -819,6 +952,13 @@ app.get('/api/practice/sessions/:id', async (req, res) => {
   try {
     const bundle = await getPracticeSessionBundle(req.vkUserId, id);
     if (!bundle) return res.status(404).json({ error: 'Session not found' });
+    if (bundle.session?.expertId) {
+      bundle.session.expertTitle = await resolveExpertDisplayTitle(
+        bundle.session.expertId,
+        req.vkUserId,
+        resolveUiLocale(req),
+      );
+    }
     res.json(bundle);
   } catch (e) {
     console.error(e);
@@ -913,6 +1053,7 @@ app.post('/api/practice/expert/turn', limitPractice, async (req, res) => {
 
   const contentLocale = resolveContentLocale(req);
   const targetLang = resolveTargetLang(req);
+  const practiceLevel = resolvePracticeLevel(req);
   const expertId = String(req.body?.expertId ?? req.body?.expertRole ?? '').trim();
   if (!isValidExpertIdFormat(expertId)) {
     return res.status(400).json({ error: 'Invalid expert role' });
@@ -940,6 +1081,7 @@ app.post('/api/practice/expert/turn', limitPractice, async (req, res) => {
           sessionId: Number.isFinite(sessionId) ? sessionId : null,
           contentLocale,
           targetLang,
+          practiceLevel,
         }),
       {
         label: `practice-expert:${expertId}:${req.vkUserId}`,
@@ -964,6 +1106,7 @@ app.post('/api/practice/expert/turn', limitPractice, async (req, res) => {
 app.post('/api/practice/word/turn', limitPractice, async (req, res) => {
   const contentLocale = resolveContentLocale(req);
   const targetLang = resolveTargetLang(req);
+  const practiceLevel = resolvePracticeLevel(req);
 
   const rawText = String(req.body?.userText ?? req.body?.text ?? '').trim();
   const isStart = rawText === PRACTICE_EXPERT_START_MARKER;
@@ -1009,6 +1152,7 @@ app.post('/api/practice/word/turn', limitPractice, async (req, res) => {
           sessionId: Number.isFinite(sessionId) ? sessionId : null,
           contentLocale,
           targetLang,
+          practiceLevel,
         }),
       {
         label: `practice-word:${wordId}:${req.vkUserId}`,
@@ -1034,6 +1178,7 @@ app.post('/api/practice/word/turn', limitPractice, async (req, res) => {
 app.post('/api/practice/pattern/turn', limitPractice, async (req, res) => {
   const contentLocale = resolveContentLocale(req);
   const targetLang = resolveTargetLang(req);
+  const practiceLevel = resolvePracticeLevel(req);
 
   const rawText = String(req.body?.userText ?? req.body?.text ?? '').trim();
   const sessionIdRaw = req.body?.sessionId;
@@ -1071,6 +1216,7 @@ app.post('/api/practice/pattern/turn', limitPractice, async (req, res) => {
           sessionId: Number.isFinite(sessionId) ? sessionId : null,
           contentLocale,
           targetLang,
+          practiceLevel,
         }),
       {
         label: `practice-pattern:${req.vkUserId}`,
@@ -1591,12 +1737,15 @@ function assertProductionSecurityConfig() {
     process.env.GOOGLE_WEB_CLIENT_ID,
   ].some((v) => String(v ?? '').trim());
 
-  if (!googleConfigured) {
-    console.error(
-      '[seashell-play] FATAL: NODE_ENV=production requires GOOGLE_CLIENT_ID or GOOGLE_WEB_CLIENT_ID',
-    );
-    process.exit(1);
-  }
+  const telegramConfigured = String(process.env.TELEGRAM_BOT_TOKEN ?? '').trim();
+  const playConfigured = String(process.env.PLAY_APP_SECRET ?? '').trim();
+
+  if (googleConfigured || telegramConfigured || playConfigured) return;
+
+  console.error(
+    '[seashell-play] FATAL: NODE_ENV=production requires GOOGLE_CLIENT_ID, TELEGRAM_BOT_TOKEN, or PLAY_APP_SECRET',
+  );
+  process.exit(1);
 }
 
 async function start() {

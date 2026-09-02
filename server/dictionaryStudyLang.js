@@ -5,6 +5,7 @@
 import { isPhraseLikeInput } from './dictionaryInputMode.js';
 import { getPromptLocaleVars, normalizeContentLocale } from './promptLocales.js';
 import { normalizeTargetLang } from './targetLang.js';
+import { practiceLevelSystemHint } from './practiceLevel.js';
 
 export const STUDY_LANG_META = {
   en: {
@@ -187,6 +188,15 @@ export const STUDY_LANG_META = {
     ttsLocale: 'uk-UA',
     supportsIrregularVerbs: false,
   },
+  ba: {
+    code: 'ba',
+    nameEn: 'Bashkir',
+    nameRu: 'башкирский',
+    studyScriptNoteEn: 'Cyrillic for the sentence words',
+    studyScriptNoteRu: 'кириллицей (слова предложения)',
+    ttsLocale: 'ba',
+    supportsIrregularVerbs: false,
+  },
   pl: {
     code: 'pl',
     nameEn: 'Polish',
@@ -337,6 +347,7 @@ export function isDictionaryGenerationReady(targetLang) {
     code === 'ja' ||
     code === 'zh' ||
     code === 'uk' ||
+    code === 'ba' ||
     code === 'pl' ||
     code === 'hi' ||
     code === 'ur' ||
@@ -455,6 +466,7 @@ export function looksLikeStudyLanguageText(text, targetLang) {
   const study = normalizeStudyLang(targetLang);
   if (study === 'ru') return looksMostlyCyrillicStudyText(text);
   if (study === 'uk') return looksMostlyCyrillicStudyText(text);
+  if (study === 'ba') return looksMostlyCyrillicStudyText(text);
   if (study === 'sr') return looksMostlyCyrillicStudyText(text);
   if (study === 'ar') return looksMostlyArabicStudyText(text);
   if (study === 'fa') return looksMostlyArabicStudyText(text);
@@ -524,6 +536,10 @@ export function wordInputLooksLikeStudyLanguage(word, contentLocale, targetLang)
   }
   if (study === 'uk') {
     if (loc !== 'uk') return false;
+    return looksMostlyCyrillicStudyText(word);
+  }
+  if (study === 'ba') {
+    if (loc !== 'ba') return false;
     return looksMostlyCyrillicStudyText(word);
   }
   if (study === 'pl') {
@@ -613,6 +629,7 @@ const L1_OF_EN = {
   en: 'English',
   ru: 'Russian',
   uk: 'Ukrainian',
+  ba: 'Bashkir',
   tr: 'Turkish',
   es: 'Spanish',
   pt: 'Portuguese',
@@ -662,6 +679,7 @@ const AUDIENCE_OF = {
     ja: 'English-speaking learners of Japanese',
     zh: 'English-speaking learners of Chinese',
     uk: 'English-speaking learners of Ukrainian',
+    ba: 'English-speaking learners of Bashkir',
     pl: 'English-speaking learners of Polish',
     sr: 'English-speaking learners of Serbian',
     ca: 'English-speaking learners of Catalan',
@@ -697,6 +715,7 @@ const AUDIENCE_OF = {
     ja: 'русскоязычным ученикам японского',
     zh: 'русскоязычным ученикам китайского',
     uk: 'русскоязычным ученикам украинского',
+    ba: 'русскоязычным ученикам башкирского',
     pl: 'русскоязычным ученикам польского',
     sr: 'русскоязычным ученикам сербского',
     ca: 'русскоязычным ученикам каталанского',
@@ -873,6 +892,7 @@ function learnerAudience(contentLocale, targetLang) {
     if (study === 'ja') return row.ja ?? row.en;
     if (study === 'zh') return row.zh ?? row.en;
     if (study === 'uk') return row.uk ?? row.en;
+    if (study === 'ba') return row.ba ?? row.en;
     if (study === 'pl') return row.pl ?? row.en;
     if (study === 'hi') return row.hi ?? row.en;
     if (study === 'ur') return row.ur ?? row.en;
@@ -916,6 +936,9 @@ function learnerAudience(contentLocale, targetLang) {
   }
   if (study === 'uk') {
     return base.learnerAudience.replace(/английск/gi, 'украинск').replace(/English/gi, 'Ukrainian');
+  }
+  if (study === 'ba') {
+    return base.learnerAudience.replace(/английск/gi, 'башкирск').replace(/English/gi, 'Bashkir');
   }
   if (study === 'pl') {
     return base.learnerAudience.replace(/английск/gi, 'польск').replace(/English/gi, 'Polish');
@@ -998,6 +1021,8 @@ export function getStudyPromptVars(contentLocale, targetLang) {
                                         ? `${base.translationLanguage} for the gloss/translation of that same Chinese sentence`
                                         : studyCode === 'uk'
                                           ? `${base.translationLanguage} for the gloss/translation of that same Ukrainian sentence`
+                                          : studyCode === 'ba'
+                                            ? `${base.translationLanguage} for the gloss/translation of that same Bashkir sentence`
                                           : studyCode === 'pl'
                                             ? `${base.translationLanguage} for the gloss/translation of that same Polish sentence`
                                             : studyCode === 'hi'
@@ -1172,6 +1197,18 @@ export function headwordQuickResolveSystemPrompt(isPhrase, targetLang) {
     return (
       'Output only valid JSON: {"headwordEn":"..."} — natural Ukrainian dictionary lemma (Cyrillic) for the single-word ' +
       'learner input. If input is Russian/Belarusian/etc., translate to the equivalent Ukrainian lemma. No markdown.'
+    );
+  }
+  if (study.code === 'ba') {
+    if (isPhrase) {
+      return (
+        'Output only valid JSON: {"headwordEn":"..."} — natural Bashkir translation of the ENTIRE learner ' +
+        'phrase/sentence in Cyrillic. Preserve full meaning. Do NOT reduce to a single keyword. No markdown.'
+      );
+    }
+    return (
+      'Output only valid JSON: {"headwordEn":"..."} — natural Bashkir dictionary lemma (Cyrillic) for the single-word ' +
+      'learner input. No markdown.'
     );
   }
   if (study.code === 'pl') {
@@ -1449,7 +1486,7 @@ export function studyExampleUsesHeadword(headword, text, targetLang) {
   const body = String(text ?? '').trim();
   if (!hw || !body) return false;
   const study = normalizeStudyLang(targetLang);
-  if (study === 'ru' || study === 'uk') {
+  if (study === 'ru' || study === 'uk' || study === 'ba') {
     const parts = hw.split(/\s+/).filter(Boolean);
     return parts.every((part) => {
       const stem = cyrillicStemForHeadwordMatch(part);
@@ -1544,6 +1581,9 @@ export function customExampleSystemPrompt(targetLang) {
   if (study.code === 'uk') {
     return 'You output only valid JSON when asked. No markdown fences. Single object with key "text" — one natural Ukrainian sentence in Cyrillic.';
   }
+  if (study.code === 'ba') {
+    return 'You output only valid JSON when asked. No markdown fences. Single object with key "text" — one natural Bashkir sentence in Cyrillic.';
+  }
   if (study.code === 'pl') {
     return 'You output only valid JSON when asked. No markdown fences. Single object with key "text" — one natural Polish sentence in Latin script.';
   }
@@ -1602,6 +1642,9 @@ export function studyDictionaryRetryNote(contentLocale, targetLang) {
   if (study.code === 'uk') {
     return `\n\nREMINDER: every "text" MUST be a Ukrainian sentence (Cyrillic). "translation" and gloss meaning MUST be in ${trans}. headwordEn must be the Ukrainian lemma/phrase in Cyrillic.`;
   }
+  if (study.code === 'ba') {
+    return `\n\nREMINDER: every "text" MUST be a Bashkir sentence (Cyrillic). "translation" and gloss meaning MUST be in ${trans}. headwordEn must be the Bashkir lemma/phrase in Cyrillic.`;
+  }
   if (study.code === 'pl') {
     return `\n\nREMINDER: every "text" MUST be a Polish sentence (Latin script). "translation" and gloss meaning MUST be in ${trans}. headwordEn must be the Polish lemma/phrase in Latin script.`;
   }
@@ -1634,22 +1677,26 @@ function practiceReplyTtsHint(study) {
   );
 }
 
-export function practiceFreeSystemPrompt(targetLang) {
+export function practiceFreeSystemPrompt(targetLang, practiceLevel) {
   const study = getStudyLangMeta(targetLang);
+  const levelHint = practiceLevelSystemHint(practiceLevel, study.nameEn);
   return (
     'You output only valid JSON when asked. No markdown fences. Keys: echo, corrections, reply, replyTts.' +
     practiceReplyTtsHint(study) +
+    ` ${levelHint} ` +
     ` The "reply" must read like a sharp, natural native ${study.nameEn} speaker in chat — specific, coherent with prior turns, not generic and not therapeutic. ` +
     'Never re-ask a premise the user already rejected or doubted.'
   );
 }
 
-export function practiceExpertSystemPrompt(targetLang) {
+export function practiceExpertSystemPrompt(targetLang, practiceLevel) {
   const study = getStudyLangMeta(targetLang);
+  const levelHint = practiceLevelSystemHint(practiceLevel, study.nameEn);
   return (
     'You output only valid JSON when asked. No markdown fences. Keys: echo, corrections, reply, replyTts.' +
     practiceReplyTtsHint(study) +
-    ` "reply" is always ${study.nameEn} at native conversational level (not slang).` +
+    ` ${levelHint} ` +
+    ` "reply" matches the learner's chosen level in ${study.nameEn} (see user prompt).` +
     ' "corrections" gloss is in the learner L1 when provided. ' +
     'On session start (user message __start__), echo and corrections must be null; reply is the expert opening with a topic offer. ' +
     'Echo must restate the user line with typo fixes only — never invent a different question. Reply must address the Last user message, not a paraphrased echo. ' +
@@ -1659,11 +1706,13 @@ export function practiceExpertSystemPrompt(targetLang) {
   );
 }
 
-export function practiceWordSystemPrompt(targetLang) {
+export function practiceWordSystemPrompt(targetLang, practiceLevel) {
   const study = getStudyLangMeta(targetLang);
+  const levelHint = practiceLevelSystemHint(practiceLevel, study.nameEn);
   return (
     'You output only valid JSON when asked. No markdown fences. Keys: echo, corrections, reply, replyTts.' +
     practiceReplyTtsHint(study) +
+    ` ${levelHint} ` +
     'Phrase practice: explain usage, ask the learner to say a sentence. ' +
     `Corrections: use when ${study.nameEn} is understandable but unnatural; suggest a natural line. null only if already native-sounding. ` +
     'Echo: light fixes only; keep the target phrase. Never swap the practiced phrase for a synonym in corrections. ' +
@@ -1671,11 +1720,13 @@ export function practiceWordSystemPrompt(targetLang) {
   );
 }
 
-export function practicePatternSystemPrompt(targetLang) {
+export function practicePatternSystemPrompt(targetLang, practiceLevel) {
   const study = getStudyLangMeta(targetLang);
+  const levelHint = practiceLevelSystemHint(practiceLevel, study.nameEn);
   return (
     'You output only valid JSON when asked. No markdown fences. Keys: echo, corrections, reply, replyTts.' +
     practiceReplyTtsHint(study) +
+    ` ${levelHint} ` +
     'Sentence-pattern drill in ' +
     study.nameEn +
     ': one fixed anchor skeleton; turn 1 teaches it; later turns grade learner lines ONLY against that anchor skeleton. ' +

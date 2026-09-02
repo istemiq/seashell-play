@@ -51,7 +51,7 @@ function espeakNgBinaryPath() {
 }
 
 /** Piper 1.2 cannot phonemize these; espeak-ng synthesis works on the VPS bundle. */
-const ESPEAK_FALLBACK_LANGS = new Set(['he', 'ko', 'ja', 'az']);
+const ESPEAK_FALLBACK_LANGS = new Set(['he', 'ko', 'ja', 'az', 'ba']);
 
 export function localeUsesEspeakFallback(locale) {
   const lc = String(locale ?? '').toLowerCase().replace(/_/g, '-');
@@ -65,6 +65,7 @@ function espeakVoiceForLocale(locale) {
   if (lc.startsWith('ko')) return 'ko';
   if (lc.startsWith('ja')) return 'ja';
   if (lc.startsWith('az')) return 'az';
+  if (lc.startsWith('ba')) return 'ba';
   return 'en';
 }
 

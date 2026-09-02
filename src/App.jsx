@@ -3,14 +3,18 @@ import { HashRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import { SplitModalSlotContext } from './context/SplitModalSlotContext.js';
-import { I18nProvider } from './i18n/I18nContext.jsx';
+import { I18nProvider, useI18n } from './i18n/I18nContext.jsx';
 import { useAppTheme } from './hooks/useAppTheme.js';
+import { useAppBackNavigation } from './hooks/useAppBackNavigation.js';
 import { HomePage } from './pages/HomePage.jsx';
 import { SignInPage } from './pages/SignInPage.jsx';
+import { OnboardingPage } from './pages/OnboardingPage.jsx';
 import { LearnLocaleTitleSync } from './components/LearnLocaleTitleSync.jsx';
-import { loadGoogleProfile } from './platform/googleAuthStore.js';
-import { bootstrapGoogleSession, whenGoogleSessionReady } from './platform/googleSession.js';
+import { loadGoogleProfile, saveGoogleProfile } from './platform/googleAuthStore.js';
+import { bootstrapGoogleSession, completeGoogleSignIn, whenGoogleSessionReady } from './platform/googleSession.js';
 import { hasGoogleSession } from './platform/googleSignIn.js';
+import { isPlayDevAuth } from './platform/runtime.js';
+import { fetchUserProfile } from './api/userApi.js';
 
 const LanguagePage = lazy(() => import('./pages/LanguagePage.jsx').then((m) => ({ default: m.LanguagePage })));
 const LearnLanguagePage = lazy(() =>
@@ -49,10 +53,10 @@ function RouteFallback() {
   );
 }
 
-function profileFromGoogle() {
+function profileFromStore() {
   const p = loadGoogleProfile();
   if (!p) return null;
-  const name = String(p.name || 'User').trim();
+  const name = String(p.displayName || p.name || 'User').trim();
   const parts = name.split(/\s+/);
   return {
     first_name: parts[0] || 'User',
@@ -61,9 +65,46 @@ function profileFromGoogle() {
   };
 }
 
+async function refreshProfileState(setUser, setNeedsOnboarding) {
+  try {
+    const profile = await fetchUserProfile();
+    const prev = loadGoogleProfile() || {};
+    saveGoogleProfile({
+      ...prev,
+      userId: profile.userId,
+      displayName: profile.displayName,
+      name: profile.displayName ?? prev.name ?? null,
+      needsOnboarding: Boolean(profile.needsOnboarding),
+    });
+    setNeedsOnboarding(Boolean(profile.needsOnboarding));
+    if (!profile.needsOnboarding) {
+      setUser(profileFromStore());
+    }
+  } catch {
+    setNeedsOnboarding(false);
+    setUser(profileFromStore());
+  }
+}
+
 function AppRoutes({ fetchedUser }) {
+  const { t } = useI18n();
+  const [exitHint, setExitHint] = useState(false);
+
+  useEffect(() => {
+    if (!exitHint) return undefined;
+    const id = window.setTimeout(() => setExitHint(false), 2000);
+    return () => window.clearTimeout(id);
+  }, [exitHint]);
+
+  useAppBackNavigation({ onExitHint: () => setExitHint(true) });
+
   return (
     <>
+      {exitHint ? (
+        <div className="ss-exit-hint" role="status" aria-live="polite">
+          {t('app.pressBackAgainToExit')}
+        </div>
+      ) : null}
       <LearnLocaleTitleSync />
       <Suspense fallback={<RouteFallback />}>
         <Routes>
@@ -93,6 +134,7 @@ function AppRoutes({ fetchedUser }) {
 export function App() {
   const [authReady, setAuthReady] = useState(false);
   const [signedIn, setSignedIn] = useState(false);
+  const [needsOnboarding, setNeedsOnboarding] = useState(false);
   const [fetchedUser, setUser] = useState(null);
   const [splitModalMountEl, setSplitModalMountEl] = useState(null);
   const effectiveTheme = useAppTheme();
@@ -100,7 +142,13 @@ export function App() {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      if (hasGoogleSession()) {
+      if (!hasGoogleSession() && isPlayDevAuth()) {
+        try {
+          await completeGoogleSignIn();
+        } catch (err) {
+          console.warn('[Seashell] dev sign-in failed', err);
+        }
+      } else if (hasGoogleSession()) {
         try {
           await bootstrapGoogleSession();
         } catch (err) {
@@ -110,7 +158,9 @@ export function App() {
       if (cancelled) return;
       const ok = hasGoogleSession();
       setSignedIn(ok);
-      if (ok) setUser(profileFromGoogle());
+      if (ok) {
+        await refreshProfileState(setUser, setNeedsOnboarding);
+      }
       setAuthReady(true);
     })();
     return () => {
@@ -121,7 +171,12 @@ export function App() {
   async function onSignedIn() {
     await whenGoogleSessionReady();
     setSignedIn(true);
-    setUser(profileFromGoogle());
+    await refreshProfileState(setUser, setNeedsOnboarding);
+  }
+
+  function onOnboardingComplete() {
+    setNeedsOnboarding(false);
+    setUser(profileFromStore());
   }
 
   if (!authReady) return <RouteFallback />;
@@ -132,6 +187,18 @@ export function App() {
         <I18nProvider>
           <div className={`seashell-crt seashell-theme-${effectiveTheme}`}>
             <SignInPage onSignedIn={() => void onSignedIn()} />
+          </div>
+        </I18nProvider>
+      </ErrorBoundary>
+    );
+  }
+
+  if (needsOnboarding) {
+    return (
+      <ErrorBoundary>
+        <I18nProvider>
+          <div className={`seashell-crt seashell-theme-${effectiveTheme}`}>
+            <OnboardingPage onComplete={() => onOnboardingComplete()} />
           </div>
         </I18nProvider>
       </ErrorBoundary>

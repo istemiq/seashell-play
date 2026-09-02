@@ -2,6 +2,7 @@
  * User-created practice experts (stored per vk_user_id).
  */
 import { assertAllowedUserContent } from './contentPolicy.js';
+import { getPracticeExpert } from './practiceExperts.js';
 
 export const USER_EXPERT_ID_PREFIX = 'u';
 export const MAX_USER_EXPERTS = 30;
@@ -130,6 +131,25 @@ export async function listUserPracticeExperts(vkUserId) {
     [vkUserId],
   );
   return r.rows.map(mapUiExpert);
+}
+
+function builtinExpertUiTitle(expert, uiLocale) {
+  const locale = String(uiLocale ?? 'ru').trim().toLowerCase();
+  if (locale === 'ru') return expert.titleRu;
+  return expert.roleTitle;
+}
+
+/** Display title for expert id (built-in, user-owned, or raw id). */
+export async function resolveExpertDisplayTitle(expertId, vkUserId, uiLocale = 'ru') {
+  const id = String(expertId ?? '').trim();
+  if (!id) return '';
+  const builtin = getPracticeExpert(id);
+  if (builtin) return builtinExpertUiTitle(builtin, uiLocale);
+  if (isUserExpertId(id)) {
+    const row = await getUserPracticeExpert(vkUserId, id);
+    return row?.title ?? id;
+  }
+  return id;
 }
 
 export async function getUserPracticeExpert(vkUserId, expertId) {

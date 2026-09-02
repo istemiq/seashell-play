@@ -1,5 +1,6 @@
 import { verifyGoogleIdToken } from './googleAuth.js';
-import { resolveGoogleUserId, getPlatformAccount } from './platformUsersDb.js';
+import { resolveGoogleUserId, getPlatformAccount, getUserProfileResponse } from './platformUsersDb.js';
+import { tryPlayAppHeaderAuth } from './playAppAuth.js';
 
 function platformUserIdFromHeader(req) {
   const raw = req.headers['x-platform-user-id'];
@@ -62,9 +63,9 @@ export async function handleGoogleSession(req, res) {
 
   if (token === 'dev-token' && playDevAuthEnabled()) {
     const userId = platformUserIdFromHeader(req) || 5000000001;
+    const profile = await getUserProfileResponse(userId);
     return res.json({
-      userId,
-      displayName: 'Dev User',
+      ...profile,
       avatarUrl: null,
       dev: true,
     });
@@ -76,9 +77,9 @@ export async function handleGoogleSession(req, res) {
   try {
     const userId = await resolveGoogleUserId(v);
     const account = await getPlatformAccount(userId);
+    const profile = await getUserProfileResponse(userId);
     return res.json({
-      userId,
-      displayName: account?.display_name ?? v.name ?? null,
+      ...profile,
       avatarUrl: account?.avatar_url ?? v.picture ?? null,
     });
   } catch (e) {
@@ -93,6 +94,9 @@ export function registerPlayAuthMiddleware(app) {
   });
 
   app.use(async (req, res, next) => {
+    if (tryPlayAppHeaderAuth(req)) {
+      return next();
+    }
     if (tryPlayDevAuth(req, res)) {
       if (req.vkUserId) return next();
       return;

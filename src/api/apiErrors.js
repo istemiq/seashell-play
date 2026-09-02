@@ -22,6 +22,10 @@ export function messageFromStatusAndBody(status, text) {
     return tStatic('errors.networkUnavailable');
   }
 
+  if (status === 502 || status === 503 || status === 504) {
+    return tStatic('errors.serverUnavailable');
+  }
+
   if (trimmed.startsWith('<!DOCTYPE') || trimmed.startsWith('<html')) {
     return tStatic('errors.serverBadResponse');
   }

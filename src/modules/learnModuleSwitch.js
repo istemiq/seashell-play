@@ -32,6 +32,7 @@ import { plOnLearnModuleEnter, plSyncCardLocaleWithUi } from './pl/plContentLoca
 import { hiOnLearnModuleEnter, hiSyncCardLocaleWithUi } from './hi/hiContentLocale.js';
 import { urOnLearnModuleEnter, urSyncCardLocaleWithUi } from './ur/urContentLocale.js';
 import { azOnLearnModuleEnter, azSyncCardLocaleWithUi } from './az/azContentLocale.js';
+import { baOnLearnModuleEnter, baSyncCardLocaleWithUi } from './ba/baContentLocale.js';
 import { ugOnLearnModuleEnter, ugSyncCardLocaleWithUi } from './ug/ugContentLocale.js';
 import { srOnLearnModuleEnter, srSyncCardLocaleWithUi } from './sr/srContentLocale.js';
 import { caOnLearnModuleEnter, caSyncCardLocaleWithUi } from './ca/caContentLocale.js';
@@ -44,7 +45,7 @@ import { viOnLearnModuleEnter, viSyncCardLocaleWithUi } from './vi/viContentLoca
 
 const STUDY_MODULE_CODES = new Set([
   'ru', 'ar', 'es', 'pt', 'it', 'el', 'fa', 'da', 'nl', 'fr', 'de',
-  'tr', 'sv', 'no', 'fi', 'ko', 'ja', 'zh', 'uk', 'pl', 'hi', 'ur', 'az', 'ug', 'vi', 'cs', 'hu', 'ro', 'id', 'he', 'ca', 'sr',
+  'tr', 'sv', 'no', 'fi', 'ko', 'ja', 'zh', 'uk', 'pl', 'hi', 'ur', 'az', 'ba', 'ug', 'vi', 'cs', 'hu', 'ro', 'id', 'he', 'ca', 'sr',
 ]);
 
 const MODULE_HANDLERS = {
@@ -71,6 +72,7 @@ const MODULE_HANDLERS = {
   hi: { enter: hiOnLearnModuleEnter, sync: hiSyncCardLocaleWithUi },
   ur: { enter: urOnLearnModuleEnter, sync: urSyncCardLocaleWithUi },
   az: { enter: azOnLearnModuleEnter, sync: azSyncCardLocaleWithUi },
+  ba: { enter: baOnLearnModuleEnter, sync: baSyncCardLocaleWithUi },
   ug: { enter: ugOnLearnModuleEnter, sync: ugSyncCardLocaleWithUi },
   vi: { enter: viOnLearnModuleEnter, sync: viSyncCardLocaleWithUi },
   cs: { enter: csOnLearnModuleEnter, sync: csSyncCardLocaleWithUi },

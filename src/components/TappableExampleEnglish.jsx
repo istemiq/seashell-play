@@ -1,36 +1,43 @@
+import { PracticeDictionaryAddBar } from './PracticeDictionaryAddBar.jsx';
 import { PracticeTappableText } from './PracticeTappableText.jsx';
 
-/** English example line: tap a word, then «Add to dictionary». */
+/** English example line: tap a word, then confirm add to dictionary. */
 export function TappableExampleEnglish({
   text,
   pickKey,
-  wordPick,
+  blockState,
   onSelectWord,
   onAddClick,
-  addLabel,
+  showTapHint = false,
   disabled = false,
   className,
   style,
 }) {
   if (!text) return null;
 
+  const { selectedWord, loading, loadingWord, addedWord } = blockState ?? {};
+
   return (
     <>
       <PracticeTappableText
         text={text}
-        selectedWord={wordPick?.pickKey === pickKey ? wordPick.word : null}
+        selectedWord={selectedWord}
+        loadingWord={loading ? loadingWord : null}
+        addedWord={addedWord}
         onSelectWord={(word) => onSelectWord(pickKey, word)}
-        className={className}
+        className={['ss-text', 'ss-practice-text', 'ss-practice-prose', 'ss-dict-study-text', className]
+          .filter(Boolean)
+          .join(' ')}
         style={style}
       />
-      <button
-        type="button"
-        className="ss-flat-link ss-mt-sm ss-block"
+      <PracticeDictionaryAddBar
+        selectedWord={selectedWord}
+        loading={loading}
+        addedWord={addedWord}
+        onAdd={onAddClick}
+        showTapHint={showTapHint}
         disabled={disabled}
-        onClick={onAddClick}
-      >
-        {addLabel}
-      </button>
+      />
     </>
   );
 }

@@ -23,14 +23,17 @@ import {
  * - отображение хода: что сказал пользователь, как поняла модель, правки, реплика бота;
  * - озвучка ответа через speechSynthesis (бесплатно, на устройстве пользователя).
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { PracticeLevelPicker } from '../components/PracticeLevelPicker.jsx';
+import { SplitModalSlotContext } from '../context/SplitModalSlotContext.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PracticeEchoText } from '../components/PracticeEchoText.jsx';
 import { PracticeTappableText } from '../components/PracticeTappableText.jsx';
 import { StreamingPracticeReply } from '../components/StreamingPracticeReply.jsx';
 import { StreamingCursor } from '../components/StreamingText.jsx';
 import { AdBanner } from '../components/AdBanner.jsx';
-import { addWord as addWordToDictionary } from '../api/dictionaryApi.js';
+import { PracticeDictionaryAddBar } from '../components/PracticeDictionaryAddBar.jsx';
+import { usePracticeDictionaryAdd } from '../hooks/usePracticeDictionaryAdd.js';
 import * as practiceApi from '../api/practiceApi.js';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { usePlatformUser } from '../hooks/usePlatformUser.js';
@@ -46,21 +49,23 @@ import { practiceUserReplyCount } from '../utils/practiceUserReplyCount.js';
 import { discardEmptyPracticeSession } from '../utils/discardEmptyPracticeSession.js';
 import { loadSettings } from '../utils/settings.js';
 import { ListenTtsButton } from '../components/ListenTtsButton.jsx';
+import { PracticeVoiceCell } from '../components/PracticeVoiceCell.jsx';
 import { dictMessageForLearn, practiceStudyLangLabel } from '../utils/contentLocale.js';
 import { speechLocaleForLearn } from '../utils/studySpeech.js';
-import {
-  practiceVoiceCellDisabled,
-  practiceVoiceCellLabel,
-  voiceUsesTap,
-} from '../utils/practiceVoiceUi.js';
+import { prefetchStudyTts } from '../utils/tts.js';
 import {
   loadFreePracticeSessionId,
   saveFreePracticeSessionId,
 } from '../utils/practiceSession.js';
 import { usePracticeDialogGate } from '../hooks/usePracticeDialogGate.js';
 
+function turnPickKey(turnIndex, field) {
+  return `${turnIndex}:${field}`;
+}
+
 
 export function PracticePage() {
+  const splitModalMount = useContext(SplitModalSlotContext);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const querySessionId = searchParams.get('session');
@@ -77,7 +82,6 @@ export function PracticePage() {
   const [error, setError] = useState(null);
   const [notice, setNotice] = useState(null);
   const [snackbar, setSnackbar] = useState(null);
-  const [wordPick, setWordPick] = useState(null);
   const [showHistory, setShowHistory] = useState(false);
   const [historySessions, setHistorySessions] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
@@ -90,6 +94,22 @@ export function PracticePage() {
     booting: restoring,
   });
   const showStartButton = dialogIdle && !loading;
+
+  const showDictNotice = useCallback((msg, duration = 2500) => {
+    setNotice(msg);
+    setSnackbar(
+      <Snackbar onClose={() => setSnackbar(null)} duration={duration}>
+        {msg}
+      </Snackbar>,
+    );
+  }, []);
+
+  const { selectWord, pickWord, getBlockState, addTextToDictionary } = usePracticeDictionaryAdd({
+    tr,
+    onLimitsUpdate: setLimits,
+    onSuccess: (word) => showDictNotice(tr('errors.dictAdded', { word }), 2200),
+    onError: (msg) => showDictNotice(msg, 3000),
+  });
 
   useEffect(() => {
     if (vkReady && !premium) {
@@ -208,6 +228,11 @@ export function PracticePage() {
     voiceError,
     toggleVoice,
     stopVoice,
+    onVoicePointerDown,
+    onVoicePointerUp,
+    onVoicePointerCancel,
+    onVoiceTouchStart,
+    onVoiceTouchEnd,
   } = usePracticeVoiceInput({
     onTranscript: (text) => void submitUserText(text),
     blockStart: loading || !showDialogUi || !studySttSupported,
@@ -239,6 +264,13 @@ export function PracticePage() {
   useEffect(() => {
     if (voiceError) setError(voiceError);
   }, [voiceError]);
+
+  useEffect(() => {
+    if (loading || !studyTtsSupported || !turns.length) return;
+    const last = turns[turns.length - 1];
+    if (!last?.reply) return;
+    prefetchStudyTts(last.reply, learnLocale, { ttsText: last.replyTts });
+  }, [turns, loading, learnLocale, studyTtsSupported]);
 
   const startNewDialog = useCallback(() => {
     stopVoice();
@@ -274,87 +306,10 @@ export function PracticePage() {
 
   const speakReplyError = useCallback(
     (msg) => {
-      setNotice(msg);
-      setSnackbar(
-        <Snackbar onClose={() => setSnackbar(null)} duration={6500}>
-          {msg}
-        </Snackbar>,
-      );
+      showDictNotice(msg, 6500);
     },
-    [],
+    [showDictNotice],
   );
-
-  const selectedTextOr = (fallback) => {
-    if (typeof window === 'undefined') return fallback;
-    const sel = window.getSelection?.();
-    const t = sel ? String(sel.toString() || '').trim() : '';
-    return t || fallback;
-  };
-
-  const pickWord = useCallback((turnIndex, field, fallback) => {
-    if (wordPick?.turnIndex === turnIndex && wordPick?.field === field && wordPick?.word) {
-      return wordPick.word;
-    }
-    return selectedTextOr(fallback);
-  }, [wordPick]);
-
-  const selectPracticeWord = useCallback((turnIndex, field, word) => {
-    setWordPick((prev) => {
-      if (!word) {
-        return prev?.turnIndex === turnIndex && prev?.field === field ? null : prev;
-      }
-      return { turnIndex, field, word };
-    });
-  }, []);
-
-  const addTurnToDictionary = async (text) => {
-    const word = String(text || '').trim().replace(/\s+/g, ' ');
-    if (!word || word.length > 200) {
-      const msg = tr('errors.dictTooLong');
-      setNotice(msg);
-      setSnackbar(
-        <Snackbar onClose={() => setSnackbar(null)} duration={2500}>
-          {msg}
-        </Snackbar>,
-      );
-      return;
-    }
-
-    const addOnce = async () => {
-      await addWordToDictionary(word);
-      const msg = tr('errors.dictAdded', { word });
-      setNotice(msg);
-      setSnackbar(
-        <Snackbar onClose={() => setSnackbar(null)} duration={2200}>
-          {msg}
-        </Snackbar>,
-      );
-      const fresh = await fetchUserLimits().catch(() => null);
-      if (fresh) setLimits(fresh);
-    };
-
-    try {
-      await runWithAdRetry({
-        type: 'words',
-        action: addOnce,
-        confirm: () =>
-          window.confirm(
-            tr('dict.limitAdConfirm') ||
-              'Free word limit reached. Watch a short ad to add 2 more words?',
-          ),
-        onLimitsUpdate: setLimits,
-      });
-    } catch (e) {
-      const msg = isAdUnavailableError(e) ? tr('ads.unavailable') : e.message || tr('errors.dictAddFailed');
-      setNotice(msg);
-      setSnackbar(
-        <Snackbar onClose={() => setSnackbar(null)} duration={3000}>
-          {msg}
-        </Snackbar>,
-      );
-    }
-  };
-
 
   const loadHistory = useCallback(async () => {
     setHistoryLoading(true);
@@ -438,7 +393,10 @@ export function PracticePage() {
 
   return (
     <Panel>
-      <PanelHeader before={<PanelHeaderBack onClick={handleBack} />}>
+      <PanelHeader
+        before={<PanelHeaderBack onClick={handleBack} />}
+        after={<PracticeLevelPicker modalMount={splitModalMount} />}
+      >
         {tr('practice.hubFree')}
       </PanelHeader>
 
@@ -532,6 +490,13 @@ export function PracticePage() {
 
           {showDialogUi && (
           <Group header={<GroupHeader mode="secondary">{tr('practice.dialog')}</GroupHeader>}>
+            {turns.length > 0 && (
+              <Box className="ss-vpad-cell">
+                <DismissibleHint hintId="practice.tapWord" className="ss-hint--inline ss-hint--subtle">
+                  {tr('practice.tapWordHint')}
+                </DismissibleHint>
+              </Box>
+            )}
             {turns.length === 0 && (
               <Box className="seashell-inline-action-row">
                 <Text style={{ flex: 1 }}>{dictMessageForLearn(tr, 'practice.empty', learnLocale)}</Text>
@@ -540,36 +505,47 @@ export function PracticePage() {
                 </DismissibleHint>
               </Box>
             )}
-            {turns.map((turn, i) => (
+            {turns.map((turn, i) => {
+              const userKey = turnPickKey(i, 'user');
+              const echoKey = turnPickKey(i, 'echo');
+              const replyKey = turnPickKey(i, 'reply');
+              const userBlock = getBlockState(userKey);
+              const echoBlock = getBlockState(echoKey);
+              const replyBlock = getBlockState(replyKey);
+
+              return (
               <Box key={i} className="ss-practice-turn">
                 <Text weight="2">{tr('practice.you')}</Text>
                 <PracticeTappableText
                   text={turn.userText}
-                  selectedWord={wordPick?.turnIndex === i && wordPick?.field === 'user' ? wordPick.word : null}
-                  onSelectWord={(word) => selectPracticeWord(i, 'user', word)}
+                  selectedWord={userBlock.selectedWord}
+                  loadingWord={userBlock.loading ? userBlock.loadingWord : null}
+                  addedWord={userBlock.addedWord}
+                  onSelectWord={(word) => selectWord(userKey, word)}
                 />
-                <button
-                  type="button"
-                  className="ss-flat-link ss-mt-sm ss-block"
-                  onClick={() => void addTurnToDictionary(pickWord(i, 'user', turn.userText))}
-                >
-                  {tb('practice.toDictionary')}
-                </button>
+                <PracticeDictionaryAddBar
+                  selectedWord={userBlock.selectedWord}
+                  loading={userBlock.loading}
+                  addedWord={userBlock.addedWord}
+                  onAdd={() => void addTextToDictionary(pickWord(userKey, turn.userText), userKey)}
+                  showTapHint={i === 0}
+                />
                 <Separator />
                 <Text weight="2">{tr('practice.heard')}</Text>
                 <PracticeEchoText
                   original={turn.userText}
                   echo={turn.echo}
-                  selectedWord={wordPick?.turnIndex === i && wordPick?.field === 'echo' ? wordPick.word : null}
-                  onSelectWord={(word) => selectPracticeWord(i, 'echo', word)}
+                  selectedWord={echoBlock.selectedWord}
+                  loadingWord={echoBlock.loading ? echoBlock.loadingWord : null}
+                  addedWord={echoBlock.addedWord}
+                  onSelectWord={(word) => selectWord(echoKey, word)}
                 />
-                <button
-                  type="button"
-                  className="ss-flat-link ss-mt-sm ss-block"
-                  onClick={() => void addTurnToDictionary(pickWord(i, 'echo', turn.echo))}
-                >
-                  {tb('practice.toDictionary')}
-                </button>
+                <PracticeDictionaryAddBar
+                  selectedWord={echoBlock.selectedWord}
+                  loading={echoBlock.loading}
+                  addedWord={echoBlock.addedWord}
+                  onAdd={() => void addTextToDictionary(pickWord(echoKey, turn.echo), echoKey)}
+                />
                 {turn.corrections && (
                   <>
                     <Separator />
@@ -582,21 +558,23 @@ export function PracticePage() {
                 <StreamingPracticeReply
                   text={turn.reply}
                   streamId={`free-${sessionId ?? 'new'}-${i}-${turn.reply}`}
-                  selectedWord={wordPick?.turnIndex === i && wordPick?.field === 'reply' ? wordPick.word : null}
-                  onSelectWord={(word) => selectPracticeWord(i, 'reply', word)}
+                  selectedWord={replyBlock.selectedWord}
+                  loadingWord={replyBlock.loading ? replyBlock.loadingWord : null}
+                  addedWord={replyBlock.addedWord}
+                  onSelectWord={(word) => selectWord(replyKey, word)}
                 />
-                <button
-                  type="button"
-                  className="ss-flat-link ss-mt-sm ss-block"
-                  onClick={() => void addTurnToDictionary(pickWord(i, 'reply', turn.reply))}
-                >
-                  {tb('practice.toDictionary')}
-                </button>
+                <PracticeDictionaryAddBar
+                  selectedWord={replyBlock.selectedWord}
+                  loading={replyBlock.loading}
+                  addedWord={replyBlock.addedWord}
+                  onAdd={() => void addTextToDictionary(pickWord(replyKey, turn.reply), replyKey)}
+                />
                 {studyTtsSupported ? (
                   <ListenTtsButton text={turn.reply} ttsText={turn.replyTts} ttsLocale={learnLocale} className="ss-mt-sm" onError={speakReplyError} />
                 ) : null}
               </Box>
-            ))}
+            );
+            })}
             {loading && (
               <Box
                 className={turns.length ? 'ss-practice-compose' : 'ss-practice-compose ss-practice-compose--empty'}
@@ -631,18 +609,22 @@ export function PracticePage() {
                 }}
               />
               {studySttSupported ? (
-              <Cell
-                disabled={practiceVoiceCellDisabled({
-                  voiceAvailable,
-                  transcribing,
-                  listening,
-                  voiceBusy,
-                  blockStart: loading || !showDialogUi,
-                })}
-                onClick={voiceUsesTap(voiceMode) ? toggleVoice : undefined}
-              >
-                {practiceVoiceCellLabel({ tr, tb, transcribing, listening })}
-              </Cell>
+              <PracticeVoiceCell
+                tr={tr}
+                tb={tb}
+                voiceMode={voiceMode}
+                voiceAvailable={voiceAvailable}
+                transcribing={transcribing}
+                listening={listening}
+                voiceBusy={voiceBusy}
+                blockStart={loading || !showDialogUi}
+                toggleVoice={toggleVoice}
+                onVoicePointerDown={onVoicePointerDown}
+                onVoicePointerUp={onVoicePointerUp}
+                onVoicePointerCancel={onVoicePointerCancel}
+                onVoiceTouchStart={onVoiceTouchStart}
+                onVoiceTouchEnd={onVoiceTouchEnd}
+              />
               ) : null}
               {studySttSupported && !voiceAvailable && (
                 <Footnote>{tr('errors.voiceBrowserUnavailable')}</Footnote>

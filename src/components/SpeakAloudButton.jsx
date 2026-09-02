@@ -82,7 +82,6 @@ export function SpeakAloudButton({
     blockStart: disabled,
     t,
     tapToToggle: true,
-    silenceStopMs: 4000,
     speechLang,
   });
 

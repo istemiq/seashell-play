@@ -43,6 +43,7 @@ function normalizeSttLanguage(lang) {
   if (lc === 'hi' || lc.startsWith('hi')) return 'hi';
   if (lc === 'ur' || lc.startsWith('ur')) return 'ur';
   if (lc === 'az' || lc.startsWith('az')) return 'az';
+  if (lc === 'ba' || lc.startsWith('ba')) return 'ba';
   if (lc === 'ug' || lc.startsWith('ug')) return 'ug';
   if (lc === 'vi' || lc.startsWith('vi')) return 'vi';
   if (lc === 'cs' || lc.startsWith('cs')) return 'cs';
@@ -133,7 +134,7 @@ function whisperModelPath(lang) {
       '/opt/whisper.cpp/models/ggml-small.bin'
     );
   }
-  if (code === 'tr' || code === 'sv' || code === 'no' || code === 'fi' || code === 'ko' || code === 'ja' || code === 'zh' || code === 'uk' || code === 'pl' || code === 'hi' || code === 'ur' || code === 'az' || code === 'ug' || code === 'vi' || code === 'cs' || code === 'hu' || code === 'ro' || code === 'id' || code === 'he' || code === 'ca' || code === 'sr') {
+  if (code === 'tr' || code === 'sv' || code === 'no' || code === 'fi' || code === 'ko' || code === 'ja' || code === 'zh' || code === 'uk' || code === 'pl' || code === 'hi' || code === 'ur' || code === 'az' || code === 'ba' || code === 'ug' || code === 'vi' || code === 'cs' || code === 'hu' || code === 'ro' || code === 'id' || code === 'he' || code === 'ca' || code === 'sr') {
     return (
       String(process.env[`STT_WHISPER_MODEL_${code.toUpperCase()}`] ?? '').trim() ||
       String(process.env.STT_WHISPER_MODEL_RU ?? '').trim() ||

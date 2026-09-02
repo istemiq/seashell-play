@@ -1391,9 +1391,103 @@ html[dir='rtl'] .seashell-example-flip__page--enter-prev {
   touch-action: manipulation;
 }
 
+.seashell-crt .ss-practice-word--tappable {
+  text-decoration: underline dotted;
+  text-decoration-color: color-mix(in srgb, var(--crt-accent, #7dd3fc) 55%, transparent);
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+
 .seashell-crt .ss-practice-word--selected {
   background: var(--crt-practice-word-selected);
   box-shadow: 0 0 0 1px var(--crt-practice-word-selected-border);
+  text-decoration-style: solid;
+}
+
+.seashell-crt .ss-practice-word--loading {
+  opacity: 0.72;
+  animation: ss-practice-word-pulse 0.9s ease-in-out infinite;
+}
+
+.seashell-crt .ss-practice-word--added {
+  background: color-mix(in srgb, var(--crt-accent, #7dd3fc) 18%, transparent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--crt-accent, #7dd3fc) 45%, transparent);
+  text-decoration: none;
+}
+
+@keyframes ss-practice-word-pulse {
+  0%,
+  100% {
+    opacity: 0.72;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.seashell-crt .ss-practice-dict-add {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+  width: 100%;
+  font-size: var(--ss-font-size-caption, 0.9em);
+  line-height: 1.35;
+}
+
+.seashell-crt .ss-practice-dict-add--hint {
+  margin-top: 6px;
+  opacity: 0.78;
+}
+
+.seashell-crt .ss-practice-dict-add--action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--crt-accent, #7dd3fc) 55%, transparent);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--crt-accent, #7dd3fc) 12%, transparent);
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+.seashell-crt .ss-practice-dict-add--action:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--crt-accent, #7dd3fc) 20%, transparent);
+}
+
+.seashell-crt .ss-practice-dict-add--action:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.seashell-crt .ss-practice-dict-add--loading {
+  color: var(--ss-color-text-secondary, inherit);
+}
+
+.seashell-crt .ss-practice-dict-add--success {
+  color: color-mix(in srgb, var(--crt-accent, #7dd3fc) 90%, white);
+  font-weight: 600;
+}
+
+.seashell-crt .ss-practice-dict-add__spinner {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  border: 2px solid color-mix(in srgb, var(--crt-accent, #7dd3fc) 25%, transparent);
+  border-top-color: var(--crt-accent, #7dd3fc);
+  border-radius: 50%;
+  animation: ss-practice-dict-spin 0.75s linear infinite;
+}
+
+@keyframes ss-practice-dict-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .seashell-crt .ss-practice-ad {
@@ -1634,4 +1728,110 @@ html[dir='rtl'] .seashell-crt .seashell-card-lang-shell__head .ss-modal-dismiss 
   .seashell-crt .ss-textarea {
     transform: translateZ(0);
   }
+}
+
+/* Google Play sign-in (Capacitor) — not boot-loader flex row */
+.seashell-crt .ss-sign-in-page {
+  min-height: var(--ss-app-height, 100dvh);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding:
+    max(24px, env(safe-area-inset-top, 0px))
+    max(20px, env(safe-area-inset-right, 0px))
+    max(24px, env(safe-area-inset-bottom, 0px))
+    max(20px, env(safe-area-inset-left, 0px));
+  box-sizing: border-box;
+  background: var(--crt-bg);
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-sign-in-page__card {
+  width: min(100%, 420px);
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 12px;
+  text-align: center;
+}
+
+.seashell-crt .ss-sign-in-page__title {
+  font-size: 1.45rem;
+  margin: 0 0 4px;
+}
+
+.seashell-crt .ss-sign-in-page__lead {
+  opacity: 0.82;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.seashell-crt .ss-sign-in-page__meta {
+  opacity: 0.58;
+  font-size: 0.78rem;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.seashell-crt .ss-sign-in-page__error {
+  color: var(--seashell-danger, #f87171);
+  margin: 0;
+}
+
+.seashell-crt .ss-sign-in-page__actions {
+  margin-top: 8px;
+  width: 100%;
+}
+
+.seashell-crt .ss-panel-header__tools {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.seashell-crt .ss-practice-level-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid var(--ss-color-separator, rgba(255, 255, 255, 0.12));
+  border-radius: 8px;
+  background: var(--ss-color-bg-secondary, rgba(255, 255, 255, 0.06));
+  color: var(--ss-color-text, inherit);
+  font-size: var(--ss-font-size-caption, 0.85em);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.seashell-crt .ss-practice-level-chip:hover {
+  background: var(--ss-color-bg-secondary-hover, rgba(255, 255, 255, 0.1));
+}
+
+.seashell-crt .ss-practice-level-chip__cefr {
+  font-variant-numeric: tabular-nums;
+}
+
+.seashell-crt .ss-practice-level-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.seashell-crt .ss-practice-level-row__cefr {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 28px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: var(--ss-color-bg-secondary, rgba(255, 255, 255, 0.08));
+  font-size: 0.85em;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }

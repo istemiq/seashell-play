@@ -9,19 +9,33 @@ function wordLemma(token) {
   return stripped || String(token);
 }
 
-function WordToken({ token, selected, onSelect, className = '' }) {
+function WordToken({ token, selected, loading, added, onSelect, className = '' }) {
   const lemma = wordLemma(token);
   const isSelected = Boolean(selected && (selected === lemma || selected === token));
+  const isLoading = Boolean(loading && (loading === lemma || loading === token));
+  const isAdded = Boolean(added && (added === lemma || added === token));
 
   return (
     <span
-      className={['ss-practice-word', isSelected ? 'ss-practice-word--selected' : '', className]
+      className={[
+        'ss-practice-word',
+        'ss-practice-word--tappable',
+        isSelected ? 'ss-practice-word--selected' : '',
+        isLoading ? 'ss-practice-word--loading' : '',
+        isAdded ? 'ss-practice-word--added' : '',
+        className,
+      ]
         .filter(Boolean)
         .join(' ')}
       role="button"
       tabIndex={0}
+      aria-pressed={isSelected}
+      aria-busy={isLoading || undefined}
+      aria-label={isAdded ? lemma : undefined}
+      title={isAdded ? undefined : lemma}
       onClick={(e) => {
         e.stopPropagation();
+        if (isLoading) return;
         onSelect?.(isSelected ? null : lemma);
       }}
       onPointerDown={(e) => {
@@ -46,6 +60,8 @@ function WordToken({ token, selected, onSelect, className = '' }) {
 export function PracticeTappableText({
   text,
   selectedWord,
+  loadingWord = null,
+  addedWord = null,
   onSelectWord,
   className = 'ss-text ss-practice-text ss-practice-prose',
   style,
@@ -63,6 +79,8 @@ export function PracticeTappableText({
             key={`${i}-${token}`}
             token={token}
             selected={selectedWord}
+            loading={loadingWord}
+            added={addedWord}
             onSelect={onSelectWord}
           />
         ),
@@ -72,7 +90,15 @@ export function PracticeTappableText({
 }
 
 /** То же для кусков echo с подсветкой правок. */
-export function PracticeTappableParts({ parts, selectedWord, onSelectWord, className = 'ss-text ss-practice-text ss-practice-prose', style }) {
+export function PracticeTappableParts({
+  parts,
+  selectedWord,
+  loadingWord = null,
+  addedWord = null,
+  onSelectWord,
+  className = 'ss-text ss-practice-text ss-practice-prose',
+  style,
+}) {
   if (!parts?.length) return null;
 
   return (
@@ -88,6 +114,8 @@ export function PracticeTappableParts({ parts, selectedWord, onSelectWord, class
               key={`${i}-${j}-${token}`}
               token={token}
               selected={selectedWord}
+              loading={loadingWord}
+              added={addedWord}
               onSelect={onSelectWord}
               className={part.changed ? 'ss-practice-echo-fix' : ''}
             />

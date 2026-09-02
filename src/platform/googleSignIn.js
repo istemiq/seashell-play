@@ -4,6 +4,7 @@ import { isPlayDevAuth } from './runtime.js';
 import {
   clearGoogleAuth,
   loadGoogleIdToken,
+  loadGoogleProfile,
   saveGoogleIdToken,
   saveGoogleProfile,
 } from './googleAuthStore.js';
@@ -28,14 +29,13 @@ export function initGoogleAuthPlugin() {
 }
 
 export function hasGoogleSession() {
-  if (isPlayDevAuth()) return true;
   return Boolean(loadGoogleIdToken());
 }
 
 export async function signInWithGoogle() {
   if (isPlayDevAuth()) {
     setPlatformUserId(DEV_USER_ID);
-    saveGoogleProfile({ name: 'Dev User', email: 'dev@local', userId: DEV_USER_ID });
+    saveGoogleProfile({ userId: DEV_USER_ID, email: 'dev@local' });
     saveGoogleIdToken('dev-token');
     return { idToken: 'dev-token', profile: loadGoogleProfile() };
   }
@@ -48,7 +48,6 @@ export async function signInWithGoogle() {
   saveGoogleProfile({
     sub: result.id,
     email: result.email,
-    name: result.name,
     picture: result.imageUrl,
   });
   return { idToken, profile: loadGoogleProfile() };
@@ -67,6 +66,5 @@ export async function signOutGoogle() {
 }
 
 export function getGoogleIdToken() {
-  if (isPlayDevAuth()) return 'dev-token';
   return loadGoogleIdToken();
 }

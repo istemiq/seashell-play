@@ -17,14 +17,17 @@ import {
   Cell,
 } from '../components/Ui.jsx';
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { PracticeLevelPicker } from '../components/PracticeLevelPicker.jsx';
+import { SplitModalSlotContext } from '../context/SplitModalSlotContext.js';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { PracticeEchoText } from '../components/PracticeEchoText.jsx';
 import { PracticeTappableText } from '../components/PracticeTappableText.jsx';
 import { StreamingPracticeReply } from '../components/StreamingPracticeReply.jsx';
 import { StreamingCursor } from '../components/StreamingText.jsx';
 import { AdBanner } from '../components/AdBanner.jsx';
-import { addWord as addWordToDictionary } from '../api/dictionaryApi.js';
+import { PracticeDictionaryAddBar } from '../components/PracticeDictionaryAddBar.jsx';
+import { usePracticeDictionaryAdd } from '../hooks/usePracticeDictionaryAdd.js';
 import * as practiceApi from '../api/practiceApi.js';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { usePlatformUser } from '../hooks/usePlatformUser.js';
@@ -39,13 +42,10 @@ import { practiceUserReplyCount } from '../utils/practiceUserReplyCount.js';
 import { discardEmptyPracticeSession } from '../utils/discardEmptyPracticeSession.js';
 import { loadSettings } from '../utils/settings.js';
 import { ListenTtsButton } from '../components/ListenTtsButton.jsx';
+import { PracticeVoiceCell } from '../components/PracticeVoiceCell.jsx';
 import { dictMessageForLearn, practiceStudyLangLabel } from '../utils/contentLocale.js';
 import { speechLocaleForLearn } from '../utils/studySpeech.js';
-import {
-  practiceVoiceCellDisabled,
-  practiceVoiceCellLabel,
-  voiceUsesTap,
-} from '../utils/practiceVoiceUi.js';
+import { prefetchStudyTts } from '../utils/tts.js';
 import {
   loadExpertPracticeSessionId,
   saveExpertPracticeSessionId,
@@ -53,8 +53,13 @@ import {
 import { setCustomBackHandler } from '../utils/backNavigation.js';
 import { usePracticeDialogGate } from '../hooks/usePracticeDialogGate.js';
 
+function turnPickKey(turnIndex, field) {
+  return `${turnIndex}:${field}`;
+}
+
 
 export function ExpertPracticePage() {
+  const splitModalMount = useContext(SplitModalSlotContext);
   const navigate = useNavigate();
   const { expertId: routeExpertId } = useParams();
   const [searchParams] = useSearchParams();
@@ -75,10 +80,12 @@ export function ExpertPracticePage() {
   const [error, setError] = useState(null);
   const [notice, setNotice] = useState(null);
   const [snackbar, setSnackbar] = useState(null);
-  const [wordPick, setWordPick] = useState(null);
   const [showHistory, setShowHistory] = useState(false);
+  const [hubTab, setHubTab] = useState('history');
   const [historySessions, setHistorySessions] = useState([]);
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyError, setHistoryError] = useState(null);
+  const [chatExpertTitle, setChatExpertTitle] = useState('');
   const [editorMode, setEditorMode] = useState(null);
   const [editorSaving, setEditorSaving] = useState(false);
   const [editorForm, setEditorForm] = useState({ who: '', sampleTopics: '' });
@@ -91,6 +98,22 @@ export function ExpertPracticePage() {
   const showStartButton = dialogIdle && !loading;
   const showSessionBootSpinner = loading && turns.length === 0 && !showDialogUi;
 
+  const showDictNotice = useCallback((msg, duration = 2500) => {
+    setNotice(msg);
+    setSnackbar(
+      <Snackbar onClose={() => setSnackbar(null)} duration={duration}>
+        {msg}
+      </Snackbar>,
+    );
+  }, []);
+
+  const { selectWord, pickWord, getBlockState, addTextToDictionary } = usePracticeDictionaryAdd({
+    tr,
+    onLimitsUpdate: setLimits,
+    onSuccess: (word) => showDictNotice(tr('errors.dictAdded', { word }), 2200),
+    onError: (msg) => showDictNotice(msg, 3000),
+  });
+
   useEffect(() => {
     if (vkReady && !premium) {
       fetchUserLimits().then(setLimits).catch(console.error);
@@ -99,8 +122,10 @@ export function ExpertPracticePage() {
 
   const expertTitle = useMemo(() => {
     const e = experts.find((x) => x.id === expertId);
-    return e?.title ?? '';
-  }, [experts, expertId]);
+    if (e?.title) return e.title;
+    if (chatExpertTitle) return chatExpertTitle;
+    return expertId ?? '';
+  }, [experts, expertId, chatExpertTitle]);
   const inChat = Boolean(expertId);
   const inEditor = Boolean(editorMode);
 
@@ -163,15 +188,10 @@ export function ExpertPracticePage() {
   useEffect(() => {
     if (!expertId) {
       loadedSessionKeyRef.current = null;
+      setChatExpertTitle('');
       return;
     }
-    if (!vkReady || expertsLoading) return;
-
-    const expert = experts.find((e) => e.id === expertId);
-    if (!expert) {
-      navigate('/practice/expert', { replace: true });
-      return;
-    }
+    if (!vkReady) return;
 
     const savedIdRaw = querySessionId ? parseInt(querySessionId, 10) : loadExpertPracticeSessionId(expertId);
     const savedId = Number.isFinite(savedIdRaw) && savedIdRaw > 0 ? savedIdRaw : null;
@@ -199,6 +219,7 @@ export function ExpertPracticePage() {
             setSessionId(savedId);
             saveExpertPracticeSessionId(expertId, savedId);
             setTurns(data.turns);
+            if (data.session.expertTitle) setChatExpertTitle(data.session.expertTitle);
             setLoading(false);
             return;
           }
@@ -213,7 +234,7 @@ export function ExpertPracticePage() {
     return () => {
       cancelled = true;
     };
-  }, [expertId, experts, expertsLoading, vkReady, navigate, requestOpening, querySessionId]);
+  }, [expertId, vkReady, navigate, querySessionId]);
 
   const pickExpert = useCallback(
     (id) => {
@@ -352,6 +373,11 @@ export function ExpertPracticePage() {
     voiceError,
     toggleVoice,
     stopVoice,
+    onVoicePointerDown,
+    onVoicePointerUp,
+    onVoicePointerCancel,
+    onVoiceTouchStart,
+    onVoiceTouchEnd,
   } = usePracticeVoiceInput({
     onTranscript: (text) => void submitUserText(text),
     blockStart: loading || !expertId || turns.length === 0 || !studySttSupported,
@@ -386,6 +412,13 @@ export function ExpertPracticePage() {
     if (voiceError) setError(voiceError);
   }, [voiceError]);
 
+  useEffect(() => {
+    if (loading || !studyTtsSupported || !turns.length) return;
+    const last = turns[turns.length - 1];
+    if (!last?.reply) return;
+    prefetchStudyTts(last.reply, learnLocale, { ttsText: last.replyTts });
+  }, [turns, loading, learnLocale, studyTtsSupported]);
+
   const startExpertDialog = useCallback(() => {
     if (!expertId || loading) return;
     startDialog();
@@ -409,11 +442,10 @@ export function ExpertPracticePage() {
     async (targetId, e) => {
       e?.stopPropagation?.();
       e?.preventDefault?.();
-      if (!expertId) return;
       try {
         await practiceApi.deletePracticeSession(targetId);
         setHistorySessions((prev) => prev.filter((s) => s.id !== targetId));
-        if (sessionId === targetId) {
+        if (expertId && sessionId === targetId) {
           saveExpertPracticeSessionId(expertId, null);
           setSessionId(null);
           setTurns([]);
@@ -429,93 +461,15 @@ export function ExpertPracticePage() {
 
   const speakReplyError = useCallback(
     (msg) => {
-      setNotice(msg);
-      setSnackbar(
-        <Snackbar onClose={() => setSnackbar(null)} duration={6500}>
-          {msg}
-        </Snackbar>,
-      );
+      showDictNotice(msg, 6500);
     },
-    [],
+    [showDictNotice],
   );
-
-  const selectedTextOr = (fallback) => {
-    if (typeof window === 'undefined') return fallback;
-    const sel = window.getSelection?.();
-    const t = sel ? String(sel.toString() || '').trim() : '';
-    return t || fallback;
-  };
-
-  const pickWord = useCallback(
-    (turnIndex, field, fallback) => {
-      if (wordPick?.turnIndex === turnIndex && wordPick?.field === field && wordPick?.word) {
-        return wordPick.word;
-      }
-      return selectedTextOr(fallback);
-    },
-    [wordPick],
-  );
-
-  const selectPracticeWord = useCallback((turnIndex, field, word) => {
-    setWordPick((prev) => {
-      if (!word) {
-        return prev?.turnIndex === turnIndex && prev?.field === field ? null : prev;
-      }
-      return { turnIndex, field, word };
-    });
-  }, []);
-
-  const addTurnToDictionary = async (text) => {
-    const word = String(text || '').trim().replace(/\s+/g, ' ');
-    if (!word || word.length > 200) {
-      const msg = tr('errors.dictTooLong');
-      setNotice(msg);
-      setSnackbar(
-        <Snackbar onClose={() => setSnackbar(null)} duration={2500}>
-          {msg}
-        </Snackbar>,
-      );
-      return;
-    }
-
-    const addOnce = async () => {
-      await addWordToDictionary(word);
-      const msg = tr('errors.dictAdded', { word });
-      setNotice(msg);
-      setSnackbar(
-        <Snackbar onClose={() => setSnackbar(null)} duration={2200}>
-          {msg}
-        </Snackbar>,
-      );
-      const fresh = await fetchUserLimits().catch(() => null);
-      if (fresh) setLimits(fresh);
-    };
-
-    try {
-      await runWithAdRetry({
-        type: 'words',
-        action: addOnce,
-        confirm: () =>
-          window.confirm(
-            tr('dict.limitAdConfirm') ||
-              'Free word limit reached. Watch a short ad to add 2 more words?',
-          ),
-        onLimitsUpdate: setLimits,
-      });
-    } catch (e) {
-      const msg = isAdUnavailableError(e) ? tr('ads.unavailable') : e.message || tr('errors.dictAddFailed');
-      setNotice(msg);
-      setSnackbar(
-        <Snackbar onClose={() => setSnackbar(null)} duration={3000}>
-          {msg}
-        </Snackbar>,
-      );
-    }
-  };
 
   const backFromChat = useCallback(() => {
     void discardEmptyPracticeSession(sessionId, turns);
     if (expertId) saveExpertPracticeSessionId(expertId, null);
+    setHubTab('history');
     navigate('/practice/expert');
   }, [navigate, sessionId, turns, expertId]);
 
@@ -524,16 +478,18 @@ export function ExpertPracticePage() {
       closeEditor();
       return;
     }
-    if (showHistory) {
+    if (inChat && showHistory) {
       setShowHistory(false);
       return;
     }
     if (inChat) {
       backFromChat();
+    } else if (hubTab === 'new') {
+      setHubTab('history');
     } else {
       navigate('/practice');
     }
-  }, [inEditor, showHistory, inChat, navigate, backFromChat, closeEditor]);
+  }, [inEditor, showHistory, inChat, hubTab, navigate, backFromChat, closeEditor]);
 
   useEscapeBack(handleBack);
 
@@ -542,25 +498,44 @@ export function ExpertPracticePage() {
     return () => setCustomBackHandler(null);
   }, [handleBack]);
 
-  const loadHistory = useCallback(async () => {
-    if (!expertId) return;
+  const loadAllHistory = useCallback(async () => {
     setHistoryLoading(true);
+    setHistoryError(null);
     try {
       const data = await practiceApi.fetchPracticeSessionsList('expert');
-      if (Array.isArray(data?.sessions)) {
-        setHistorySessions(data.sessions.filter(s => s.expertId === expertId).slice(0, 10));
-      }
+      setHistorySessions(Array.isArray(data?.sessions) ? data.sessions : []);
     } catch (e) {
-      console.error(e);
+      setHistoryError(e.message || tr('errors.loadFailed'));
     } finally {
       setHistoryLoading(false);
     }
-  }, [expertId]);
+  }, [tr]);
+
+  const loadExpertHistory = useCallback(async () => {
+    if (!expertId) return;
+    setHistoryLoading(true);
+    setHistoryError(null);
+    try {
+      const data = await practiceApi.fetchPracticeSessionsList('expert');
+      if (Array.isArray(data?.sessions)) {
+        setHistorySessions(data.sessions.filter((s) => s.expertId === expertId).slice(0, 10));
+      }
+    } catch (e) {
+      setHistoryError(e.message || tr('errors.loadFailed'));
+    } finally {
+      setHistoryLoading(false);
+    }
+  }, [expertId, tr]);
 
   const openHistory = useCallback(() => {
     setShowHistory(true);
-    void loadHistory();
-  }, [loadHistory]);
+    void loadExpertHistory();
+  }, [loadExpertHistory]);
+
+  useEffect(() => {
+    if (!vkReady || inChat || inEditor || hubTab !== 'history') return;
+    void loadAllHistory();
+  }, [vkReady, inChat, inEditor, hubTab, loadAllHistory]);
 
   useEffect(() => {
     if (!showHistory) return undefined;
@@ -575,6 +550,31 @@ export function ExpertPracticePage() {
     const { locale } = loadSettings();
     return d.toLocaleDateString(locale || 'en', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
   };
+
+  const expertHubSegments = !inChat && !inEditor ? (
+    <Group>
+      <div className="seashell-segmented" role="tablist">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={hubTab === 'history'}
+          className={`seashell-segmented__item${hubTab === 'history' ? ' is-active' : ''}`}
+          onClick={() => setHubTab('history')}
+        >
+          {tb('practice.history')}
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={hubTab === 'new'}
+          className={`seashell-segmented__item${hubTab === 'new' ? ' is-active' : ''}`}
+          onClick={() => setHubTab('new')}
+        >
+          {tb('practice.dialog')}
+        </button>
+      </div>
+    </Group>
+  ) : null;
 
   const expertChatSegments = inChat ? (
     <Group>
@@ -608,11 +608,14 @@ export function ExpertPracticePage() {
           <PanelHeaderBack onClick={handleBack} />
         }
         after={
-          !inChat && !inEditor ? (
-            <DismissibleHint hintId="practice.expert.disclaimer" className="ss-hint--inline ss-hint--subtle">
-              {dictMessageForLearn(tr, 'practice.expertDisclaimer', learnLocale)}
-            </DismissibleHint>
-          ) : null
+          <div className="ss-panel-header__tools">
+            <PracticeLevelPicker modalMount={splitModalMount} />
+            {!inChat && !inEditor ? (
+              <DismissibleHint hintId="practice.expert.disclaimer" className="ss-hint--inline ss-hint--subtle">
+                {dictMessageForLearn(tr, 'practice.expertDisclaimer', learnLocale)}
+              </DismissibleHint>
+            ) : null}
+          </div>
         }
       >
         <span dir="auto">
@@ -626,7 +629,52 @@ export function ExpertPracticePage() {
         </span>
       </PanelHeader>
 
+      {expertHubSegments}
       {expertChatSegments}
+
+      {!inChat && !inEditor && hubTab === 'history' ? (
+        <Group>
+          {historyLoading ? (
+            <Box className="ss-center-load">
+              <Spinner />
+            </Box>
+          ) : historyError ? (
+            <Box className="ss-vpad-cell">
+              <Footnote style={{ textAlign: 'center', color: 'var(--ss-color-text-negative, #e64646)' }}>
+                {historyError}
+              </Footnote>
+            </Box>
+          ) : historySessions.length === 0 ? (
+            <Box className="ss-vpad-cell">
+              <Footnote style={{ textAlign: 'center' }}>{tr('practice.historyEmpty')}</Footnote>
+            </Box>
+          ) : (
+            historySessions.map((s) => (
+              <Cell
+                key={s.id}
+                chevron
+                subtitle={formatDate(s.updatedAt)}
+                onClick={() => {
+                  if (s.expertTitle) setChatExpertTitle(s.expertTitle);
+                  navigate(`/practice/expert/${s.expertId}?session=${s.id}`);
+                }}
+                after={
+                  <button
+                    type="button"
+                    className="ss-flat-link seashell-dict-delete-btn"
+                    onMouseDown={(e) => e.stopPropagation()}
+                    onClick={(e) => void removeHistorySession(s.id, e)}
+                  >
+                    {tb('dict.delete')}
+                  </button>
+                }
+              >
+                <span dir="auto">{s.expertTitle || s.expertId}</span>
+              </Cell>
+            ))
+          )}
+        </Group>
+      ) : null}
 
       {inChat && showHistory ? (
         <Group>
@@ -690,7 +738,7 @@ export function ExpertPracticePage() {
         </Group>
       )}
 
-      {vkReady && !inChat && !inEditor && (
+      {vkReady && !inChat && !inEditor && hubTab === 'new' && (
         <>
           {expertsLoading && (
             <Box className="ss-center-load">
@@ -811,42 +859,56 @@ export function ExpertPracticePage() {
 
           {(showDialogUi && (turns.length > 0 || loading)) && (
           <Group header={<GroupHeader mode="secondary">{tr('practice.dialog')}</GroupHeader>}>
-            {turns.map((turn, i) => (
+            {turns.length > 0 && (
+              <Box className="ss-vpad-cell">
+                <DismissibleHint hintId="practice.tapWord" className="ss-hint--inline ss-hint--subtle">
+                  {tr('practice.tapWordHint')}
+                </DismissibleHint>
+              </Box>
+            )}
+            {turns.map((turn, i) => {
+              const userKey = turnPickKey(i, 'user');
+              const echoKey = turnPickKey(i, 'echo');
+              const replyKey = turnPickKey(i, 'reply');
+              const userBlock = getBlockState(userKey);
+              const echoBlock = getBlockState(echoKey);
+              const replyBlock = getBlockState(replyKey);
+
+              return (
               <Box key={i} className="ss-practice-turn">
                 {!turn.opening && (
                   <>
                     <Text weight="2">{tr('practice.you')}</Text>
                     <PracticeTappableText
                       text={turn.userText}
-                      selectedWord={
-                        wordPick?.turnIndex === i && wordPick?.field === 'user' ? wordPick.word : null
-                      }
-                      onSelectWord={(word) => selectPracticeWord(i, 'user', word)}
+                      selectedWord={userBlock.selectedWord}
+                      loadingWord={userBlock.loading ? userBlock.loadingWord : null}
+                      addedWord={userBlock.addedWord}
+                      onSelectWord={(word) => selectWord(userKey, word)}
                     />
-                    <button
-                      type="button"
-                      className="ss-flat-link ss-mt-sm ss-block"
-                      onClick={() => void addTurnToDictionary(pickWord(i, 'user', turn.userText))}
-                    >
-                      {tb('practice.toDictionary')}
-                    </button>
+                    <PracticeDictionaryAddBar
+                      selectedWord={userBlock.selectedWord}
+                      loading={userBlock.loading}
+                      addedWord={userBlock.addedWord}
+                      onAdd={() => void addTextToDictionary(pickWord(userKey, turn.userText), userKey)}
+                      showTapHint={i === 0}
+                    />
                     <Separator />
                     <Text weight="2">{tr('practice.heard')}</Text>
                     <PracticeEchoText
                       original={turn.userText}
                       echo={turn.echo}
-                      selectedWord={
-                        wordPick?.turnIndex === i && wordPick?.field === 'echo' ? wordPick.word : null
-                      }
-                      onSelectWord={(word) => selectPracticeWord(i, 'echo', word)}
+                      selectedWord={echoBlock.selectedWord}
+                      loadingWord={echoBlock.loading ? echoBlock.loadingWord : null}
+                      addedWord={echoBlock.addedWord}
+                      onSelectWord={(word) => selectWord(echoKey, word)}
                     />
-                    <button
-                      type="button"
-                      className="ss-flat-link ss-mt-sm ss-block"
-                      onClick={() => void addTurnToDictionary(pickWord(i, 'echo', turn.echo))}
-                    >
-                      {tb('practice.toDictionary')}
-                    </button>
+                    <PracticeDictionaryAddBar
+                      selectedWord={echoBlock.selectedWord}
+                      loading={echoBlock.loading}
+                      addedWord={echoBlock.addedWord}
+                      onAdd={() => void addTextToDictionary(pickWord(echoKey, turn.echo), echoKey)}
+                    />
                     {turn.corrections && (
                       <>
                         <Separator />
@@ -861,23 +923,24 @@ export function ExpertPracticePage() {
                 <StreamingPracticeReply
                   text={turn.reply}
                   streamId={`expert-${expertId}-${sessionId ?? 'new'}-${i}-${turn.reply}`}
-                  selectedWord={
-                    wordPick?.turnIndex === i && wordPick?.field === 'reply' ? wordPick.word : null
-                  }
-                  onSelectWord={(word) => selectPracticeWord(i, 'reply', word)}
+                  selectedWord={replyBlock.selectedWord}
+                  loadingWord={replyBlock.loading ? replyBlock.loadingWord : null}
+                  addedWord={replyBlock.addedWord}
+                  onSelectWord={(word) => selectWord(replyKey, word)}
                 />
-                <button
-                  type="button"
-                  className="ss-flat-link ss-mt-sm ss-block"
-                  onClick={() => void addTurnToDictionary(pickWord(i, 'reply', turn.reply))}
-                >
-                  {tb('practice.toDictionary')}
-                </button>
+                <PracticeDictionaryAddBar
+                  selectedWord={replyBlock.selectedWord}
+                  loading={replyBlock.loading}
+                  addedWord={replyBlock.addedWord}
+                  onAdd={() => void addTextToDictionary(pickWord(replyKey, turn.reply), replyKey)}
+                  showTapHint={Boolean(turn.opening) && i === 0}
+                />
                 {studyTtsSupported ? (
                   <ListenTtsButton text={turn.reply} ttsText={turn.replyTts} ttsLocale={learnLocale} className="ss-mt-sm" onError={speakReplyError} />
                 ) : null}
               </Box>
-            ))}
+            );
+            })}
             {loading && (
               <Box
                 className={turns.length ? 'ss-practice-compose' : 'ss-practice-compose ss-practice-compose--empty'}
@@ -913,18 +976,22 @@ export function ExpertPracticePage() {
                 {tr('practice.reply')}
               </Cell>
               {studySttSupported ? (
-              <Cell
-                disabled={practiceVoiceCellDisabled({
-                  voiceAvailable,
-                  transcribing,
-                  listening,
-                  voiceBusy,
-                  blockStart: loading || turns.length === 0,
-                })}
-                onClick={voiceUsesTap(voiceMode) ? toggleVoice : undefined}
-              >
-                {practiceVoiceCellLabel({ tr, tb, transcribing, listening })}
-              </Cell>
+              <PracticeVoiceCell
+                tr={tr}
+                tb={tb}
+                voiceMode={voiceMode}
+                voiceAvailable={voiceAvailable}
+                transcribing={transcribing}
+                listening={listening}
+                voiceBusy={voiceBusy}
+                blockStart={loading || turns.length === 0}
+                toggleVoice={toggleVoice}
+                onVoicePointerDown={onVoicePointerDown}
+                onVoicePointerUp={onVoicePointerUp}
+                onVoicePointerCancel={onVoicePointerCancel}
+                onVoiceTouchStart={onVoiceTouchStart}
+                onVoiceTouchEnd={onVoiceTouchEnd}
+              />
               ) : null}
               {studySttSupported && !voiceAvailable && <Footnote>{tr('errors.voiceBrowserUnavailable')}</Footnote>}
             </FormItem>

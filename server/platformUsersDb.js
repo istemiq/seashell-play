@@ -1,6 +1,10 @@
-import { pool } from './db.js';
+import { getDbPool } from './db.js';
+
+const pool = getDbPool();
 
 const PLATFORM = 'google';
+const MAX_DISPLAY_NAME = 40;
+const LEGACY_USER_ID_MAX = 5_000_000_000;
 
 export async function ensurePlatformAccountsSchema() {
   await pool.query(`
@@ -25,6 +29,10 @@ export async function ensurePlatformAccountsSchema() {
   `);
 }
 
+function isNewPlatformUserId(userId) {
+  return Number(userId) >= LEGACY_USER_ID_MAX;
+}
+
 /**
  * Resolve internal numeric user id for Google account (stable across logins).
  * @param {{ sub: string, email?: string, name?: string, picture?: string }} googleUser
@@ -43,10 +51,9 @@ export async function resolveGoogleUserId(googleUser) {
       `UPDATE platform_accounts
        SET last_login_at = NOW(),
            email = COALESCE($2, email),
-           display_name = COALESCE($3, display_name),
-           avatar_url = COALESCE($4, avatar_url)
+           avatar_url = COALESCE($3, avatar_url)
        WHERE user_id = $1`,
-      [userId, googleUser.email ?? null, googleUser.name ?? null, googleUser.picture ?? null],
+      [userId, googleUser.email ?? null, googleUser.picture ?? null],
     );
     return userId;
   }
@@ -55,8 +62,8 @@ export async function resolveGoogleUserId(googleUser) {
   const userId = Number(seq.rows[0].id);
   await pool.query(
     `INSERT INTO platform_accounts (user_id, platform, external_id, email, display_name, avatar_url)
-     VALUES ($1, $2, $3, $4, $5, $6)`,
-    [userId, PLATFORM, externalId, googleUser.email ?? null, googleUser.name ?? null, googleUser.picture ?? null],
+     VALUES ($1, $2, $3, $4, NULL, $5)`,
+    [userId, PLATFORM, externalId, googleUser.email ?? null, googleUser.picture ?? null],
   );
   return userId;
 }
@@ -68,4 +75,47 @@ export async function getPlatformAccount(userId) {
     [userId],
   );
   return rows[0] ?? null;
+}
+
+/** Public profile for app UI — display name only, no email. */
+export async function getUserProfileResponse(userId) {
+  const account = await getPlatformAccount(userId);
+  if (account) {
+    const displayName = String(account.display_name ?? '').trim() || null;
+    return {
+      userId,
+      displayName,
+      needsOnboarding: !displayName,
+    };
+  }
+  return {
+    userId,
+    displayName: null,
+    needsOnboarding: isNewPlatformUserId(userId),
+  };
+}
+
+export async function setPlatformDisplayName(userId, displayName) {
+  const name = String(displayName ?? '').trim().slice(0, MAX_DISPLAY_NAME);
+  if (!name) {
+    const err = new Error('Display name is required');
+    err.status = 400;
+    throw err;
+  }
+
+  const account = await getPlatformAccount(userId);
+  if (account) {
+    await pool.query(`UPDATE platform_accounts SET display_name = $2 WHERE user_id = $1`, [userId, name]);
+    return name;
+  }
+
+  if (!isNewPlatformUserId(userId)) {
+    const err = new Error('Profile name is managed by your Telegram account');
+    err.status = 403;
+    throw err;
+  }
+
+  const err = new Error('Account not found');
+  err.status = 404;
+  throw err;
 }

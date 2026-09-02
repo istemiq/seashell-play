@@ -63,6 +63,7 @@ import * as hi from '../modules/hi/hiContentLocale.js';
 import * as ur from '../modules/ur/urContentLocale.js';
 
 import * as az from '../modules/az/azContentLocale.js';
+import * as ba from '../modules/ba/baContentLocale.js';
 import * as ug from '../modules/ug/ugContentLocale.js';
 import * as vi from '../modules/vi/viContentLocale.js';
 import * as cs from '../modules/cs/csContentLocale.js';
@@ -75,7 +76,7 @@ import * as sr from '../modules/sr/srContentLocale.js';
 
 
 
-const MODULES = { ru, ar, es, pt, it, el, fa, da, nl, fr, de, tr, sv, no, fi, ko, ja, zh, uk, pl, hi, ur, az, ug, vi, cs, hu, ro, id, he, ca, sr };
+const MODULES = { ru, ar, es, pt, it, el, fa, da, nl, fr, de, tr, sv, no, fi, ko, ja, zh, uk, pl, hi, ur, az, ba, ug, vi, cs, hu, ro, id, he, ca, sr };
 
 
 

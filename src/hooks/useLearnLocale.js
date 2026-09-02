@@ -15,7 +15,7 @@ export function isEnglishLearnModule(learnLocale) {
 
 const DICT_READY_CODES = new Set([
   'en', 'ru', 'ar', 'es', 'pt', 'it', 'el', 'fa', 'da', 'nl', 'fr', 'de',
-  'tr', 'sv', 'no', 'fi', 'ko', 'ja', 'zh', 'uk', 'pl', 'hi', 'ur', 'az', 'ug', 'vi', 'cs', 'hu', 'ro', 'id', 'he', 'ca', 'sr',
+  'tr', 'sv', 'no', 'fi', 'ko', 'ja', 'zh', 'uk', 'pl', 'hi', 'ur', 'az', 'ba', 'ug', 'vi', 'cs', 'hu', 'ro', 'id', 'he', 'ca', 'sr',
 ]);
 
 /** Languages without server TTS — Web Speech on the device (ug has no espeak voice). */

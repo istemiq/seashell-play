@@ -21,7 +21,7 @@ import { useLearnLocale } from '../hooks/useLearnLocale.js';
 import { getStudyModuleCode } from '../modules/learnModuleSwitch.js';
 import { loadSettings, updateSettings, getSavedTtsLocaleForLearn } from '../utils/settings.js';
 import { speechLocaleForLearn } from '../utils/studySpeech.js';
-import { speakStudyText } from '../utils/tts.js';
+import { speakStudyText, unlockAudioPlayback } from '../utils/tts.js';
 import { setThemePreference, THEME_DARK, THEME_LIGHT, THEME_SYSTEM } from '../utils/theme.js';
 import {
   FONT_LARGE,
@@ -129,6 +129,9 @@ export function SettingsPage() {
     if (studyModule === 'uk') {
       return [{ labelKey: 'settings.accentUk', value: 'uk-UA' }];
     }
+    if (studyModule === 'ba') {
+      return [{ labelKey: 'settings.accentBa', value: 'ba' }];
+    }
     if (studyModule === 'pl') {
       return [{ labelKey: 'settings.accentPl', value: 'pl-PL' }];
     }
@@ -181,9 +184,11 @@ export function SettingsPage() {
     const samples = {
       en: 'Hello, how are you?',
       zh: '你好，很高兴认识你。',
+      ba: 'Сәләм! Нихәл?',
     };
     const sample = samples[studyModule];
     if (!sample) return;
+    void unlockAudioPlayback();
     void speakStudyText(sample, ttsLocale).catch(() => {});
   };
 

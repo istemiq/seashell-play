@@ -56,6 +56,7 @@ import { formatExampleTranslationForLocale } from '../utils/exampleTranslation.j
 import { loadSettings } from '../utils/settings.js';
 import { useAutofocusInput } from '../hooks/useAutofocusInput.js';
 import { useTappableDictionaryAdd } from '../hooks/useTappableDictionaryAdd.js';
+import { DictGlossText } from '../components/DictGlossText.jsx';
 import { TappableExampleEnglish } from '../components/TappableExampleEnglish.jsx';
 import { useLearnLocale, isDictionaryGenerationReady, isStudyTtsSupported, isStudySttSupported } from '../hooks/useLearnLocale.js';
 import { speechLocaleForLearn } from '../utils/studySpeech.js';
@@ -224,7 +225,7 @@ export function DictionaryPage() {
     wordDetailHistoryRef.current = false;
   }, [learnLocale]);
 
-  const { wordPick, selectWord, pickWord, clearWordPick, addTextToDictionary } = useTappableDictionaryAdd({
+  const { selectWord, pickWord, clearWordPick, getBlockState, addTextToDictionary } = useTappableDictionaryAdd({
     tr: t,
     showConfirm,
     onLimitsUpdate: setLimits,
@@ -310,16 +311,26 @@ export function DictionaryPage() {
   const openWord = async (wordId) => {
     if (!userId) return;
     setSelectedId(wordId);
-    setDetailLoading(true);
     setExampleIdx(0);
     setExamplesTab('builtin');
     setNativeSentence('');
     setWordSetsModalOpen(false);
     setModalNewSetName('');
     setError(null);
+
+    const cached = api.peekWordDetailCache(wordId);
+    if (cached) {
+      bumpExampleShuffle();
+      setDetail(cached);
+      setPendingSetIds(Array.isArray(cached?.setIds) ? cached.setIds : []);
+      setDetailLoading(false);
+    } else {
+      setDetail(null);
+      setDetailLoading(true);
+    }
+
     try {
-      let d = await api.fetchWord(wordId);
-      d = await maybeAutoRefreshForLocale(wordId, d);
+      const d = await api.fetchWord(wordId);
       bumpExampleShuffle();
       setDetail(d);
       setPendingSetIds(Array.isArray(d?.setIds) ? d.setIds : []);
@@ -330,6 +341,7 @@ export function DictionaryPage() {
     } catch (e) {
       setError(e.message || t('errors.generic'));
       setSelectedId(null);
+      setDetail(null);
     } finally {
       setDetailLoading(false);
     }
@@ -960,6 +972,9 @@ export function DictionaryPage() {
         <Group>
           <Box>
             <Text>{error}</Text>
+            <Button flat mode="secondary" className="ss-mt-sm" onClick={() => void loadList()}>
+              {t('common.retry')}
+            </Button>
           </Box>
         </Group>
       )}
@@ -1145,6 +1160,8 @@ export function DictionaryPage() {
                   <Cell
                     key={w.id}
                     onClick={() => openWord(w.id)}
+                    onMouseDown={() => api.prefetchWord(w.id)}
+                    onTouchStart={() => api.prefetchWord(w.id)}
                     subtitle={
                       w.content_locale ? (
                         <>
@@ -1201,7 +1218,7 @@ export function DictionaryPage() {
               <Box>
                 <Text weight="2">{t('dict.meaning')}</Text>
                 {detail.gloss_ru ? (
-                  <Text className="ss-mt-6" dir="auto">{detail.gloss_ru}</Text>
+                  <DictGlossText gloss={detail.gloss_ru} />
                 ) : (
                   <Footnote className="ss-mt-6">{t('dict.noMeaning')}</Footnote>
                 )}
@@ -1233,17 +1250,16 @@ export function DictionaryPage() {
                             <TappableExampleEnglish
                               text={en}
                               pickKey={`verb-usage-${i}`}
-                              wordPick={wordPick}
+                              blockState={getBlockState(`verb-usage-${i}`)}
                               onSelectWord={selectWord}
-                              addLabel={t('practice.toDictionary')}
                               disabled={examplesBusy}
                               onAddClick={() =>
-                                void addTextToDictionary(pickWord(`verb-usage-${i}`, en))
+                                void addTextToDictionary(pickWord(`verb-usage-${i}`, en), `verb-usage-${i}`)
                               }
                             />
                           ) : null}
                           {ru ? (
-                            <Text className="ss-mt-6 ss-opacity-soft" dir="auto">{ru}</Text>
+                            <Text className="ss-mt-6 ss-dict-translation-text" dir="auto">{ru}</Text>
                           ) : null}
                         </Box>
                       );
@@ -1316,12 +1332,11 @@ export function DictionaryPage() {
                         <TappableExampleEnglish
                           text={currentExampleText}
                           pickKey={examplePickKey}
-                          wordPick={wordPick}
+                          blockState={getBlockState(examplePickKey)}
                           onSelectWord={selectWord}
-                          addLabel={t('practice.toDictionary')}
                           disabled={examplesBusy}
                           onAddClick={() =>
-                            void addTextToDictionary(pickWord(examplePickKey, currentExampleText))
+                            void addTextToDictionary(pickWord(examplePickKey, currentExampleText), examplePickKey)
                           }
                         />
                         {addingCustomExample ? (
@@ -1333,11 +1348,11 @@ export function DictionaryPage() {
                             <StreamingText
                               text={currentExampleRu}
                               streamId={`dict-tr-${selectedId}-${exampleIdx}-${currentExampleRu}`}
-                              className="ss-mt-lg ss-opacity-soft"
+                              className="ss-mt-lg ss-dict-translation-text"
                               dir="auto"
                             />
                           ) : (
-                            <Text className="ss-mt-lg ss-opacity-soft" dir="auto">
+                            <Text className="ss-mt-lg ss-dict-translation-text" dir="auto">
                               {currentExampleRu}
                             </Text>
                           )

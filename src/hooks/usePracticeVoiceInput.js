@@ -3,6 +3,7 @@ import { postSttTranscribe } from '../api/sttApi.js';
 import { APP_RESUME_EVENT, APP_SUSPEND_EVENT } from '../utils/appResume.js';
 import { normalizeSttLanguage } from '../utils/studySpeech.js';
 import { hasTelegramWebApp } from '../platform/telegramApp.js';
+import { isCapacitorNative } from '../platform/runtime.js';
 import { acquireSharedMicStream } from '../utils/sharedMicStream.js';
 import { startRecordingSilenceWatch } from '../utils/recordingSilenceWatch.js';
 
@@ -15,9 +16,15 @@ export function isTelegramMiniApp() {
   return hasTelegramWebApp();
 }
 
+/** Telegram Mini App — MediaRecorder + server STT (Whisper). Capacitor prefers on-device Web Speech when available. */
+export function usesServerSttVoice() {
+  return isTelegramMiniApp() || (isCapacitorNative() && !getSpeechRecognition());
+}
+
 export function voiceInputMode() {
   if (isTelegramMiniApp()) return 'hold';
   if (getSpeechRecognition()) return 'tap';
+  if (isCapacitorNative()) return 'hold';
   return null;
 }
 
@@ -27,11 +34,11 @@ function canUseHoldVoice() {
 
 function pickRecorderMime() {
   if (typeof MediaRecorder === 'undefined') return '';
-  const candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus', ''];
+  const candidates = isCapacitorNative()
+    ? ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus']
+    : ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
   for (const mime of candidates) {
-    if (!mime || MediaRecorder.isTypeSupported(mime)) {
-      return mime || 'audio/webm';
-    }
+    if (MediaRecorder.isTypeSupported(mime)) return mime;
   }
   return '';
 }
@@ -46,7 +53,7 @@ export function usePracticeVoiceInput({
   blockStart,
   t,
   tapToToggle = isTelegramMiniApp(),
-  silenceStopMs = isTelegramMiniApp() ? 4000 : 0,
+  silenceStopMs = isTelegramMiniApp() ? 4000 : 2500,
   speechLang = 'en-US',
 }) {
   const baseMode = voiceInputMode();
@@ -179,7 +186,7 @@ export function usePracticeVoiceInput({
       stopSilenceWatch();
       setListening(false);
       mediaRecRef.current = null;
-      const minMs = mode === 'toggle-record' ? 180 : 400;
+      const minMs = mode === 'toggle-record' ? 120 : 300;
       if (heldMs < minMs) return;
       const blob = new Blob(chunksRef.current, { type: mime });
       chunksRef.current = [];
@@ -352,6 +359,11 @@ export function usePracticeVoiceInput({
     },
     [endHoldRecording, mode],
   );
+
+  useEffect(() => {
+    if (!usesServerSttVoice() || blockStart) return;
+    void acquireSharedMicStream().catch(() => {});
+  }, [blockStart]);
 
   useEffect(
     () => () => {

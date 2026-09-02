@@ -1,14 +1,13 @@
 import { useEffect, useState } from 'react';
 
-import { getTelegramUser, isBrowserDevMode } from '../platform/telegramApp.js';
 import { resolvePlatformUserId, setPlatformUserId } from '../platform/platformUser.js';
-import { whenTelegramSessionReady } from '../platform/telegramSession.js';
+import { whenGoogleSessionReady } from '../platform/googleSession.js';
+import { loadGoogleProfile } from '../platform/googleAuthStore.js';
+import { isPlayDevAuth } from '../platform/runtime.js';
 import { tStatic } from '../i18n/I18nContext.jsx';
 
-const DEV_FALLBACK_USER_ID = Number(import.meta.env.VITE_DEV_TG_USER_ID) || 1000001;
-
 /**
- * userId для API + optional error в WebView Telegram.
+ * Platform user id for API calls (Google Play build).
  */
 export function usePlatformUser() {
   const [userId, setUserId] = useState(() => resolvePlatformUserId());
@@ -16,32 +15,25 @@ export function usePlatformUser() {
 
   useEffect(() => {
     let cancelled = false;
-    (async () => {
-      await whenTelegramSessionReady();
-      const tgUser = getTelegramUser();
-      if (tgUser?.id) {
-        setPlatformUserId(tgUser.id);
-        if (!cancelled) setUserId(tgUser.id);
-        return;
+    void (async () => {
+      try {
+        await whenGoogleSessionReady();
+        const profile = loadGoogleProfile();
+        const id = profile?.userId ?? resolvePlatformUserId();
+        if (id) {
+          setPlatformUserId(id);
+          if (!cancelled) setUserId(id);
+          return;
+        }
+        if (!cancelled) {
+          setError(tStatic('errors.authInitData'));
+        }
+      } catch {
+        if (!cancelled) {
+          setError(isPlayDevAuth() ? tStatic('errors.loadFailed') : tStatic('errors.authInitData'));
+        }
       }
-      const id = resolvePlatformUserId();
-      if (id) {
-        if (!cancelled) setUserId(id);
-        return;
-      }
-      if (isBrowserDevMode()) {
-        setPlatformUserId(DEV_FALLBACK_USER_ID);
-        if (!cancelled) setUserId(DEV_FALLBACK_USER_ID);
-        return;
-      }
-      if (!cancelled) {
-        setError(tStatic('errors.userTelegram'));
-      }
-    })().catch(() => {
-      if (!cancelled) {
-        setError(tStatic('errors.userTelegram'));
-      }
-    });
+    })();
     return () => {
       cancelled = true;
     };

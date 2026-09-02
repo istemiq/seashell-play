@@ -16,7 +16,9 @@ import {
   Cell,
 } from '../components/Ui.jsx';
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { PracticeLevelPicker } from '../components/PracticeLevelPicker.jsx';
+import { SplitModalSlotContext } from '../context/SplitModalSlotContext.js';
 import { useNavigate, useParams } from 'react-router-dom';
 import { PracticeEchoText } from '../components/PracticeEchoText.jsx';
 import { PracticeTappableText } from '../components/PracticeTappableText.jsx';
@@ -34,16 +36,13 @@ import { useEscapeBack } from '../hooks/useEscapeBack.js';
 import { useLearnLocale, isStudyTtsSupported, isStudySttSupported } from '../hooks/useLearnLocale.js';
 import { dictMessageForLearn, practiceStudyLangLabel } from '../utils/contentLocale.js';
 import { speechLocaleForLearn } from '../utils/studySpeech.js';
-import {
-  practiceVoiceCellDisabled,
-  practiceVoiceCellLabel,
-  voiceUsesTap,
-} from '../utils/practiceVoiceUi.js';
+import { prefetchStudyTts } from '../utils/tts.js';
 import { fetchUserLimits } from '../api/userApi.js';
 import { runWithAdRetry, isAdUnavailableError } from '../utils/limitsGate.js';
 import { practiceUserReplyCount } from '../utils/practiceUserReplyCount.js';
 import { discardEmptyPracticeSession } from '../utils/discardEmptyPracticeSession.js';
 import { ListenTtsButton } from '../components/ListenTtsButton.jsx';
+import { PracticeVoiceCell } from '../components/PracticeVoiceCell.jsx';
 import {
   loadWordPracticeSessionId,
   saveWordPracticeSessionId,
@@ -52,6 +51,7 @@ import { usePracticeDialogGate } from '../hooks/usePracticeDialogGate.js';
 
 
 export function WordPracticePage() {
+  const splitModalMount = useContext(SplitModalSlotContext);
   const navigate = useNavigate();
   const { wordId: wordIdParam } = useParams();
   const wordId = parseInt(String(wordIdParam ?? ''), 10);
@@ -229,6 +229,11 @@ export function WordPracticePage() {
     voiceError,
     toggleVoice,
     stopVoice,
+    onVoicePointerDown,
+    onVoicePointerUp,
+    onVoicePointerCancel,
+    onVoiceTouchStart,
+    onVoiceTouchEnd,
   } = usePracticeVoiceInput({
     onTranscript: (text) => void submitUserText(text),
     blockStart: loading || booting || turns.length === 0 || !studySttSupported,
@@ -260,6 +265,13 @@ export function WordPracticePage() {
   useEffect(() => {
     if (voiceError) setError(voiceError);
   }, [voiceError]);
+
+  useEffect(() => {
+    if (loading || !studyTtsSupported || !turns.length) return;
+    const last = turns[turns.length - 1];
+    if (!last?.reply) return;
+    prefetchStudyTts(last.reply, learnLocale, { ttsText: last.replyTts });
+  }, [turns, loading, learnLocale, studyTtsSupported]);
 
   const startWordDialog = useCallback(() => {
     if (!Number.isFinite(wordId) || loading || booting) return;
@@ -303,9 +315,12 @@ export function WordPracticePage() {
       <PanelHeader
         before={<PanelHeaderBack onClick={handleBack} />}
         after={
-          <DismissibleHint hintId="dict.wordPractice.hint" className="ss-hint--inline ss-hint--subtle">
-            {dictMessageForLearn(tr, 'dict.wordPracticeHint', learnLocale, { word: wordLabel || '…' })}
-          </DismissibleHint>
+          <div className="ss-panel-header__tools">
+            <PracticeLevelPicker modalMount={splitModalMount} />
+            <DismissibleHint hintId="dict.wordPractice.hint" className="ss-hint--inline ss-hint--subtle">
+              {dictMessageForLearn(tr, 'dict.wordPracticeHint', learnLocale, { word: wordLabel || '…' })}
+            </DismissibleHint>
+          </div>
         }
       >
         {tr('dict.wordPracticeTitle', { word: wordLabel || '…' })}
@@ -422,18 +437,22 @@ export function WordPracticePage() {
                 {tr('practice.reply')}
               </Cell>
               {studySttSupported ? (
-              <Cell
-                disabled={practiceVoiceCellDisabled({
-                  voiceAvailable,
-                  transcribing,
-                  listening,
-                  voiceBusy,
-                  blockStart: loading || booting || turns.length === 0,
-                })}
-                onClick={voiceUsesTap(voiceMode) ? toggleVoice : undefined}
-              >
-                {practiceVoiceCellLabel({ tr, tb, transcribing, listening })}
-              </Cell>
+              <PracticeVoiceCell
+                tr={tr}
+                tb={tb}
+                voiceMode={voiceMode}
+                voiceAvailable={voiceAvailable}
+                transcribing={transcribing}
+                listening={listening}
+                voiceBusy={voiceBusy}
+                blockStart={loading || booting || turns.length === 0}
+                toggleVoice={toggleVoice}
+                onVoicePointerDown={onVoicePointerDown}
+                onVoicePointerUp={onVoicePointerUp}
+                onVoicePointerCancel={onVoicePointerCancel}
+                onVoiceTouchStart={onVoiceTouchStart}
+                onVoiceTouchEnd={onVoiceTouchEnd}
+              />
               ) : null}
               {studySttSupported && !voiceAvailable && <Footnote>{tr('errors.voiceBrowserUnavailable')}</Footnote>}
             </FormItem>

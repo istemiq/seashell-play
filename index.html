@@ -170,9 +170,9 @@
           if (!root || !root.querySelector('.boot-loader')) return;
           root.innerHTML =
             '<div class="boot-loader" style="padding:24px;box-sizing:border-box;font-family:system-ui,sans-serif;text-align:center;line-height:1.5">' +
-            '<p style="margin:0 0 12px;opacity:.85">Медленное соединение — приложение ещё загружается.</p>' +
-            '<p style="margin:0 0 16px;font-size:0.95rem;opacity:.65">Slow connection on iPhone is common. Use Wi‑Fi, update Telegram, then close and reopen the Mini App from the bot menu.</p>' +
-            '<button type="button" onclick="location.reload()" style="padding:10px 18px;border:1px solid rgba(127,127,127,.4);border-radius:8px;background:transparent;font:inherit">Reload / Перезагрузить</button>' +
+            '<p style="margin:0 0 12px;opacity:.85">Приложение долго загружается.</p>' +
+            '<p style="margin:0 0 16px;font-size:0.95rem;opacity:.65">Проверьте Wi‑Fi и что API запущен на компьютере (npm run dev). На телефоне в .env должен быть IP компьютера, не 10.0.2.2.</p>' +
+            '<button type="button" onclick="location.reload()" style="padding:10px 18px;border:1px solid rgba(127,127,127,.4);border-radius:8px;background:transparent;font:inherit">Перезагрузить</button>' +
             '</div>';
         }
         window.setTimeout(showBootSlow, 20000);

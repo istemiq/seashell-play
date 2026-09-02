@@ -6,6 +6,8 @@ export function StreamingPracticeReply({
   text,
   streamId,
   selectedWord,
+  loadingWord = null,
+  addedWord = null,
   onSelectWord,
   className = 'ss-text ss-practice-text ss-practice-prose ss-practice-prose--pre',
   style,
@@ -37,6 +39,8 @@ export function StreamingPracticeReply({
     <PracticeTappableText
       text={full}
       selectedWord={selectedWord}
+      loadingWord={loadingWord}
+      addedWord={addedWord}
       onSelectWord={onSelectWord}
       className={className}
       style={style}

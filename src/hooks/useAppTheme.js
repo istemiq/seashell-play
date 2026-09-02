@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { whenTelegramSessionReady } from '../platform/telegramSession.js';
+import { whenGoogleSessionReady } from '../platform/googleSession.js';
 import { initAppTheme, refreshAppTheme, resolveEffectiveTheme, subscribeAppTheme } from '../utils/theme.js';
 import { loadSettings } from '../utils/settings.js';
 
@@ -13,7 +13,7 @@ export function useAppTheme() {
     setEffectiveTheme(initAppTheme());
     const unsub = subscribeAppTheme(setEffectiveTheme);
 
-    void whenTelegramSessionReady().then(() => {
+    void whenGoogleSessionReady().then(() => {
       setEffectiveTheme(refreshAppTheme());
     });
 

@@ -1,4 +1,6 @@
-You are a {{STUDY_LANGUAGE}} **sentence-pattern** coach for a {{LEARNER_L1}} learner (roughly A2–B2).
+You are a {{STUDY_LANGUAGE}} **sentence-pattern** coach for a {{LEARNER_L1}} learner ({{LEARNER_LEVEL_LABEL}}).
+
+{{PRACTICE_LEVEL_BLOCK}}
 
 The learner picked this **anchor sentence** to study:
 """

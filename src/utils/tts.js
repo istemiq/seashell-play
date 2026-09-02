@@ -4,11 +4,17 @@ import { tStatic } from '../i18n/I18nContext.jsx';
 import { normalizeLearnLocale, LEARN_LOCALE_CODES } from '../i18n/learnLocales.js';
 import { STUDY_PIPER_UNSUPPORTED_CODES } from '../hooks/useLearnLocale.js';
 import { speechLocaleForLearn } from './studySpeech.js';
+import { TextToSpeech } from '@capacitor-community/text-to-speech';
+import { isCapacitorNative } from '../platform/runtime.js';
 
 /** One shared element — mobile WebViews allow play after async only on the element unlocked by the tap. */
 let sharedAudio = null;
 let activeAudio = null;
 let blobUrlToRevoke = null;
+
+/** mp3 blob URLs keyed by remote URL — avoids re-download on repeat Listen taps. */
+const mp3BlobCache = new Map();
+const MP3_CACHE_MAX = 48;
 
 const SILENT_WAV =
   'data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA';
@@ -19,6 +25,7 @@ function getSharedAudio() {
     sharedAudio = new Audio();
     sharedAudio.preload = 'auto';
     sharedAudio.playsInline = true;
+    sharedAudio.crossOrigin = 'anonymous';
     sharedAudio.setAttribute('playsinline', '');
     sharedAudio.setAttribute('webkit-playsinline', '');
   }
@@ -36,17 +43,14 @@ function revokeBlobUrl() {
 }
 
 /** Call synchronously from a user tap, before any await — unlocks Piper mp3 on iOS/Android WebView. */
-export async function unlockAudioPlayback() {
+export function unlockAudioPlayback() {
   const a = getSharedAudio();
   if (!a) return false;
   try {
     a.pause();
     revokeBlobUrl();
     a.src = SILENT_WAV;
-    await Promise.race([
-      a.play(),
-      new Promise((resolve) => window.setTimeout(resolve, 400)),
-    ]);
+    void a.play().catch(() => {});
     return true;
   } catch {
     return false;
@@ -80,6 +84,9 @@ function stopAllPlayback() {
     } catch {
       /* ignore */
     }
+  }
+  if (isCapacitorNative()) {
+    void TextToSpeech.stop().catch(() => {});
   }
 }
 
@@ -135,13 +142,34 @@ async function ensureVoicesLoaded(timeoutMs = 1200) {
   });
 }
 
-async function tryWebSpeech(text, locale) {
+/** Android/iOS system TTS — fallback when Piper unavailable. Returns once playback starts. */
+function tryNativeTts(text, locale, { onStart } = {}) {
+  const s = loadSettings();
+  if (!s.ttsEnabled || !isCapacitorNative()) return false;
+  const lang = resolveSpeakLocale(locale);
+  try {
+    void TextToSpeech.stop().catch(() => {});
+    onStart?.();
+    void TextToSpeech.speak({
+      text,
+      lang,
+      rate: Math.min(2, Math.max(0.5, Number(s.ttsRate) || 0.95)),
+      pitch: 1.0,
+      volume: 1.0,
+    }).catch(() => {});
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function tryWebSpeech(text, locale, { onStart } = {}) {
   const s = loadSettings();
   if (!s.ttsEnabled) return false;
   if (!canUseWebSpeech()) return false;
   const speechLocale = effectiveTtsLocale(locale || s.ttsLocale || loadSettings().learnLocale);
   try {
-    await ensureVoicesLoaded();
+    await ensureVoicesLoaded(400);
     const u = new SpeechSynthesisUtterance(text);
     u.lang = speechLocale;
     u.rate = Number(s.ttsRate) || 0.95;
@@ -149,6 +177,7 @@ async function tryWebSpeech(text, locale) {
     if (voice) u.voice = voice;
 
     const spoke = await new Promise((resolve) => {
+      u.onstart = () => onStart?.();
       u.onend = () => resolve(true);
       u.onerror = () => resolve(false);
       try {
@@ -171,7 +200,44 @@ async function tryWebSpeech(text, locale) {
   }
 }
 
-async function playUrl(url) {
+function rememberMp3Blob(remote, blobUrl) {
+  if (mp3BlobCache.size >= MP3_CACHE_MAX) {
+    const oldest = mp3BlobCache.keys().next().value;
+    if (oldest) {
+      try {
+        URL.revokeObjectURL(mp3BlobCache.get(oldest));
+      } catch {
+        /* ignore */
+      }
+      mp3BlobCache.delete(oldest);
+    }
+  }
+  mp3BlobCache.set(remote, blobUrl);
+}
+
+async function audioSrcForUrl(url) {
+  const remote = resolveTtsPlayUrl(url);
+  if (!remote) return null;
+
+  const cached = mp3BlobCache.get(remote);
+  if (cached) return cached;
+
+  if (!isCapacitorNative()) return remote;
+
+  try {
+    const res = await fetch(remote);
+    if (!res.ok) return remote;
+    const blob = await res.blob();
+    if (!blob.size) return remote;
+    const blobUrl = URL.createObjectURL(blob);
+    rememberMp3Blob(remote, blobUrl);
+    return blobUrl;
+  } catch {
+    return remote;
+  }
+}
+
+async function playUrl(url, { onStart } = {}) {
   const remote = resolveTtsPlayUrl(url);
   if (!remote) return false;
 
@@ -179,38 +245,69 @@ async function playUrl(url) {
   if (!a) return false;
 
   activeAudio = a;
-  revokeBlobUrl();
 
-  try {
-    return await new Promise((resolve) => {
+  const tryPlaySrc = (src) =>
+    new Promise((resolve) => {
       let settled = false;
       const finish = (ok) => {
         if (settled) return;
         settled = true;
         clearTimeout(timer);
-        a.removeEventListener('ended', onEnd);
         a.removeEventListener('error', onErr);
+        a.removeEventListener('playing', onPlaying);
         a.removeEventListener('canplaythrough', onReady);
         a.removeEventListener('loadeddata', onReady);
         resolve(ok);
       };
       let started = false;
-      const onEnd = () => finish(true);
       const onErr = () => finish(false);
+      const onPlaying = () => {
+        onStart?.();
+        finish(true);
+      };
       const onReady = () => {
         if (started) return;
         started = true;
         a.play().catch(() => finish(false));
       };
-      const timer = window.setTimeout(() => finish(false), 45000);
-      a.addEventListener('ended', onEnd, { once: true });
+      const timer = window.setTimeout(() => finish(false), 12000);
       a.addEventListener('error', onErr, { once: true });
+      a.addEventListener('playing', onPlaying, { once: true });
       a.addEventListener('canplaythrough', onReady, { once: true });
       a.addEventListener('loadeddata', onReady, { once: true });
-      a.src = remote;
+      try {
+        a.pause();
+        a.currentTime = 0;
+      } catch {
+        /* ignore */
+      }
+      if (!src.startsWith('blob:')) revokeBlobUrl();
+      else blobUrlToRevoke = src;
+      a.src = src;
       a.load();
       if (a.readyState >= 2) onReady();
     });
+
+  try {
+    const cached = mp3BlobCache.get(remote);
+    if (cached && (await tryPlaySrc(cached))) return true;
+
+    if (isCapacitorNative()) {
+      if (await tryPlaySrc(remote)) {
+        void fetch(remote)
+          .then((r) => (r.ok ? r.blob() : null))
+          .then((blob) => {
+            if (!blob?.size || mp3BlobCache.has(remote)) return;
+            rememberMp3Blob(remote, URL.createObjectURL(blob));
+          })
+          .catch(() => {});
+        return true;
+      }
+    }
+
+    const src = await audioSrcForUrl(url);
+    if (!src) return false;
+    return tryPlaySrc(src);
   } finally {
     if (activeAudio === a) activeAudio = null;
   }
@@ -247,6 +344,7 @@ function resolveSpeakLocale(learnOrTtsLocale) {
   if (raw === 'ru-ru' || raw === 'ru') return 'ru-RU';
   if (raw === 'ar-jo' || raw === 'ar' || raw.startsWith('ar-')) return 'ar-JO';
   if (raw === 'ug-cn' || raw === 'ug') return 'ug-CN';
+  if (raw === 'ba-ru' || raw === 'ba') return 'ba';
   if (raw === 'nb-no' || raw === 'nb') return 'no-NO';
   if (/^[a-z]{2}-[a-z]{2}$/i.test(raw)) {
     const normalized = `${raw.slice(0, 2).toLowerCase()}-${raw.slice(-2).toUpperCase()}`;
@@ -277,9 +375,44 @@ function clipTextForTts(text, maxLen = TTS_SPEAK_MAX_LEN) {
 }
 
 /**
- * Speak study-language text via Piper backend (mp3), Web Speech as fallback.
+ * Warm Piper mp3 cache while the user reads the reply — next Listen tap is instant.
  */
-export async function speakStudyText(text, learnOrTtsLocale, { ttsText } = {}) {
+export function prefetchStudyTts(text, learnOrTtsLocale, { ttsText } = {}) {
+  const line = clipTextForTts(String(text ?? '').trim());
+  if (!line) return;
+  const s = loadSettings();
+  if (!s.ttsEnabled) return;
+
+  const locale = effectiveTtsLocale(learnOrTtsLocale);
+  const markedRaw = String(ttsText ?? '').trim();
+  const marked = markedRaw ? clipTextForTts(markedRaw) : undefined;
+  const speakLine = marked || line;
+  const learnCode = learnCodeForSpeak(learnOrTtsLocale);
+  if (STUDY_PIPER_UNSUPPORTED_CODES.has(learnCode)) return;
+
+  void postTtsSpeak({
+    text: speakLine,
+    ttsText: marked && marked !== speakLine ? marked : undefined,
+    locale,
+    rate: Number(s.ttsRate) || 0.95,
+  })
+    .then((r) => {
+      const remote = resolveTtsPlayUrl(r.url);
+      if (!remote || mp3BlobCache.has(remote)) return;
+      return fetch(remote)
+        .then((res) => (res.ok ? res.blob() : null))
+        .then((blob) => {
+          if (!blob?.size) return;
+          rememberMp3Blob(remote, URL.createObjectURL(blob));
+        });
+    })
+    .catch(() => {});
+}
+
+/**
+ * Speak study-language text via Piper backend (mp3), native/Web Speech as fallback.
+ */
+export async function speakStudyText(text, learnOrTtsLocale, { ttsText, onStart } = {}) {
   const line = clipTextForTts(String(text ?? '').trim());
   if (!line) return;
   const locale = effectiveTtsLocale(learnOrTtsLocale);
@@ -298,6 +431,7 @@ export async function speakStudyText(text, learnOrTtsLocale, { ttsText } = {}) {
   const piperOk = !STUDY_PIPER_UNSUPPORTED_CODES.has(learnCode);
   let piperError = null;
 
+  // Cached Piper mp3 first — fast and supports stress marks (ttsText).
   if (piperOk) {
     try {
       const r = await postTtsSpeak({
@@ -306,19 +440,21 @@ export async function speakStudyText(text, learnOrTtsLocale, { ttsText } = {}) {
         locale,
         rate: Number(s.ttsRate) || 0.95,
       });
-      if (await playUrl(r.url)) return;
+      if (await playUrl(r.url, { onStart })) return;
       piperError = new Error(tStatic('errors.ttsUnavailable'));
     } catch (e) {
       piperError = e instanceof Error ? e : new Error(tStatic('errors.ttsUnavailable'));
     }
   }
 
-  if (await tryWebSpeech(line, locale)) return;
+  if (isCapacitorNative() && tryNativeTts(line, locale, { onStart })) return;
+
+  if (await tryWebSpeech(line, locale, { onStart })) return;
 
   throw piperError || new Error(tStatic('errors.ttsUnavailable'));
 }
 
 /** Speak English via Piper / Web Speech. */
-export async function speakEnglish(text) {
-  return speakStudyText(text, 'en-US');
+export async function speakEnglish(text, opts = {}) {
+  return speakStudyText(text, 'en-US', opts);
 }

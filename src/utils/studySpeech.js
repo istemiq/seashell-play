@@ -26,6 +26,7 @@ export function speechLocaleForLearn(learnLocale) {
   if (code === 'hi') return 'hi-IN';
   if (code === 'ur') return 'ur-PK';
   if (code === 'az') return 'az-AZ';
+  if (code === 'ba') return 'ba';
   if (code === 'ug') return 'ug-CN';
   if (code === 'vi') return 'vi-VN';
   if (code === 'cs') return 'cs-CZ';
@@ -74,6 +75,7 @@ export function normalizeSttLanguage(code) {
   if (lc === 'hi' || lc.startsWith('hi-')) return 'hi';
   if (lc === 'ur' || lc.startsWith('ur-')) return 'ur';
   if (lc === 'az' || lc.startsWith('az-')) return 'az';
+  if (lc === 'ba' || lc.startsWith('ba-')) return 'ba';
   if (lc === 'ug' || lc.startsWith('ug-')) return 'ug';
   if (lc === 'vi' || lc.startsWith('vi-')) return 'vi';
   if (lc === 'cs' || lc.startsWith('cs-')) return 'cs';

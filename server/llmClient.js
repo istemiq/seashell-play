@@ -51,6 +51,7 @@ import {
   wordInputLooksLikeStudyLanguage,
 } from './dictionaryStudyLang.js';
 import { localeDictionaryRetryNote, normalizeContentLocale } from './promptLocales.js';
+import { normalizePracticeLevel } from './practiceLevel.js';
 import { buildRegisterTagsGuide, registerTailExamples } from './registerTags.js';
 import {
   assertPayloadMatchesContentLocale,
@@ -939,12 +940,13 @@ export async function resolveHeadwordEnQuick(word, contentLocale = 'en', targetL
 
 export { wordInputLooksEnglish } from './dictionaryInputMode.js';
 
-function buildPracticePrompt(userText, dialogueSummary, historyBlock, contentLocale, targetLang = 'en') {
+function buildPracticePrompt(userText, dialogueSummary, historyBlock, contentLocale, targetLang = 'en', practiceLevel) {
   const locale = normalizeContentLocale(contentLocale);
+  const level = normalizePracticeLevel(practiceLevel);
   const h = historyBlock ?? '(empty)';
   const summary = String(dialogueSummary ?? '').trim() || '(none yet)';
   const activeThread = extractActiveThreadHint(h);
-  return loadPracticeTurnPrompt(locale, targetLang)
+  return loadPracticeTurnPrompt(locale, targetLang, level)
     .replace('{{USER_TEXT}}', String(userText).trim().slice(0, 4000))
     .replace('{{HISTORY}}', h)
     .replace('{{DIALOGUE_SUMMARY}}', summary.slice(0, 900))
@@ -995,9 +997,11 @@ export async function generatePracticeTurn({
   history,
   contentLocale,
   targetLang = 'en',
+  practiceLevel,
 } = {}) {
   const locale = normalizeContentLocale(contentLocale);
   const study = normalizeStudyLang(targetLang);
+  const level = normalizePracticeLevel(practiceLevel);
   let block = historyBlock ?? '(empty)';
   let summary = dialogueSummary;
   if (block === '(empty)' && Array.isArray(history) && history.length) {
@@ -1017,13 +1021,13 @@ export async function generatePracticeTurn({
             .slice(0, 16000);
     summary = summary ?? '(none yet)';
   }
-  const userContent = buildPracticePrompt(userText, summary, block, locale, study);
+  const userContent = buildPracticePrompt(userText, summary, block, locale, study, level);
 
   const content = await llmChatCompletion({
     messages: [
       {
         role: 'system',
-        content: practiceFreeSystemPrompt(study),
+        content: practiceFreeSystemPrompt(study, level),
       },
       { role: 'user', content: userContent },
     ],
@@ -1039,14 +1043,23 @@ export async function generatePracticeTurn({
   return turn;
 }
 
-function buildPracticeExpertPrompt(userText, dialogueSummary, historyBlock, contentLocale, expert, targetLang = 'en') {
+function buildPracticeExpertPrompt(
+  userText,
+  dialogueSummary,
+  historyBlock,
+  contentLocale,
+  expert,
+  targetLang = 'en',
+  practiceLevel,
+) {
   if (!expert) {
     throw new Error('Unknown expert role');
   }
+  const level = normalizePracticeLevel(practiceLevel);
   const h = historyBlock ?? '(empty)';
   const summary = String(dialogueSummary ?? '').trim() || '(none yet)';
   const activeThread = extractActiveThreadHint(h);
-  return loadPracticeExpertTurnPrompt(contentLocale, expert, targetLang)
+  return loadPracticeExpertTurnPrompt(contentLocale, expert, targetLang, level)
     .replaceAll('{{USER_TEXT}}', String(userText).trim().slice(0, 4000))
     .replaceAll('{{HISTORY}}', h)
     .replaceAll('{{DIALOGUE_SUMMARY}}', summary.slice(0, 900))
@@ -1062,12 +1075,14 @@ export async function generatePracticeExpertTurn({
   contentLocale,
   expert,
   targetLang = 'en',
+  practiceLevel,
 } = {}) {
   if (!expert) {
     throw new Error('Unknown expert role');
   }
   const locale = normalizeContentLocale(contentLocale);
   const study = normalizeStudyLang(targetLang);
+  const level = normalizePracticeLevel(practiceLevel);
   let block = historyBlock;
   let summary = dialogueSummary;
   if (!block && Array.isArray(history)) {
@@ -1087,11 +1102,11 @@ export async function generatePracticeExpertTurn({
             .slice(0, 16000);
     summary = summary ?? '(none yet)';
   }
-  const userContent = buildPracticeExpertPrompt(userText, summary, block, locale, expert, study);
+  const userContent = buildPracticeExpertPrompt(userText, summary, block, locale, expert, study, level);
 
   const content = await llmChatCompletion({
     messages: [
-      { role: 'system', content: practiceExpertSystemPrompt(study) },
+      { role: 'system', content: practiceExpertSystemPrompt(study, level) },
       { role: 'user', content: userContent },
     ],
     temperature: 0.48,
@@ -1123,8 +1138,17 @@ function formatWordExamplesBlock(examples) {
     .join('\n');
 }
 
-function buildPracticeWordPrompt(userText, dialogueSummary, historyBlock, contentLocale, wordMeta, targetLang = 'en') {
+function buildPracticeWordPrompt(
+  userText,
+  dialogueSummary,
+  historyBlock,
+  contentLocale,
+  wordMeta,
+  targetLang = 'en',
+  practiceLevel,
+) {
   const locale = normalizeContentLocale(contentLocale);
+  const level = normalizePracticeLevel(practiceLevel);
   const h = historyBlock ?? '(empty)';
   const summary = String(dialogueSummary ?? '').trim() || '(none yet)';
   const lemma = String(wordMeta?.word ?? '').trim();
@@ -1138,6 +1162,7 @@ function buildPracticeWordPrompt(userText, dialogueSummary, historyBlock, conten
       wordExamplesBlock: examplesBlock,
     },
     targetLang,
+    level,
   )
     .replace('{{USER_TEXT}}', String(userText).trim().slice(0, 4000))
     .replace('{{HISTORY}}', h)
@@ -1153,9 +1178,11 @@ export async function generatePracticeWordTurn({
   contentLocale,
   wordMeta,
   targetLang = 'en',
+  practiceLevel,
 } = {}) {
   const locale = normalizeContentLocale(contentLocale);
   const study = normalizeStudyLang(targetLang);
+  const level = normalizePracticeLevel(practiceLevel);
   let block = historyBlock;
   let summary = dialogueSummary;
   if (!block && Array.isArray(history)) {
@@ -1175,11 +1202,11 @@ export async function generatePracticeWordTurn({
             .slice(0, 12000);
     summary = summary ?? '(none yet)';
   }
-  const userContent = buildPracticeWordPrompt(userText, summary, block, locale, wordMeta, study);
+  const userContent = buildPracticeWordPrompt(userText, summary, block, locale, wordMeta, study, level);
 
   const content = await llmChatCompletion({
     messages: [
-      { role: 'system', content: practiceWordSystemPrompt(study) },
+      { role: 'system', content: practiceWordSystemPrompt(study, level) },
       { role: 'user', content: userContent },
     ],
     temperature: 0.48,
@@ -1199,11 +1226,20 @@ export async function generatePracticeWordTurn({
   return turn;
 }
 
-function buildPracticePatternPrompt(userText, dialogueSummary, historyBlock, contentLocale, patternSeed, targetLang = 'en') {
+function buildPracticePatternPrompt(
+  userText,
+  dialogueSummary,
+  historyBlock,
+  contentLocale,
+  patternSeed,
+  targetLang = 'en',
+  practiceLevel,
+) {
   const locale = normalizeContentLocale(contentLocale);
+  const level = normalizePracticeLevel(practiceLevel);
   const h = historyBlock ?? '(empty)';
   const summary = String(dialogueSummary ?? '').trim() || '(none yet)';
-  return loadPracticePatternTurnPrompt(locale, { patternSeed }, targetLang)
+  return loadPracticePatternTurnPrompt(locale, { patternSeed }, targetLang, level)
     .replace('{{USER_TEXT}}', String(userText).trim().slice(0, 4000))
     .replace('{{HISTORY}}', h)
     .replace('{{DIALOGUE_SUMMARY}}', summary.slice(0, 900));
@@ -1218,9 +1254,11 @@ export async function generatePracticePatternTurn({
   contentLocale,
   patternSeed,
   targetLang = 'en',
+  practiceLevel,
 } = {}) {
   const locale = normalizeContentLocale(contentLocale);
   const study = normalizeStudyLang(targetLang);
+  const level = normalizePracticeLevel(practiceLevel);
   let block = historyBlock;
   let summary = dialogueSummary;
   if (!block && Array.isArray(history)) {
@@ -1247,12 +1285,13 @@ export async function generatePracticePatternTurn({
     locale,
     patternSeed,
     study,
+    level,
   );
   const isFirstTurn = String(block ?? '').trim() === '(empty)';
 
   const content = await llmChatCompletion({
     messages: [
-      { role: 'system', content: practicePatternSystemPrompt(study) },
+      { role: 'system', content: practicePatternSystemPrompt(study, level) },
       { role: 'user', content: userContent },
     ],
     temperature: 0.45,

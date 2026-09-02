@@ -158,7 +158,7 @@ export function IrregularVerbsPage() {
     resolve?.(ok);
   }, []);
 
-  const { wordPick, selectWord, pickWord, clearWordPick, addTextToDictionary } = useTappableDictionaryAdd({
+  const { selectWord, pickWord, clearWordPick, getBlockState, addTextToDictionary } = useTappableDictionaryAdd({
     tr: t,
     showConfirm,
     onSuccess: (word) => {
@@ -771,16 +771,15 @@ export function IrregularVerbsPage() {
                   <TappableExampleEnglish
                     text={currentExample.en}
                     pickKey={examplePickKey}
-                    wordPick={wordPick}
+                    blockState={getBlockState(examplePickKey)}
                     onSelectWord={selectWord}
-                    addLabel={t('practice.toDictionary')}
                     disabled={examplesLoading || examplesRefreshing}
                     onAddClick={() =>
-                      void addTextToDictionary(pickWord(examplePickKey, currentExample.en))
+                      void addTextToDictionary(pickWord(examplePickKey, currentExample.en), examplePickKey)
                     }
                     className="ss-mt-sm"
                   />
-                  <Text className="ss-mt-md ss-opacity-soft" dir="auto">
+                  <Text className="ss-mt-md ss-dict-translation-text" dir="auto">
                     {exampleTranslationDisplay}
                   </Text>
                 </SwipeableExamplePane>

@@ -32,7 +32,7 @@ export class ErrorBoundary extends Component {
         >
           <p style={{ margin: '0 0 12px', opacity: 0.9 }}>Не удалось загрузить приложение.</p>
           <p className="ss-footnote" style={{ margin: '0 0 16px', opacity: 0.7 }}>
-            Could not load the app. Close the Mini App completely and open it again from the bot menu.
+            Could not load the app. Check your connection and try again.
           </p>
           <button
             type="button"

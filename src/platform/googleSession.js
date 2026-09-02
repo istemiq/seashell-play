@@ -13,6 +13,21 @@ let sessionReady = false;
 /** @type {Promise<void> | null} */
 let sessionPromise = null;
 
+function applySessionPayload(data) {
+  const userId = Number(data.userId);
+  if (!Number.isFinite(userId) || userId <= 0) throw new Error('Invalid session user id');
+  setPlatformUserId(userId);
+  const prev = loadGoogleProfile() || {};
+  saveGoogleProfile({
+    ...prev,
+    userId,
+    name: data.displayName ?? prev.name ?? null,
+    displayName: data.displayName ?? null,
+    needsOnboarding: Boolean(data.needsOnboarding),
+    picture: data.avatarUrl ?? prev.picture,
+  });
+}
+
 async function exchangeSessionWithApi() {
   const token = getGoogleIdToken();
   if (!token) throw new Error('Not signed in');
@@ -22,8 +37,6 @@ async function exchangeSessionWithApi() {
     setPlatformUserId(devId);
     saveGoogleProfile({
       ...(loadGoogleProfile() || {}),
-      name: 'Dev User',
-      email: 'dev@local',
       userId: devId,
     });
     return;
@@ -41,12 +54,7 @@ async function exchangeSessionWithApi() {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.error || `Auth failed (${res.status})`);
   }
-  const data = await res.json();
-  const userId = Number(data.userId);
-  if (!Number.isFinite(userId) || userId <= 0) throw new Error('Invalid session user id');
-  setPlatformUserId(userId);
-  const prev = loadGoogleProfile() || {};
-  saveGoogleProfile({ ...prev, userId, name: data.displayName ?? prev.name, picture: data.avatarUrl ?? prev.picture });
+  applySessionPayload(await res.json());
 }
 
 export function bootstrapGoogleSession() {
@@ -75,4 +83,8 @@ export async function completeGoogleSignIn() {
 
 export function isGoogleSessionReady() {
   return sessionReady && hasGoogleSession();
+}
+
+export function needsOnboarding() {
+  return Boolean(loadGoogleProfile()?.needsOnboarding);
 }

@@ -50,6 +50,30 @@ async function readHttpError(r) {
   return messageFromStatusAndBody(r.status, t);
 }
 
+/** In-memory cache — instant re-open of word cards without waiting on network. */
+const wordDetailCache = new Map();
+
+export function peekWordDetailCache(wordId) {
+  const row = wordDetailCache.get(Number(wordId));
+  return row?.data ?? null;
+}
+
+export function invalidateWordDetailCache(wordId) {
+  if (wordId != null) wordDetailCache.delete(Number(wordId));
+  else wordDetailCache.clear();
+}
+
+function rememberWordDetail(wordId, data) {
+  wordDetailCache.set(Number(wordId), { data, at: Date.now() });
+}
+
+/** Warm cache on pointer down — card opens faster on tap. */
+export function prefetchWord(wordId) {
+  const id = Number(wordId);
+  if (!Number.isFinite(id) || id <= 0 || wordDetailCache.has(id)) return;
+  void fetchWord(id).catch(() => {});
+}
+
 export async function fetchWords() {
   const r = await request('/words');
   if (!r.ok) throw new Error(await readHttpError(r));
@@ -69,7 +93,9 @@ export async function fetchWordsInSet(setId) {
 export async function fetchWord(wordId) {
   const r = await request(`/words/${wordId}`);
   if (!r.ok) throw new Error(await readHttpError(r));
-  return r.json();
+  const data = await r.json();
+  rememberWordDetail(wordId, data);
+  return data;
 }
 
 export async function fetchSets() {
@@ -151,6 +177,7 @@ export async function removeWord(wordId) {
   if (!r.ok && r.status !== 204) {
     throw new Error(await readHttpError(r));
   }
+  invalidateWordDetailCache(wordId);
 }
 
 /** Заново запросить у LLM примеры с переводами и заменить сохранённые. */
@@ -163,7 +190,9 @@ export async function refreshWordExamples(wordId) {
   if (!r.ok) {
     throw new Error(messageFromStatusAndBody(r.status, text));
   }
-  return JSON.parse(text);
+  const data = JSON.parse(text);
+  rememberWordDetail(wordId, data);
+  return data;
 }
 
 /** Добавить пользовательский пример: родная фраза → естественный английский с headword. */
@@ -181,5 +210,7 @@ export async function addCustomWordExample(wordId, nativeText) {
   if (!r.ok) {
     throw new Error(messageFromStatusAndBody(r.status, text));
   }
-  return JSON.parse(text);
+  const data = JSON.parse(text);
+  rememberWordDetail(wordId, data);
+  return data;
 }

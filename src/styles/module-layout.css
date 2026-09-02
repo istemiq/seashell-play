@@ -141,6 +141,35 @@
   margin-bottom: 6px;
 }
 
+.seashell-crt .ss-dict-study-text {
+  color: var(--crt-fg);
+}
+
+.seashell-crt .ss-dict-translation-text {
+  color: var(--crt-fg-dim);
+}
+
+.seashell-crt .ss-dict-gloss-sep {
+  color: var(--crt-fg-dim);
+  opacity: 0.65;
+}
+
+.seashell-crt .ss-exit-hint {
+  position: fixed;
+  left: 50%;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  transform: translateX(-50%);
+  z-index: 1200;
+  max-width: min(92vw, 360px);
+  padding: 10px 14px;
+  border: 1px solid var(--crt-border);
+  background: color-mix(in srgb, var(--crt-bg-elev) 92%, transparent);
+  color: var(--crt-fg);
+  font-size: var(--ss-font-size-secondary, 0.95em);
+  text-align: center;
+  pointer-events: none;
+}
+
 .seashell-crt .ss-dict-header-meta {
   display: flex;
   flex-direction: column;

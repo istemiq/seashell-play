@@ -3,6 +3,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { getStudyPromptVars, normalizeStudyLang } from './dictionaryStudyLang.js';
 import { getPromptLocaleVars, normalizeContentLocale } from './promptLocales.js';
+import { practiceLevelTemplateVars } from './practiceLevel.js';
 import { englishLineFromItem, russianLineFromItem } from './exampleFields.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -20,8 +21,14 @@ function fillTemplate(raw, vars) {
 }
 
 /** Maps promptLocales + study lang fields to {{UPPER_SNAKE}} placeholders. */
-function templateVarsFromLocale(locale, targetLang = 'en') {
+function templateVarsFromLocale(locale, targetLang = 'en', practiceLevel, levelMode = 'free') {
   const v = getStudyPromptVars(locale, targetLang);
+  const levelVars = practiceLevelTemplateVars(practiceLevel, { mode: levelMode });
+  for (const [key, val] of Object.entries(levelVars)) {
+    if (typeof val === 'string' && val.includes('{{')) {
+      levelVars[key] = fillTemplate(val, v);
+    }
+  }
   return {
     LEARNER_L1: v.learnerL1,
     CORRECTIONS_LANGUAGE: v.correctionsLanguage,
@@ -42,6 +49,7 @@ function templateVarsFromLocale(locale, targetLang = 'en') {
     STUDY_SCRIPT_NOTE_RU: v.STUDY_SCRIPT_NOTE_RU,
     STUDY_LANGUAGE_EN: v.STUDY_LANGUAGE_EN,
     TARGET_LANG: v.TARGET_LANG,
+    ...levelVars,
   };
 }
 
@@ -125,14 +133,17 @@ export function loadDictionaryFormatSamples(locale, targetLang = 'en') {
 }
 
 /** Practice turn user prompt template. */
-export function loadPracticeTurnPrompt(locale, targetLang = 'en') {
-  return fillTemplate(readTemplate('practice-turn.template.txt'), templateVarsFromLocale(locale, targetLang));
+export function loadPracticeTurnPrompt(locale, targetLang = 'en', practiceLevel) {
+  return fillTemplate(
+    readTemplate('practice-turn.template.txt'),
+    templateVarsFromLocale(locale, targetLang, practiceLevel, 'free'),
+  );
 }
 
 /** Expert practice turn user prompt (role substituted from practiceExperts). */
-export function loadPracticeExpertTurnPrompt(locale, expert, targetLang = 'en') {
+export function loadPracticeExpertTurnPrompt(locale, expert, targetLang = 'en', practiceLevel) {
   const vars = {
-    ...templateVarsFromLocale(locale, targetLang),
+    ...templateVarsFromLocale(locale, targetLang, practiceLevel, 'expert'),
     EXPERT_ROLE_TITLE: expert.roleTitle,
     EXPERT_DOMAIN: expert.domain,
     EXPERT_STYLE: expert.style,
@@ -146,9 +157,14 @@ export function loadPracticeExpertTurnPrompt(locale, expert, targetLang = 'en') 
 }
 
 /** Word-focused practice dialogue for one dictionary lemma. */
-export function loadPracticeWordTurnPrompt(locale, { targetWord, wordGloss, wordExamplesBlock }, targetLang = 'en') {
+export function loadPracticeWordTurnPrompt(
+  locale,
+  { targetWord, wordGloss, wordExamplesBlock },
+  targetLang = 'en',
+  practiceLevel,
+) {
   const vars = {
-    ...templateVarsFromLocale(locale, targetLang),
+    ...templateVarsFromLocale(locale, targetLang, practiceLevel, 'word'),
     TARGET_WORD: targetWord,
     WORD_GLOSS: wordGloss || '(no gloss)',
     WORD_EXAMPLES_BLOCK: wordExamplesBlock || '(none)',
@@ -158,9 +174,9 @@ export function loadPracticeWordTurnPrompt(locale, { targetWord, wordGloss, word
 }
 
 /** Sentence-pattern drill: anchor sentence + parallel examples. */
-export function loadPracticePatternTurnPrompt(locale, { patternSeed }, targetLang = 'en') {
+export function loadPracticePatternTurnPrompt(locale, { patternSeed }, targetLang = 'en', practiceLevel) {
   const vars = {
-    ...templateVarsFromLocale(locale, targetLang),
+    ...templateVarsFromLocale(locale, targetLang, practiceLevel, 'pattern'),
     PATTERN_SEED: String(patternSeed ?? '').trim().slice(0, 500) || '(none)',
   };
   return fillTemplate(readTemplate('practice-pattern-turn.template.txt'), vars);

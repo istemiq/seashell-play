@@ -25,10 +25,35 @@ async function apiFetch(path, init = {}) {
   }
 }
 
-/** @returns {Promise<{ premium: boolean, admin?: boolean, subscription?: object, billing?: object }>} */
 export async function fetchUserPlan() {
   const r = await apiFetch('/user/plan', {
     headers: await buildAuthHeaders(),
+  });
+  const text = await r.text();
+  if (!r.ok) {
+    throw new Error(messageFromStatusAndBody(r.status, text));
+  }
+  return JSON.parse(text);
+}
+
+/** @returns {Promise<{ userId: number, displayName: string|null, needsOnboarding: boolean }>} */
+export async function fetchUserProfile() {
+  const r = await apiFetch('/user/profile', {
+    headers: await buildAuthHeaders(),
+  });
+  const text = await r.text();
+  if (!r.ok) {
+    throw new Error(messageFromStatusAndBody(r.status, text));
+  }
+  return JSON.parse(text);
+}
+
+/** @returns {Promise<{ userId: number, displayName: string, needsOnboarding: false }>} */
+export async function updateUserProfile(displayName) {
+  const r = await apiFetch('/user/profile', {
+    method: 'PATCH',
+    headers: await buildAuthHeaders(),
+    body: JSON.stringify({ displayName }),
   });
   const text = await r.text();
   if (!r.ok) {

@@ -3,12 +3,15 @@ import { useEffect, useState } from 'react';
 import { Footnote } from './Ui.jsx';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { dismissUiHint, isUiHintDismissed } from '../utils/uiHints.js';
+import { isPlayApp } from '../platform/runtime.js';
 
 /**
  * Подсказка с кнопкой «Понятно». После нажатия сворачивается в «?»;
  * при развороте снова показывает текст и кнопку «Понятно».
+ * В Play APK подсказки скрыты — чище мобильный UI.
  */
 export function DismissibleHint({ hintId, children, style, className = '' }) {
+  if (isPlayApp()) return null;
   const { t, tb } = useI18n();
   const inline = className.includes('ss-hint--inline');
   const [dismissed, setDismissed] = useState(() => isUiHintDismissed(hintId));

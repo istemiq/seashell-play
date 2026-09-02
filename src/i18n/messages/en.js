@@ -9,6 +9,7 @@ export default {
   'nav.learnLanguage': "Language to learn",
   'nav.readme': "Help",
   'nav.back': "Back",
+  'app.pressBackAgainToExit': "Press back again to exit",
   'common.yes': "Yes",
   'common.cancel': "Cancel",
   'common.delete': "Delete",
@@ -16,8 +17,15 @@ export default {
   'common.close': "Close",
   'common.loading': "Loading",
   'common.gotIt': "Got it",
+  'common.retry': "Try again",
   'common.showHint': "Show hint",
   'home.profile': "Profile",
+  'onboarding.title': "Welcome",
+  'onboarding.prompt': "Choose a name to show in the app. We don't share it outside Seashell.",
+  'onboarding.nameLabel': "Your name",
+  'onboarding.namePlaceholder': "How should we call you?",
+  'onboarding.continue': "Continue",
+  'onboarding.nameRequired': "Please enter a name",
   'home.sections': "Sections",
   'home.tagline1': "Learn by doing.",
   'home.tagline2': "Grow your vocabulary.",
@@ -76,6 +84,19 @@ export default {
   'practice.hubTitle': 'Language practice',
   'practice.hubChoose': 'Mode',
   'practice.hubFree': 'Free conversation',
+
+  'practice.level.title': 'Practice level',
+  'practice.level.subtitle': 'Bot adapts vocabulary and sentence complexity',
+  'practice.level.beginner': 'Beginner',
+  'practice.level.beginnerHint': 'A1 — very short replies, simple words',
+  'practice.level.elementary': 'Elementary',
+  'practice.level.elementaryHint': 'A2 — short sentences, everyday topics',
+  'practice.level.intermediate': 'Intermediate',
+  'practice.level.intermediateHint': 'B1 — natural chat (default)',
+  'practice.level.upper': 'Upper intermediate',
+  'practice.level.upperHint': 'B2 — richer vocabulary, longer replies',
+  'practice.level.advanced': 'Advanced',
+  'practice.level.advancedHint': 'C1 — articulate, near-native complexity',
   'practice.hubExpert': 'Talk with an expert',
   'practice.hubPattern': 'Sentence patterns',
   'practice.patternTitle': 'Sentence patterns',
@@ -258,6 +279,11 @@ export default {
   'practice.corrections': "Corrections",
   'practice.partner': "Partner",
   'practice.toDictionary': "Add to dictionary",
+
+  'practice.tapWordHint': 'Tap any word in the dialogue, then tap the button below to save it to your dictionary.',
+  'practice.addWordAction': 'Add "{word}" to dictionary',
+  'practice.addingWord': 'Adding "{word}"…',
+  'practice.wordAdded': '"{word}" added to dictionary',
   'practice.listen': "Listen",
   'practice.yourReply': "Your message",
   'practice.inEnglish': "In English",
@@ -297,6 +323,7 @@ export default {
   'errors.loadGroupsFailed': "Could not load groups",
   'errors.generic': "Error",
   'errors.addFailed': "Could not add",
+  'errors.saveFailed': "Could not save",
   'errors.customExampleHeadword':
     'Could not build a natural Russian sentence with this word. Try rephrasing your phrase or use a form closer to the dictionary word.',
   'errors.customExampleHeadwordAr':
@@ -849,6 +876,34 @@ export default {
     'Short dialogue in simple Ukrainian. Try to use «{word}» when it fits.',
   'dict.wordPracticePlaceholderUk': 'Short answer in Ukrainian…',
   'practice.inUkrainian': 'In Ukrainian',
+  'practice.patternHintBa': "Paste a Bashkir sentence. The AI explains its structure in your language, shows parallel examples with the same grammar, and asks you to write your own.",
+  'practice.patternSeedPlaceholderBa': "e.g. Min ber stakan hыu käräk",
+  'settings.accentBa': "Bashkir — espeak-ng on server (ba), device TTS in Play",
+  'lang.hintBa': 'Learning content (dictionary and practice) stays in Bashkir. Menus and hints use the language you choose.',
+  'practice.expertDisclaimerBa':
+    'This is AI for Bashkir practice. Answers may be wrong. For real help, see qualified professionals. You learn language through a role-play expert persona — not professional advice.',
+  'practice.expertDisclaimerShortBa':
+    'AI Bashkir practice, not professional advice. May contain errors — consult specialists for real decisions.',
+  'practice.expertPlaceholderBa': 'Reply in Bashkir: yes, no, or suggest another topic…',
+  'practice.emptyBa':
+    'Type in Bashkir — your partner will reply, show what was heard, and briefly correct phrasing if needed.',
+  'practice.placeholderBa': 'Type in Bashkir…',
+  'errors.customExampleHeadwordBa':
+    'Could not build a natural Bashkir sentence with this word. Try rephrasing your phrase or use a form closer to the dictionary word.',
+  'dict.wordLabelBa': "Word or phrase (BA or your language)",
+  'dict.placeholderWordBa': 'e.g. hыu or dictionary',
+  'dict.cardLangHintBa':
+    "Examples stay in Bashkir; meanings and translations use the language above. After changing it, tap «Refresh examples» on a card.",
+  'dict.addHintBa':
+    'Type in your language or Bashkir — we save a natural Bashkir headword. Examples stay in Bashkir; translations use the language chosen above.',
+  'dict.addHintGroupBa':
+    'The word will be added to this group. Examples stay in Bashkir; translations use the language chosen above.',
+  'dict.myExamplesEmptyBa':
+    'Type a sentence in your native language — AI will translate it naturally into Bashkir using this word.',
+  'dict.wordPracticeHintBa':
+    'Short dialogue in simple Bashkir. Try to use «{word}» when it fits.',
+  'dict.wordPracticePlaceholderBa': 'Short answer in Bashkir…',
+  'practice.inBashkir': 'In Bashkir',
   'settings.accentPl': "Polish — Gosia (pl-PL)",
   'lang.hintPl': 'Learning content (dictionary and practice) stays in Polish. Menus and hints use the language you choose.',
   'practice.expertDisclaimerPl':
