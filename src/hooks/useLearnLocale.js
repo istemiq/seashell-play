@@ -21,6 +21,9 @@ const DICT_READY_CODES = new Set([
 /** Languages without server TTS — Web Speech on the device (ug has no espeak voice). */
 export const STUDY_PIPER_UNSUPPORTED_CODES = new Set(['ug']);
 
+/** Languages without speech recognition — whisper.cpp has no uyghur language code. */
+export const STUDY_STT_UNSUPPORTED_CODES = new Set(['ug']);
+
 /** Dictionary add/generate supported for this learn locale. */
 export function isDictionaryGenerationReady(learnLocale) {
   return DICT_READY_CODES.has(normalizeLearnLocale(learnLocale));
@@ -39,7 +42,8 @@ export function isStudyPiperTtsSupported(learnLocale) {
 
 /** STT (Whisper) — multilingual small model for ready study locales. */
 export function isStudySttSupported(learnLocale) {
-  return DICT_READY_CODES.has(normalizeLearnLocale(learnLocale));
+  const code = normalizeLearnLocale(learnLocale);
+  return DICT_READY_CODES.has(code) && !STUDY_STT_UNSUPPORTED_CODES.has(code);
 }
 
 /** @deprecated use isStudySttSupported */

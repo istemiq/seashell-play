@@ -76,7 +76,8 @@ export function normalizeSttLanguage(code) {
   if (lc === 'ur' || lc.startsWith('ur-')) return 'ur';
   if (lc === 'az' || lc.startsWith('az-')) return 'az';
   if (lc === 'ba' || lc.startsWith('ba-')) return 'ba';
-  if (lc === 'ug' || lc.startsWith('ug-')) return 'ug';
+  // whisper.cpp has no uyghur — ask the server for auto-detect instead of an invalid code.
+  if (lc === 'ug' || lc.startsWith('ug-')) return 'auto';
   if (lc === 'vi' || lc.startsWith('vi-')) return 'vi';
   if (lc === 'cs' || lc.startsWith('cs-')) return 'cs';
   if (lc === 'hu' || lc.startsWith('hu-')) return 'hu';

@@ -20,6 +20,7 @@ function whisperBinPath() {
 
 function normalizeSttLanguage(lang) {
   const lc = String(lang ?? 'en').trim().toLowerCase();
+  if (lc === 'en' || lc.startsWith('en')) return 'en';
   if (lc === 'ru' || lc.startsWith('ru')) return 'ru';
   if (lc === 'ar' || lc.startsWith('ar')) return 'ar';
   if (lc === 'es' || lc.startsWith('es')) return 'es';
@@ -44,7 +45,6 @@ function normalizeSttLanguage(lang) {
   if (lc === 'ur' || lc.startsWith('ur')) return 'ur';
   if (lc === 'az' || lc.startsWith('az')) return 'az';
   if (lc === 'ba' || lc.startsWith('ba')) return 'ba';
-  if (lc === 'ug' || lc.startsWith('ug')) return 'ug';
   if (lc === 'vi' || lc.startsWith('vi')) return 'vi';
   if (lc === 'cs' || lc.startsWith('cs')) return 'cs';
   if (lc === 'hu' || lc.startsWith('hu')) return 'hu';
@@ -53,7 +53,9 @@ function normalizeSttLanguage(lang) {
   if (lc === 'he' || lc.startsWith('he')) return 'he';
   if (lc === 'ca' || lc.startsWith('ca')) return 'ca';
   if (lc === 'sr' || lc.startsWith('sr')) return 'sr';
-  return 'en';
+  // Whisper has no such language (e.g. uyghur) — auto-detect on the multilingual
+  // model instead of silently running the English-only one.
+  return 'auto';
 }
 
 function whisperModelPath(lang) {
@@ -134,13 +136,14 @@ function whisperModelPath(lang) {
       '/opt/whisper.cpp/models/ggml-small.bin'
     );
   }
-  if (code === 'tr' || code === 'sv' || code === 'no' || code === 'fi' || code === 'ko' || code === 'ja' || code === 'zh' || code === 'uk' || code === 'pl' || code === 'hi' || code === 'ur' || code === 'az' || code === 'ba' || code === 'ug' || code === 'vi' || code === 'cs' || code === 'hu' || code === 'ro' || code === 'id' || code === 'he' || code === 'ca' || code === 'sr') {
+  if (code === 'auto' || code === 'tr' || code === 'sv' || code === 'no' || code === 'fi' || code === 'ko' || code === 'ja' || code === 'zh' || code === 'uk' || code === 'pl' || code === 'hi' || code === 'ur' || code === 'az' || code === 'ba' || code === 'vi' || code === 'cs' || code === 'hu' || code === 'ro' || code === 'id' || code === 'he' || code === 'ca' || code === 'sr') {
     return (
       String(process.env[`STT_WHISPER_MODEL_${code.toUpperCase()}`] ?? '').trim() ||
       String(process.env.STT_WHISPER_MODEL_RU ?? '').trim() ||
       '/opt/whisper.cpp/models/ggml-small.bin'
     );
   }
+  // English-only tiny model — reached only for `en` (multilingual model above).
   return (
     String(process.env.STT_WHISPER_MODEL ?? '').trim() ||
     '/opt/whisper.cpp/models/ggml-tiny.en.bin'
@@ -202,7 +205,9 @@ function extFromMime(mime) {
 }
 
 async function transcodeToWav(inputPath) {
-  const outPath = inputPath.replace(/\.[^.]+$/, '.wav');
+  // Never reuse the input name: ffmpeg refuses to write "in place" when the
+  // uploaded file already has a .wav extension (mime audio/wav → 500).
+  const outPath = `${inputPath}.16k.wav`;
   await execChecked(ffmpegBinPath(), [
     '-y',
     '-i',
