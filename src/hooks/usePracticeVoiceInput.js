@@ -62,6 +62,7 @@ export function usePracticeVoiceInput({
   const mediaRecRef = useRef(null);
   const chunksRef = useRef([]);
   const holdStartedAtRef = useRef(0);
+  const suspendedAtRef = useRef(0);
   const pointerActiveRef = useRef(false);
   const recordingRef = useRef(false);
   const silenceWatchStopRef = useRef(null);
@@ -150,7 +151,6 @@ export function usePracticeVoiceInput({
     if (blockStart || transcribing || recordingRef.current) return false;
     recordingRef.current = true;
     setVoiceError(null);
-    holdStartedAtRef.current = Date.now();
 
     const mime = pickRecorderMime();
     if (typeof MediaRecorder === 'undefined') {
@@ -165,6 +165,11 @@ export function usePracticeVoiceInput({
       return false;
     }
 
+    // A suspend/abort may have fired while the mic permission prompt was open
+    // (visibility flips kill the capture) — never start a zombie recording.
+    if (!recordingRef.current) return false;
+
+    holdStartedAtRef.current = Date.now();
     chunksRef.current = [];
     const mr = mime ? new MediaRecorder(stream, { mimeType: mime }) : new MediaRecorder(stream);
     mediaRecRef.current = mr;
@@ -373,12 +378,22 @@ export function usePracticeVoiceInput({
   );
 
   useEffect(() => {
-    const onLifecycle = () => abortActiveCapture();
-    window.addEventListener(APP_RESUME_EVENT, onLifecycle);
-    window.addEventListener(APP_SUSPEND_EVENT, onLifecycle);
+    const onSuspend = () => {
+      suspendedAtRef.current = Date.now();
+      abortActiveCapture();
+    };
+    const onResume = () => {
+      // Resume events can arrive in bursts (wake timers after a permission
+      // dialog or app activation). Only abort captures started before the
+      // last suspend — never kill a fresh in-flight recording.
+      if (recordingRef.current && holdStartedAtRef.current > suspendedAtRef.current) return;
+      abortActiveCapture();
+    };
+    window.addEventListener(APP_RESUME_EVENT, onResume);
+    window.addEventListener(APP_SUSPEND_EVENT, onSuspend);
     return () => {
-      window.removeEventListener(APP_RESUME_EVENT, onLifecycle);
-      window.removeEventListener(APP_SUSPEND_EVENT, onLifecycle);
+      window.removeEventListener(APP_RESUME_EVENT, onResume);
+      window.removeEventListener(APP_SUSPEND_EVENT, onSuspend);
     };
   }, [abortActiveCapture]);
 
