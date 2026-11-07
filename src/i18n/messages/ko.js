@@ -14,9 +14,7 @@ export default {
   'common.delete': "삭제",
   'common.save': "저장",
   'common.close': "닫기",
-  'common.loading': "로딩 중",
-  'common.gotIt': "알겠습니다",
-  'common.showHint': "힌트 보기",
+  'common.loading': "로딩 중",
   'home.profile': "프로필",
   'home.sections': "섹션",
   'home.tagline1': "실전으로 배우세요.",

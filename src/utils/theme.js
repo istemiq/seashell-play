@@ -5,7 +5,7 @@ export const THEME_DARK = 'dark';
 export const THEME_SYSTEM = 'system';
 
 const PAGE_BG = {
-  light: '#f4f6fa',
+  light: '#f2f2f2',
   dark: '#0a0e14',
 };
 
@@ -50,7 +50,8 @@ export function applyAppTheme(effectiveTheme) {
   const root = document.documentElement;
   root.dataset.seashellTheme = theme;
   root.style.colorScheme = theme;
-  const pageBg = PAGE_BG[theme];
+  const computedBg = getComputedStyle(root).getPropertyValue('--ss-page-bg').trim();
+  const pageBg = computedBg || PAGE_BG[theme];
   root.style.background = pageBg;
   if (document.body) {
     document.body.style.background = pageBg;

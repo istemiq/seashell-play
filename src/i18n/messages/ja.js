@@ -14,9 +14,7 @@ export default {
   'common.delete': "削除",
   'common.save': "保存",
   'common.close': "閉じる",
-  'common.loading': "読み込み中",
-  'common.gotIt': "了解",
-  'common.showHint': "ヒントを表示",
+  'common.loading': "読み込み中",
   'home.profile': "プロフィール",
   'home.sections': "セクション",
   'home.tagline1': "実践で学ぶ。",

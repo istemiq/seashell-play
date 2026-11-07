@@ -34,6 +34,7 @@ console.log('  (весь server/, без .env / node_modules / data/)');
 
 try {
   run('tar', [
+    '--force-local',
     '-czf',
     tarPath,
     '-C',

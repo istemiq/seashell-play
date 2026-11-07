@@ -1,4 +1,4 @@
-root = true
+root: true
 
 env:
   browser: true
@@ -18,6 +18,13 @@ parserOptions:
 settings:
   react:
     version: detect
+
+ignorePatterns:
+  - node_modules/
+  - build/
+  - dist/
+  - android/
+  - '*.timestamp-*.mjs'
 
 rules:
   react/prop-types: off

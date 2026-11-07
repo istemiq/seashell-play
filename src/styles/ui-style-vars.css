@@ -1,0 +1,21 @@
+/**
+ * UI styles (Academic only).
+ * Activated via html[data-seashell-ui-style="…"]. Light/dark tokens inherit from theme-vars.css.
+ */
+
+:root {
+  --ss-ui-font-family: 'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', Courier, monospace;
+  --ss-ui-radius-regular: 0px;
+  --ss-ui-radius-compact: 0px;
+  --ss-ui-radius-sheet: 12px;
+  --ss-ui-cell-shadow: none;
+  --ss-ui-panel-shadow: none;
+}
+
+/* ── Academic (terminal style) ── */
+html[data-seashell-ui-style='academic'] {
+  --ss-ui-font-family: 'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', Courier, monospace;
+  --ss-ui-radius-regular: 0px;
+  --ss-ui-radius-compact: 0px;
+  --ss-ui-radius-sheet: 2px;
+}

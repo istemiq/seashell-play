@@ -1,0 +1,50 @@
+/**
+ * Full UI layouts per style (mockup-level). Academic = flat/terminal (legacy).
+ * Non-academic styles reshape home, dictionary, practice chat, compose bar.
+ * Currently unused (academic style only).
+ */
+
+/* ── Shared: practice bubbles (academic = flat blocks) ── */
+.ss-practice-bubble {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ss-practice-bubble__label {
+  font-size: var(--ss-font-size-caption, 0.9em);
+  color: var(--crt-fg-dim);
+}
+
+html[data-seashell-ui-style='academic'] .ss-practice-turn,
+html:not([data-seashell-ui-style]) .ss-practice-turn,
+.seashell-crt.seashell-ui-style-academic .ss-practice-turn {
+  display: block;
+}
+
+html[data-seashell-ui-style='academic'] .ss-practice-bubble,
+html:not([data-seashell-ui-style]) .ss-practice-bubble,
+.seashell-crt.seashell-ui-style-academic .ss-practice-bubble {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  padding: 0 0 12px;
+  margin: 0;
+  border-bottom: 1px solid var(--crt-cell-border);
+}
+
+html[data-seashell-ui-style='academic'] .ss-practice-turn .ss-practice-bubble:last-child,
+html:not([data-seashell-ui-style]) .ss-practice-turn .ss-practice-bubble:last-child,
+.seashell-crt.seashell-ui-style-academic .ss-practice-turn .ss-practice-bubble:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+html[data-seashell-ui-style='academic'] .ss-practice-bubble__label,
+html:not([data-seashell-ui-style]) .ss-practice-bubble__label,
+.seashell-crt.seashell-ui-style-academic .ss-practice-bubble__label {
+  font-weight: 600;
+  color: var(--crt-fg);
+  font-size: 1em;
+}

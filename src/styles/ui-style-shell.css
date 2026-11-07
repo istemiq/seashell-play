@@ -1,0 +1,98 @@
+/**
+ * Shell tweaks per UI style: radius on cells, focus mode chrome, shimmer font.
+ */
+
+.seashell-crt {
+  font-family: var(--ss-ui-font-family);
+}
+
+.seashell-crt .ss-panel,
+.seashell-crt .ss-group,
+.seashell-crt .ss-cell,
+.seashell-crt .ss-button,
+.seashell-crt .ss-input,
+.seashell-crt .ss-textarea {
+  border-radius: var(--ss-ui-radius-regular);
+}
+
+.seashell-crt .seashell-wordsets-shell__dialog,
+.seashell-crt .seashell-card-lang-shell__dialog,
+.seashell-crt .seashell-confirm-shell__dialog {
+  border-radius: var(--ss-ui-radius-sheet) var(--ss-ui-radius-sheet) 0 0;
+}
+
+@media (min-width: 768px) {
+  .seashell-crt .seashell-wordsets-shell__dialog,
+  .seashell-crt .seashell-card-lang-shell__dialog,
+  .seashell-crt .seashell-confirm-shell__dialog {
+    border-radius: var(--ss-ui-radius-sheet);
+  }
+}
+
+html[data-seashell-ui-style='calm'] .seashell-crt .ss-cell,
+html[data-seashell-ui-style='paper'] .seashell-crt .ss-cell,
+html[data-seashell-ui-style='evening'] .seashell-crt .ss-cell,
+html[data-seashell-ui-style='ongo'] .seashell-crt .ss-cell,
+html[data-seashell-ui-style='focus'] .seashell-crt .ss-cell,
+.seashell-crt.seashell-ui-style-calm .ss-cell,
+.seashell-crt.seashell-ui-style-paper .ss-cell,
+.seashell-crt.seashell-ui-style-evening .ss-cell,
+.seashell-crt.seashell-ui-style-ongo .ss-cell,
+.seashell-crt.seashell-ui-style-focus .ss-cell {
+  box-shadow: var(--ss-ui-cell-shadow);
+}
+
+html[data-seashell-ui-style='calm'] .seashell-shimmer,
+html[data-seashell-ui-style='paper'] .seashell-shimmer,
+html[data-seashell-ui-style='evening'] .seashell-shimmer,
+html[data-seashell-ui-style='ongo'] .seashell-shimmer,
+html[data-seashell-ui-style='focus'] .seashell-shimmer,
+.seashell-crt.seashell-ui-style-calm .seashell-shimmer,
+.seashell-crt.seashell-ui-style-paper .seashell-shimmer,
+.seashell-crt.seashell-ui-style-evening .seashell-shimmer,
+.seashell-crt.seashell-ui-style-ongo .seashell-shimmer,
+.seashell-crt.seashell-ui-style-focus .seashell-shimmer {
+  font-family: var(--ss-ui-font-family);
+  letter-spacing: 0.01em;
+}
+
+
+html[data-seashell-ui-style='focus'] .seashell-crt .ss-tagline,
+.seashell-crt.seashell-ui-style-focus .ss-tagline {
+  border-width: 0;
+  box-shadow: none;
+}
+
+html[data-seashell-ui-style='focus'] .seashell-crt .ss-practice-level-chip,
+.seashell-crt.seashell-ui-style-focus .ss-practice-level-chip {
+  border-radius: 999px;
+}
+
+/* На ходу — чуть крупнее зоны нажатия */
+html[data-seashell-ui-style='ongo'] .seashell-crt .ss-cell,
+.seashell-crt.seashell-ui-style-ongo .ss-cell {
+  min-height: calc(var(--ss-space-cell-min, 54px) + 2px);
+}
+
+html[data-seashell-ui-style='ongo'] .seashell-crt .ss-practice-level-chip,
+.seashell-crt.seashell-ui-style-ongo .ss-practice-level-chip {
+  border-radius: 999px;
+  min-width: 2.5rem;
+}
+
+/* Академик — сохраняем острые углы и monospace shimmer */
+html[data-seashell-ui-style='academic'] .seashell-crt,
+html:not([data-seashell-ui-style]) .seashell-crt,
+.seashell-crt.seashell-ui-style-academic {
+  --vkui--size_border_radius--regular: 0;
+  --vkui--size_border_radius--compact: 0;
+  --vkui--size_border_radius_paper--regular: 2px;
+}
+
+html:not([data-seashell-ui-style='academic']):not([data-seashell-ui-style='']),
+.seashell-crt:not(.seashell-ui-style-calm):not(.seashell-ui-style-paper):not(.seashell-ui-style-evening):not(.seashell-ui-style-ongo):not(.seashell-ui-style-focus) {
+  --vkui--size_border_radius--regular: var(--ss-ui-radius-regular);
+  --vkui--size_border_radius--compact: var(--ss-ui-radius-compact);
+  --vkui--size_border_radius_paper--regular: var(--ss-ui-radius-regular);
+  text-shadow: none;
+}

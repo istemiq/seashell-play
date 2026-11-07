@@ -1,7 +1,6 @@
 import { useCallback, useMemo, useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 
-import { DismissibleHint } from './DismissibleHint.jsx';
 import { CheckIcon } from './CheckIcon.jsx';
 import {
   Cell,
@@ -28,7 +27,6 @@ import {
 export function RuCardTranslationLocalePicker({
   modalMount,
   onLocaleChange,
-  hideHint = false,
 }) {
   const { t } = useI18n();
   const locales = useMemo(() => ruCardTranslationLocales(), []);
@@ -137,13 +135,6 @@ export function RuCardTranslationLocalePicker({
         <Cell
           chevron
           onClick={() => setOpen(true)}
-          after={
-            !hideHint ? (
-              <DismissibleHint hintId="dict.cardLang" className="ss-hint--inline ss-hint--subtle">
-                {t('dict.cardLangHintRu')}
-              </DismissibleHint>
-            ) : null
-          }
         >
           <span className="ss-native-name" lang={effectiveCode}>
             {selectedName}

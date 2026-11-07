@@ -30,7 +30,11 @@ if (!hasAnalyticsToken || !hasAnalyticsApp) {
 }
 
 const html = readFileSync(indexPath, 'utf8');
-const jsRel = html.match(/assets\/(index-[^"']+\.js)/)?.[1];
+// Ищем именно тег подключения энтри-бандла: свободный поиск «assets/index-….js» по тексту HTML ловит
+// упоминания в комментариях и inline-скриптах (сторож загрузки) и берёт несуществующий файл.
+const jsRel =
+  html.match(/<script[^>]+type=["']module["'][^>]*src=["'][^"']*assets\/(index-[^"']+\.js)[^"']*["']/)?.[1] ??
+  html.match(/assets\/(index-[^"']+\.js)/)?.[1];
 if (!jsRel) {
   console.error('✗ В index.html нет assets/index-*.js');
   process.exit(1);

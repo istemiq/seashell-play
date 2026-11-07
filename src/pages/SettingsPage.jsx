@@ -23,6 +23,7 @@ import { loadSettings, updateSettings, getSavedTtsLocaleForLearn } from '../util
 import { speechLocaleForLearn } from '../utils/studySpeech.js';
 import { speakStudyText, unlockAudioPlayback } from '../utils/tts.js';
 import { setThemePreference, THEME_DARK, THEME_LIGHT, THEME_SYSTEM } from '../utils/theme.js';
+import { setUiStylePreference, UI_STYLE_OPTIONS } from '../utils/uiStyle.js';
 import {
   FONT_LARGE,
   FONT_NORMAL,
@@ -179,6 +180,11 @@ export function SettingsPage() {
     return speechLocaleForLearn(learnLocale);
   }, [s, accentOptions, learnLocale, studyModule]);
 
+  const uiStyleOptions = UI_STYLE_OPTIONS.map((o) => ({
+    labelKey: o.labelKey,
+    value: o.code,
+  }));
+
   const previewAccent = (ttsLocale) => {
     if (!s.ttsEnabled) return;
     const samples = {
@@ -212,7 +218,7 @@ export function SettingsPage() {
         </Group>
       ) : null}
 
-      <Group header={<GroupHeader mode="secondary">{t('settings.interface')}</GroupHeader>}>
+      <Group className="ss-settings-list" header={<GroupHeader mode="secondary">{t('settings.interface')}</GroupHeader>}>
         <FormItem top={t('settings.theme')}>
           <SettingOptions
             options={themeOptions}
@@ -233,15 +239,26 @@ export function SettingsPage() {
             }}
           />
         </FormItem>
+        <FormItem top={t('settings.uiStyle')}>
+          <SettingOptions
+            options={uiStyleOptions}
+            value={String(s.uiStyle || 'academic')}
+            onChange={(uiStyle) => {
+              setUiStylePreference(uiStyle);
+              setS(loadSettings());
+            }}
+          />
+        </FormItem>
+        <Footnote>{t('settings.uiStyleFootnote')}</Footnote>
       </Group>
 
-      <Group header={<GroupHeader mode="secondary">{t('billing.title')}</GroupHeader>}>
+      <Group className="ss-settings-list" header={<GroupHeader mode="secondary">{t('billing.title')}</GroupHeader>}>
         <FormItem>
           <Cell chevron i18nKey={plan.premium ? 'billing.premiumActive' : 'nav.premium'} onClick={() => navigate('/premium')} />
         </FormItem>
       </Group>
 
-      <Group header={<GroupHeader mode="secondary">{t('settings.tts')}</GroupHeader>}>
+      <Group className="ss-settings-list" header={<GroupHeader mode="secondary">{t('settings.tts')}</GroupHeader>}>
         <FormItem>
           <label className="ss-switch-row">
             <Switch

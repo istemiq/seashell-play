@@ -18,6 +18,13 @@ export function messageFromStatusAndBody(status, text) {
   const raw = String(text ?? '');
   const trimmed = raw.trim();
 
+  // 401 — всегда проблема авторизации: не показываем пользователю внутренние тексты API
+  // (в т.ч. VK-ветку общего сервера) — только понятное сообщение.
+  if (status === 401) {
+    if (trimmed) console.error('[auth] request rejected:', trimmed);
+    return tStatic('errors.authRequired');
+  }
+
   if (/^<\?xml/i.test(trimmed) && /<Code>\s*AccessDenied\s*<\/Code>/i.test(trimmed)) {
     return tStatic('errors.networkUnavailable');
   }

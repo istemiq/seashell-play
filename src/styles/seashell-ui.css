@@ -598,63 +598,19 @@
   opacity: 0.95;
 }
 
-.seashell-crt .ss-hint {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-}
 
-.seashell-crt .ss-hint__text {
-  line-height: var(--ss-line-body, 1.58);
-}
 
-.seashell-crt .ss-hint__btn {
-  align-self: flex-start;
-  min-height: 0;
-  padding: 0;
-  font-weight: 400;
-  color: var(--crt-fg-dim);
-  border: none;
-  background: transparent;
-  box-shadow: none;
-}
 
-.seashell-crt .ss-hint-collapsed {
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-}
 
-.seashell-crt .ss-hint-collapsed__toggle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 24px;
-  min-height: 24px;
-  padding: 2px 4px;
-  border: none;
-  border-radius: 0;
-  background: transparent;
-  color: var(--crt-fg-dim);
-  font-size: 1em;
-  font-weight: 400;
-  line-height: 1;
-  cursor: pointer;
-  box-shadow: none;
-  opacity: 0.75;
-}
 
-.seashell-crt .ss-hint-collapsed__toggle:hover {
-  opacity: 1;
-  color: var(--crt-fg);
-}
 
-.seashell-crt .ss-panel-header__side--after .ss-hint-collapsed {
-  margin-top: 0;
-  position: relative;
-}
+
+
+
+
+
+
+
 
 .seashell-segmented {
   display: flex;
@@ -971,14 +927,9 @@ html[dir='rtl'] .seashell-example-flip__page--enter-prev {
   }
 }
 
-.seashell-crt .ss-cell__after .ss-hint-collapsed {
-  margin-top: 0;
-  position: relative;
-}
 
-.seashell-crt .ss-cell__after .ss-hint--inline.ss-hint {
-  right: 0;
-}
+
+
 
 .seashell-inline-action-row,
 .seashell-crt .ss-box.seashell-inline-action-row {
@@ -1014,48 +965,17 @@ html[dir='rtl'] .seashell-example-flip__page--enter-prev {
   min-height: var(--ss-space-cell-min, 52px);
 }
 
-.seashell-crt .seashell-inline-action-row .ss-hint-collapsed {
-  margin-top: 0;
-  flex: 0 0 auto;
-  width: auto;
-}
 
-.seashell-crt .ss-hint--inline.ss-hint-collapsed {
-  margin-top: 0;
-  flex-shrink: 0;
-}
 
-.seashell-crt .ss-hint--inline.ss-hint {
-  position: absolute;
-  right: 0;
-  bottom: calc(100% + 8px);
-  z-index: 4;
-  width: min(300px, calc(100vw - 32px));
-  margin-top: 0;
-  padding: 10px 12px;
-  border: 1px solid color-mix(in srgb, var(--crt-fg-dim) 22%, transparent);
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--crt-bg) 92%, var(--crt-panel));
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.22);
-}
 
-.seashell-crt .ss-hint--subtle.ss-hint .ss-hint__text,
-.seashell-crt .ss-hint--subtle.ss-hint .ss-footnote {
-  color: var(--crt-fg-dim);
-}
 
-.seashell-crt .ss-hint--subtle.ss-hint .ss-hint__btn {
-  border-color: color-mix(in srgb, var(--crt-fg-dim) 35%, transparent);
-  background: transparent;
-  color: var(--crt-fg-dim);
-  box-shadow: none;
-}
 
-.seashell-crt .ss-hint--subtle.ss-hint .ss-hint__btn:hover:not(:disabled) {
-  color: var(--crt-fg);
-  border-color: color-mix(in srgb, var(--crt-fg-dim) 55%, transparent);
-  filter: none;
-}
+
+
+
+
+
+
 
 .seashell-crt .ss-separator {
   margin: 0;
@@ -1604,11 +1524,6 @@ html[lang='ru'] .seashell-crt .ss-panel-header__content,
 html[lang='uk'] .seashell-crt .ss-panel-header__content,
 html[lang='ja'] .seashell-crt .ss-panel-header__content,
 html[lang='ko'] .seashell-crt .ss-panel-header__content,
-html[dir='rtl'] .seashell-crt .ss-hint__text,
-html[lang='ru'] .seashell-crt .ss-hint__text,
-html[lang='uk'] .seashell-crt .ss-hint__text,
-html[lang='ja'] .seashell-crt .ss-hint__text,
-html[lang='ko'] .seashell-crt .ss-hint__text,
 html[dir='rtl'] .seashell-crt .ss-flat-link,
 html[lang='ru'] .seashell-crt .ss-flat-link,
 html[lang='uk'] .seashell-crt .ss-flat-link,

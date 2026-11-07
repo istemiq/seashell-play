@@ -46,7 +46,10 @@ describe('dictionary cache key variants', () => {
 
   it('default key has no variant segment', () => {
     const key = dictionaryCacheKey(base);
-    assert.equal(key.split('\u001f').length, 5);
+    const parts = key.split('\u001f');
+    // word · model · promptVersion · exampleCount · contentLocale · targetLang (+ variant, если есть)
+    assert.equal(parts.length, 6);
+    assert.equal(parts.at(-1), 'en');
   });
 
   it('refresh variant produces a distinct cache key', () => {

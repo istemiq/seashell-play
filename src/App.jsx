@@ -5,8 +5,11 @@ import { ErrorBoundary } from './components/ErrorBoundary.jsx';
 import { SplitModalSlotContext } from './context/SplitModalSlotContext.js';
 import { I18nProvider, useI18n } from './i18n/I18nContext.jsx';
 import { useAppTheme } from './hooks/useAppTheme.js';
+import { useUiStyle } from './hooks/useUiStyle.js';
+import { uiStyleShellClass } from './utils/uiStyle.js';
 import { useAppBackNavigation } from './hooks/useAppBackNavigation.js';
 import { HomePage } from './pages/HomePage.jsx';
+import { UiStyleBackdrop } from './components/UiStyleBackdrop.jsx';
 import { SignInPage } from './pages/SignInPage.jsx';
 import { OnboardingPage } from './pages/OnboardingPage.jsx';
 import { LearnLocaleTitleSync } from './components/LearnLocaleTitleSync.jsx';
@@ -37,6 +40,7 @@ const PatternPracticePage = lazy(() =>
 const IrregularVerbsPage = lazy(() =>
   import('./pages/IrregularVerbsPage.jsx').then((m) => ({ default: m.IrregularVerbsPage })),
 );
+const ReaderPage = lazy(() => import('./pages/ReaderPage.jsx').then((m) => ({ default: m.ReaderPage })));
 const PrivacyPage = lazy(() => import('./pages/PrivacyPage.jsx').then((m) => ({ default: m.PrivacyPage })));
 const ReadmePage = lazy(() => import('./pages/ReadmePage.jsx').then((m) => ({ default: m.ReadmePage })));
 const SettingsPage = lazy(() => import('./pages/SettingsPage.jsx').then((m) => ({ default: m.SettingsPage })));
@@ -111,6 +115,7 @@ function AppRoutes({ fetchedUser }) {
           <Route index element={<HomePage fetchedUser={fetchedUser} />} />
           <Route path="dictionary" element={<DictionaryPage />} />
           <Route path="irregular-verbs" element={<IrregularVerbsPage />} />
+          <Route path="reader" element={<ReaderPage />} />
           <Route path="practice/word/:wordId" element={<WordPracticePage />} />
           <Route path="practice/pattern" element={<PatternPracticePage />} />
           <Route path="practice" element={<PracticeHubPage />} />
@@ -138,6 +143,8 @@ export function App() {
   const [fetchedUser, setUser] = useState(null);
   const [splitModalMountEl, setSplitModalMountEl] = useState(null);
   const effectiveTheme = useAppTheme();
+  const uiStyle = useUiStyle();
+  const shellCls = `seashell-crt seashell-theme-${effectiveTheme} ${uiStyleShellClass(uiStyle)}`;
 
   useEffect(() => {
     let cancelled = false;
@@ -179,37 +186,32 @@ export function App() {
     setUser(profileFromStore());
   }
 
-  if (!authReady) return <RouteFallback />;
+  let body = <RouteFallback />;
 
-  if (!signedIn) {
-    return (
-      <ErrorBoundary>
-        <I18nProvider>
-          <div className={`seashell-crt seashell-theme-${effectiveTheme}`}>
-            <SignInPage onSignedIn={() => void onSignedIn()} />
-          </div>
-        </I18nProvider>
-      </ErrorBoundary>
+  if (authReady && !signedIn) {
+    body = (
+      <div className={shellCls}>
+        <UiStyleBackdrop />
+        <div className="seashell-crt-content">
+          <SignInPage onSignedIn={() => void onSignedIn()} />
+        </div>
+      </div>
     );
-  }
-
-  if (needsOnboarding) {
-    return (
-      <ErrorBoundary>
-        <I18nProvider>
-          <div className={`seashell-crt seashell-theme-${effectiveTheme}`}>
-            <OnboardingPage onComplete={() => onOnboardingComplete()} />
-          </div>
-        </I18nProvider>
-      </ErrorBoundary>
+  } else if (authReady && needsOnboarding) {
+    body = (
+      <div className={shellCls}>
+        <UiStyleBackdrop />
+        <div className="seashell-crt-content">
+          <OnboardingPage onComplete={() => onOnboardingComplete()} />
+        </div>
+      </div>
     );
-  }
-
-  return (
-    <ErrorBoundary>
-      <I18nProvider>
-        <SplitModalSlotContext.Provider value={splitModalMountEl}>
-          <div className={`seashell-crt seashell-theme-${effectiveTheme}`}>
+  } else if (authReady) {
+    body = (
+      <SplitModalSlotContext.Provider value={splitModalMountEl}>
+        <div className={shellCls}>
+          <UiStyleBackdrop />
+          <div className="seashell-crt-content">
             <HashRouter>
               <AppRoutes fetchedUser={fetchedUser} />
               <div
@@ -219,8 +221,14 @@ export function App() {
               />
             </HashRouter>
           </div>
-        </SplitModalSlotContext.Provider>
-      </I18nProvider>
+        </div>
+      </SplitModalSlotContext.Provider>
+    );
+  }
+
+  return (
+    <ErrorBoundary>
+      <I18nProvider>{body}</I18nProvider>
     </ErrorBoundary>
   );
 }

@@ -36,7 +36,9 @@ import { applyCaCardLocaleStorageMigration } from '../modules/ca/caContentLocale
 import { applySrCardLocaleStorageMigration } from '../modules/sr/srContentLocale.js';
 import { invalidateAuthHeadersCache } from '../api/buildAuthHeaders.js';
 import { normalizePracticeLevel } from './practiceLevel.js';
+import { normalizeUiStyle } from './uiStyle.js';
 import { resolvePlatformUserId } from '../platform/platformUser.js';
+import { isSuperAccountUser } from '../platform/superAccount.js';
 
 const STORAGE_KEY = 'seashell_settings_v1';
 const THEME_MIGRATION_KEY = 'seashell_theme_follow_tg_v1';
@@ -57,6 +59,8 @@ export const DEFAULT_SETTINGS = {
   /** Per study-language TTS accent (en → en-GB, ru → ru-RU, …). */
   ttsLocaleByLearn: {},
   fontScale: 'normal',
+  /** Visual shell: academic | calm | paper | evening | ongo | focus */
+  uiStyle: 'academic',
   /** CEFR-style dialogue/practice level: beginner | elementary | intermediate | upper | advanced */
   practiceLevel: 'intermediate',
 };
@@ -174,6 +178,7 @@ export function loadSettings() {
   const merged = { ...DEFAULT_SETTINGS, ...parsed };
   merged.learnLocale = normalizeLearnLocale(merged.learnLocale);
   merged.practiceLevel = normalizePracticeLevel(merged.practiceLevel);
+  merged.uiStyle = normalizeUiStyle(merged.uiStyle);
   if (String(merged.ttsLocale || '').trim() === 'nb-NO') {
     merged.ttsLocale = 'no-NO';
     saveSettings(merged);
@@ -222,6 +227,13 @@ export function updateSettings(patch) {
   let next = { ...current, ...patch };
   if (patch.learnLocale != null) {
     next.learnLocale = normalizeLearnLocale(patch.learnLocale);
+    invalidateAuthHeadersCache();
+  }
+  if (patch.uiLocale != null) {
+    invalidateAuthHeadersCache();
+  }
+  if (patch.cardLocale != null || patch.cardLocalePinned != null) {
+    invalidateAuthHeadersCache();
   }
   if (patch.ttsLocale != null) {
     next = rememberTtsLocaleForLearn(next, getStudyModuleCode(next.learnLocale), patch.ttsLocale);
@@ -233,6 +245,9 @@ export function updateSettings(patch) {
   if (patch.practiceLevel != null) {
     next.practiceLevel = normalizePracticeLevel(patch.practiceLevel);
     invalidateAuthHeadersCache();
+  }
+  if (patch.uiStyle != null) {
+    next.uiStyle = normalizeUiStyle(patch.uiStyle);
   }
   saveSettings(next);
   if (typeof window !== 'undefined') {

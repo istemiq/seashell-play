@@ -323,14 +323,14 @@ html.vkui {
   min-height: 100%;
   background: var(--crt-app-gradient);
   color: var(--crt-fg);
-  font-family: 'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', Courier, monospace;
+  font-family: var(--ss-ui-font-family);
   font-size: calc(var(--ss-font-size-base, 17px) * var(--ss-font-scale, 1));
   -webkit-font-smoothing: antialiased;
   text-shadow: var(--crt-text-shadow);
 
-  --vkui--size_border_radius--regular: 0;
-  --vkui--size_border_radius--compact: 0;
-  --vkui--size_border_radius_paper--regular: 2px;
+  --vkui--size_border_radius--regular: var(--ss-ui-radius-regular, 0);
+  --vkui--size_border_radius--compact: var(--ss-ui-radius-compact, 0);
+  --vkui--size_border_radius_paper--regular: var(--ss-ui-radius-regular, 2px);
 
   --vkui--color_background_accent_themed: rgba(96, 118, 188, 0.34);
   --vkui--color_background_accent_themed--hover: rgba(96, 118, 188, 0.48);

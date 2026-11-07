@@ -16,6 +16,7 @@
     "android:sync": "npx cap sync android",
     "android:run": "npm run build:android && npx cap run android",
     "test": "node --test server/tests/*.test.js",
+    "check:jsx": "node scripts/check-jsx-imports.mjs",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0"
   },
   "dependencies": {
@@ -26,6 +27,7 @@
     "@codetrix-studio/capacitor-google-auth": "3.4.0-rc.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-reader": "^2.0.15",
     "react-router-dom": "^6.28.0"
   },
   "devDependencies": {

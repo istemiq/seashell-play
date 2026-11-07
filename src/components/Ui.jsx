@@ -80,6 +80,7 @@ export function Cell({
   chevron,
   disabled = false,
   selected = false,
+  className = '',
   style,
   onPointerDown,
   onPointerUp,
@@ -102,6 +103,7 @@ export function Cell({
         interactive ? 'ss-cell--action' : '',
         disabled ? 'ss-cell--disabled' : '',
         selected ? 'ss-cell--selected' : '',
+        className,
       ]
         .filter(Boolean)
         .join(' ')}

@@ -21,8 +21,9 @@ export async function buildAuthHeaders() {
   }
 
   await whenGoogleSessionReady();
+  const playSecret = String(import.meta.env.VITE_PLAY_APP_SECRET ?? '').trim();
   const token = getGoogleIdToken();
-  if (!token && !isPlayDevAuth()) {
+  if (!token && !isPlayDevAuth() && !playSecret) {
     throw new Error('Not signed in with Google');
   }
 

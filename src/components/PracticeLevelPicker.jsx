@@ -25,6 +25,15 @@ export function PracticeLevelPicker({ modalMount, className = '' }) {
     return () => window.removeEventListener('seashell-settings-changed', sync);
   }, []);
 
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKeyDown = (e) => {
+      if (e.key === 'Escape') setOpen(false);
+    };
+    window.addEventListener('keydown', onKeyDown, true);
+    return () => window.removeEventListener('keydown', onKeyDown, true);
+  }, [open]);
+
   const pick = useCallback((code) => {
     setPracticeLevel(code);
     setOpen(false);
@@ -46,37 +55,46 @@ export function PracticeLevelPicker({ modalMount, className = '' }) {
   const modal =
     open && modalMount
       ? createPortal(
-          <div className="ss-modal-host" role="presentation" onClick={() => setOpen(false)}>
+          <div className="seashell-card-lang-shell seashell-crt">
+            <button
+              type="button"
+              className="seashell-card-lang-shell__backdrop"
+              aria-label={t('common.close')}
+              onClick={() => setOpen(false)}
+            />
             <div
-              className="ss-modal ss-modal--sheet"
+              className="seashell-card-lang-shell__dialog"
               role="dialog"
               aria-modal="true"
-              aria-label={t('practice.level.title')}
-              onClick={(e) => e.stopPropagation()}
+              aria-labelledby="seashell-practice-level-title"
             >
-              <div className="ss-modal__head">
-                <Text weight="2">{t('practice.level.title')}</Text>
+              <div className="seashell-card-lang-shell__head">
                 <ModalDismissButton onClick={() => setOpen(false)} />
+                <Text weight="2" id="seashell-practice-level-title" className="seashell-card-lang-shell__title">
+                  {t('practice.level.title')}
+                </Text>
               </div>
-              <Group header={<GroupHeader mode="secondary">{t('practice.level.subtitle')}</GroupHeader>}>
-                {PRACTICE_LEVELS.map((item) => {
-                  const selected = item.code === level;
-                  return (
-                    <Cell
-                      key={item.code}
-                      selected={selected}
-                      after={selected ? <CheckIcon /> : null}
-                      onClick={() => pick(item.code)}
-                      subtitle={t(item.hintKey)}
-                    >
-                      <span className="ss-practice-level-row">
-                        <span className="ss-practice-level-row__cefr">{item.cefr}</span>
-                        <span>{t(item.labelKey)}</span>
-                      </span>
-                    </Cell>
-                  );
-                })}
-              </Group>
+              <div className="seashell-card-lang-shell__list">
+                <Group header={<GroupHeader mode="secondary">{t('practice.level.subtitle')}</GroupHeader>}>
+                  {PRACTICE_LEVELS.map((item) => {
+                    const selected = item.code === level;
+                    return (
+                      <Cell
+                        key={item.code}
+                        selected={selected}
+                        after={selected ? <CheckIcon /> : null}
+                        onClick={() => pick(item.code)}
+                        subtitle={t(item.hintKey)}
+                      >
+                        <span className="ss-practice-level-row">
+                          <span className="ss-practice-level-row__cefr">{item.cefr}</span>
+                          <span>{t(item.labelKey)}</span>
+                        </span>
+                      </Cell>
+                    );
+                  })}
+                </Group>
+              </div>
             </div>
           </div>,
           modalMount,

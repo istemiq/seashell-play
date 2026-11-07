@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" fill="none">
+  <defs>
+    <filter id="haze" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+  <path d="M-10 600 L80 480 L170 540 L260 460 L390 520 L390 844 L-10 844Z" fill="#1f6b7a" fill-opacity="0.16" filter="url(#haze)"/>
+  <path d="M0 640 L100 560 L190 600 L280 540 L390 580" stroke="#1f6b7a" stroke-opacity="0.42" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="320" cy="120" r="36" fill="#ffc850" fill-opacity="0.35" filter="url(#haze)"/>
+  <path d="M60 700 Q195 660 330 700" stroke="#1f6b7a" stroke-opacity="0.22" stroke-width="1.4" fill="none"/>
+</svg>

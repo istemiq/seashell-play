@@ -1,0 +1,115 @@
+/**
+ * Conceptual illustration layer for UI style backdrops.
+ */
+
+.ss-ui-backdrop__layer--scene {
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  opacity: 0.92;
+  transform: translateZ(0);
+  filter: contrast(1.1) saturate(1.08);
+  min-height: 100%;
+  min-height: 100dvh;
+}
+
+.ss-ui-backdrop__layer--vignette {
+  background:
+    radial-gradient(ellipse 90% 55% at 50% 18%, rgba(255, 255, 255, 0.08) 0%, transparent 55%),
+    radial-gradient(ellipse 100% 80% at 50% 100%, rgba(0, 0, 0, 0.06) 0%, transparent 50%),
+    linear-gradient(180deg, transparent 0%, transparent 55%, rgba(255, 255, 255, 0.04) 100%);
+  opacity: 0.9;
+}
+
+html[data-seashell-theme='dark'] .ss-ui-backdrop__layer--vignette,
+.seashell-crt.seashell-theme-dark .ss-ui-backdrop__layer--vignette {
+  background:
+    radial-gradient(ellipse 85% 50% at 50% 12%, rgba(58, 154, 173, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 100% 75% at 50% 100%, rgba(0, 0, 0, 0.22) 0%, transparent 55%),
+    linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, transparent 40%, rgba(0, 0, 0, 0.08) 100%);
+}
+
+/* ── На ходу: путь, солнце, диалог ── */
+.ss-ui-backdrop--ongo .ss-ui-backdrop__layer--scene {
+  background-image: url('../ui-backdrops/ongo-scene.svg');
+  opacity: 0.85;
+}
+
+html[data-seashell-ui-style='ongo'][data-seashell-theme='dark'] .ss-ui-backdrop--ongo .ss-ui-backdrop__layer--scene,
+.seashell-crt.seashell-ui-style-ongo.seashell-theme-dark .ss-ui-backdrop--ongo .ss-ui-backdrop__layer--scene {
+  background-image: url('../ui-backdrops/ongo-scene-dark.svg');
+  opacity: 0.65;
+}
+
+/* ── Спокойный: море, парусник, ракушка ── */
+.ss-ui-backdrop--calm .ss-ui-backdrop__layer--scene {
+  background-image: url('../ui-backdrops/calm-scene.svg');
+  opacity: 0.82;
+}
+
+html[data-seashell-ui-style='calm'][data-seashell-theme='dark'] .ss-ui-backdrop--calm .ss-ui-backdrop__layer--scene,
+.seashell-crt.seashell-ui-style-calm.seashell-theme-dark .ss-ui-backdrop--calm .ss-ui-backdrop__layer--scene {
+  background-image: url('../ui-backdrops/calm-scene-dark.svg');
+  opacity: 0.58;
+}
+
+/* ── Бумага: блокнот, карандаш, кофе ── */
+.ss-ui-backdrop--paper .ss-ui-backdrop__layer--scene {
+  background-image: url('../ui-backdrops/paper-scene.svg');
+  opacity: 0.78;
+}
+
+html[data-seashell-ui-style='paper'][data-seashell-theme='dark'] .ss-ui-backdrop--paper .ss-ui-backdrop__layer--scene,
+.seashell-crt.seashell-ui-style-paper.seashell-theme-dark .ss-ui-backdrop--paper .ss-ui-backdrop__layer--scene {
+  background-image: url('../ui-backdrops/paper-scene.svg');
+  opacity: 0.62;
+}
+
+/* ── Вечер: закат, горы ── */
+.ss-ui-backdrop--evening .ss-ui-backdrop__layer--scene {
+  background-image: url('../ui-backdrops/evening-scene.svg');
+  opacity: 0.72;
+}
+
+/* ── Focus: гора, энсо ── */
+.ss-ui-backdrop--focus .ss-ui-backdrop__layer--scene {
+  background-image: url('../ui-backdrops/focus-scene.svg');
+  opacity: 0.68;
+}
+
+html[data-seashell-ui-style='focus'][data-seashell-theme='dark'] .ss-ui-backdrop--focus .ss-ui-backdrop__layer--scene,
+.seashell-crt.seashell-ui-style-focus.seashell-theme-dark .ss-ui-backdrop--focus .ss-ui-backdrop__layer--scene {
+  background-image: url('../ui-backdrops/focus-scene-dark.svg');
+  opacity: 0.75;
+}
+
+/* Точечный паттерн поверх сцены — тише, чтобы не шумел */
+.ss-ui-backdrop--ongo .ss-ui-backdrop__layer--pattern,
+.ss-ui-backdrop--calm .ss-ui-backdrop__layer--pattern,
+.ss-ui-backdrop--paper .ss-ui-backdrop__layer--pattern,
+.ss-ui-backdrop--evening .ss-ui-backdrop__layer--pattern,
+.ss-ui-backdrop--focus .ss-ui-backdrop__layer--pattern {
+  opacity: 0.28;
+}
+
+@media (min-width: 420px) {
+  .ss-ui-backdrop__layer--scene {
+    background-size: cover;
+    background-position: center center;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .ss-ui-backdrop__layer--scene {
+    animation: ss-backdrop-scene-in 0.9s ease-out both;
+  }
+}
+
+@keyframes ss-backdrop-scene-in {
+  from {
+    transform: translateY(16px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}

@@ -14,9 +14,7 @@ export default {
   'common.delete': "حذف",
   'common.save': "حفظ",
   'common.close': "إغلاق",
-  'common.loading': "جارٍ التحميل",
-  'common.gotIt': "فهمت",
-  'common.showHint': "إظهار تلميح",
+  'common.loading': "جارٍ التحميل",
   'home.profile': "الملف الشخصي",
   'home.sections': "الأقسام",
   'home.tagline1': 'تعلّم بالممارسة.',

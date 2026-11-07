@@ -34,6 +34,7 @@ export function PracticeVoiceCell({
 
   return (
     <Cell
+      className="ss-practice-voice-cell"
       disabled={disabled}
       onClick={usesTap ? toggleVoice : undefined}
       onPointerDown={usesHold && !disabled ? onVoicePointerDown : undefined}

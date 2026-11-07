@@ -14,6 +14,117 @@
     />
     <title>Seashell</title>
     <script>
+      /*
+       * Сторож загрузки фронта.
+       *  1) Если бандл (хешированный файл в assets/) не скачался — модуль не выполняется, window.__seashellAppMounted
+       *     не появляется, и приложение навсегда висит на «seashell». Пробуем один раз перезагрузить бандл
+       *     с обходом кеша (лечит «index.html старый, assets уже перезалиты»), затем показываем экран.
+       *  2) Если приложение так и не смонтировалось — показываем понятный текст + диагностику
+       *     (stage, entry, последняя ошибка), чтобы причина была видна с телефона.
+       */
+      (function () {
+        var boot = (window.__seashellBoot = window.__seashellBoot || { stage: 'html', errors: [] });
+        var retried = false;
+
+        function record(kind, detail) {
+          try {
+            boot.errors.push(kind + ': ' + String(detail == null ? '' : detail).slice(0, 180));
+            if (boot.errors.length > 5) boot.errors.shift();
+          } catch (e) {
+            /* ignore */
+          }
+        }
+
+        function appAlive() {
+          return Boolean(window.__seashellAppMounted || boot.mounted);
+        }
+
+        function entrySrc() {
+          var el = document.querySelector('script[type="module"][src]');
+          return el ? el.getAttribute('src') || '' : '';
+        }
+
+        function describe() {
+          var parts = ['stage=' + (boot.stage || 'html')];
+          var src = entrySrc();
+          if (src) parts.push('entry=' + src);
+          if (boot.errors.length) parts.push(boot.errors[boot.errors.length - 1]);
+          return parts.join(' | ');
+        }
+
+        function showBootScreen(fatal) {
+          if (appAlive() || boot.htmlScreen) return;
+          if (!document.body) {
+            document.addEventListener('DOMContentLoaded', function () {
+              showBootScreen(fatal);
+            });
+            return;
+          }
+          var root = document.getElementById('root');
+          if (!root || !root.querySelector('.boot-loader')) return;
+          boot.htmlScreen = fatal ? 'fatal' : 'slow';
+          root.innerHTML =
+            '<div class="boot-loader" style="padding:24px;box-sizing:border-box;font-family:system-ui,sans-serif;text-align:center;line-height:1.5">' +
+            '<p style="margin:0 0 12px;opacity:.85">' +
+            (fatal ? 'Не удалось загрузить приложение.' : 'Приложение долго загружается.') +
+            '</p>' +
+            '<p style="margin:0 0 16px;font-size:0.95rem;opacity:.65">Проверьте интернет и полностью закройте приложение, затем откройте снова.</p>' +
+            '<button type="button" onclick="location.reload()" style="padding:10px 18px;border:1px solid rgba(127,127,127,.4);border-radius:8px;background:transparent;font:inherit">Перезагрузить</button>' +
+            '<p style="margin:16px 0 0;font-size:11px;opacity:.45;word-break:break-word">' +
+            describe() +
+            '</p>' +
+            '</div>';
+        }
+
+        /** Одна повторная загрузка бандла с обходом кеша. */
+        function retryEntry(reason) {
+          if (retried || appAlive()) return;
+          var src = entrySrc();
+          if (!src) return;
+          retried = true;
+          record('retry', reason);
+          var s = document.createElement('script');
+          s.type = 'module';
+          s.crossOrigin = 'anonymous';
+          s.src = src + (src.indexOf('?') >= 0 ? '&' : '?') + 'retry=' + Date.now();
+          s.onerror = function () {
+            record('retry-failed', s.src);
+            showBootScreen(true);
+          };
+          document.head.appendChild(s);
+        }
+
+        window.addEventListener(
+          'error',
+          function (event) {
+            var target = event && event.target;
+            if (target && target !== window && target.tagName === 'SCRIPT') {
+              var src = target.getAttribute('src') || '';
+              record('script-error', src);
+              if (src && src === entrySrc()) retryEntry('entry load failed');
+              return;
+            }
+            if (typeof ErrorEvent !== 'undefined' && event instanceof ErrorEvent) {
+              record('error', event.message);
+            }
+          },
+          true,
+        );
+
+        window.addEventListener('unhandledrejection', function (event) {
+          var reason = event && event.reason;
+          record('rejection', (reason && reason.message) || reason);
+        });
+
+        window.setTimeout(function () {
+          showBootScreen(false);
+        }, 20000);
+        window.setTimeout(function () {
+          showBootScreen(false);
+        }, 50000);
+      })();
+    </script>
+    <script>
       (function () {
         var theme = 'light';
         var locale = 'en';
@@ -162,23 +273,8 @@
         }, 2600);
       })();
     </script>
-    <script>
-      (function () {
-        function showBootSlow() {
-          if (window.__seashellAppMounted) return;
-          var root = document.getElementById('root');
-          if (!root || !root.querySelector('.boot-loader')) return;
-          root.innerHTML =
-            '<div class="boot-loader" style="padding:24px;box-sizing:border-box;font-family:system-ui,sans-serif;text-align:center;line-height:1.5">' +
-            '<p style="margin:0 0 12px;opacity:.85">Приложение долго загружается.</p>' +
-            '<p style="margin:0 0 16px;font-size:0.95rem;opacity:.65">Проверьте Wi‑Fi и что API запущен на компьютере (npm run dev). На телефоне в .env должен быть IP компьютера, не 10.0.2.2.</p>' +
-            '<button type="button" onclick="location.reload()" style="padding:10px 18px;border:1px solid rgba(127,127,127,.4);border-radius:8px;background:transparent;font:inherit">Перезагрузить</button>' +
-            '</div>';
-        }
-        window.setTimeout(showBootSlow, 20000);
-        window.setTimeout(showBootSlow, 50000);
-      })();
-    </script>
+    <!-- Сторож загрузки перенесён в <head> (см. скрипт с window.__seashellBoot): он должен ловить
+         ошибку загрузки бандла раньше, чем она станет необратимой. -->
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -14,9 +14,7 @@ export default {
   'common.delete': "Видалити",
   'common.save': "Зберегти",
   'common.close': "Закрити",
-  'common.loading': "Завантаження",
-  'common.gotIt': "Зрозуміло",
-  'common.showHint': "Показати підказку",
+  'common.loading': "Завантаження",
   'home.profile': "Профіль",
   'home.sections': "Розділи",
   'home.tagline1': "Вчись на практиці.",

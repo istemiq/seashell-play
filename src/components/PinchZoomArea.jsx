@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { APP_RESUME_EVENT, APP_SUSPEND_EVENT } from '../utils/appResume.js';
 import { subscribeAppFontScale } from '../utils/fontScale.js';
+import { isInteractiveGestureTarget } from '../utils/gestureInteractiveTarget.js';
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 2.5;

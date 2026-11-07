@@ -14,9 +14,7 @@ export default {
   'common.delete': "Elimina",
   'common.save': "Salva",
   'common.close': "Chiudi",
-  'common.loading': "Caricamento",
-  'common.gotIt': "Capito",
-  'common.showHint': "Mostra suggerimento",
+  'common.loading': "Caricamento",
   'home.profile': "Profilo",
   'home.sections': "Sezioni",
   'home.tagline1': "Impara facendo.",

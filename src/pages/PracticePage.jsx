@@ -1,4 +1,3 @@
-import { DismissibleHint } from '../components/DismissibleHint.jsx';
 import {
   Panel,
   PanelHeader,
@@ -10,7 +9,6 @@ import {
   Footnote,
   Textarea,
   FormItem,
-  Separator,
   Spinner,
   Snackbar,
   Cell,
@@ -25,6 +23,7 @@ import {
  */
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { PracticeLevelPicker } from '../components/PracticeLevelPicker.jsx';
+import { PracticeBubble } from '../components/PracticeBubble.jsx';
 import { SplitModalSlotContext } from '../context/SplitModalSlotContext.js';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { PracticeEchoText } from '../components/PracticeEchoText.jsx';
@@ -104,7 +103,7 @@ export function PracticePage() {
     );
   }, []);
 
-  const { selectWord, pickWord, getBlockState, addTextToDictionary } = usePracticeDictionaryAdd({
+  const { selectWord, pickWord, clearWordPick, getBlockState, addTextToDictionary } = usePracticeDictionaryAdd({
     tr,
     onLimitsUpdate: setLimits,
     onSuccess: (word) => showDictNotice(tr('errors.dictAdded', { word }), 2200),
@@ -279,10 +278,10 @@ export function PracticePage() {
     setSessionId(null);
     setTurns([]);
     setInput('');
-    setWordPick(null);
+    clearWordPick();
     setError(null);
     resetDialog();
-  }, [stopVoice, sessionId, turns, resetDialog]);
+  }, [stopVoice, sessionId, turns, resetDialog, clearWordPick]);
 
   const removeHistorySession = useCallback(
     async (targetId, e) => {
@@ -349,7 +348,7 @@ export function PracticePage() {
     }
     void discardEmptyPracticeSession(sessionId, turns);
     saveFreePracticeSessionId(null);
-    navigate('/practice');
+    navigate('/');
   }, [showHistory, navigate, sessionId, turns]);
 
   useEscapeBack(handleBack);
@@ -367,7 +366,7 @@ export function PracticePage() {
   };
 
   const practiceSegments = (
-    <Group>
+    <Group className="ss-practice-tabs">
       <div className="seashell-segmented" role="tablist">
         <button
           type="button"
@@ -477,32 +476,22 @@ export function PracticePage() {
       {vkReady && !restoring && (
         <>
           {showStartButton && (
-            <Group>
+            <Group className="ss-practice-action">
               <Cell i18nKey="practice.startDialog" onClick={startChat} />
             </Group>
           )}
 
           {turns.length > 0 && (
-            <Group>
+            <Group className="ss-practice-action">
               <Cell i18nKey="practice.newDialog" onClick={startNewDialog} />
             </Group>
           )}
 
           {showDialogUi && (
-          <Group header={<GroupHeader mode="secondary">{tr('practice.dialog')}</GroupHeader>}>
-            {turns.length > 0 && (
-              <Box className="ss-vpad-cell">
-                <DismissibleHint hintId="practice.tapWord" className="ss-hint--inline ss-hint--subtle">
-                  {tr('practice.tapWordHint')}
-                </DismissibleHint>
-              </Box>
-            )}
+          <Group className="ss-practice-chat" header={<GroupHeader mode="secondary">{tr('practice.dialog')}</GroupHeader>}>
             {turns.length === 0 && (
               <Box className="seashell-inline-action-row">
-                <Text style={{ flex: 1 }}>{dictMessageForLearn(tr, 'practice.empty', learnLocale)}</Text>
-                <DismissibleHint hintId="practice.empty" className="ss-hint--inline ss-hint--subtle">
-                  {tr('practice.emptyHint')}
-                </DismissibleHint>
+                <Text style={{ flex: 1 }}>{dictMessageForLearn(tr, 'practice.empty', learnLocale)}</Text>
               </Box>
             )}
             {turns.map((turn, i) => {
@@ -515,7 +504,8 @@ export function PracticePage() {
 
               return (
               <Box key={i} className="ss-practice-turn">
-                <Text weight="2">{tr('practice.you')}</Text>
+                <PracticeBubble variant="user">
+                <Text weight="2" className="ss-practice-bubble__label">{tr('practice.you')}</Text>
                 <PracticeTappableText
                   text={turn.userText}
                   selectedWord={userBlock.selectedWord}
@@ -530,8 +520,9 @@ export function PracticePage() {
                   onAdd={() => void addTextToDictionary(pickWord(userKey, turn.userText), userKey)}
                   showTapHint={i === 0}
                 />
-                <Separator />
-                <Text weight="2">{tr('practice.heard')}</Text>
+                </PracticeBubble>
+                <PracticeBubble variant="meta">
+                <Text weight="2" className="ss-practice-bubble__label">{tr('practice.heard')}</Text>
                 <PracticeEchoText
                   original={turn.userText}
                   echo={turn.echo}
@@ -546,15 +537,15 @@ export function PracticePage() {
                   addedWord={echoBlock.addedWord}
                   onAdd={() => void addTextToDictionary(pickWord(echoKey, turn.echo), echoKey)}
                 />
-                {turn.corrections && (
+                {turn.corrections ? (
                   <>
-                    <Separator />
-                    <Text weight="2">{tr('practice.corrections')}</Text>
+                    <Text weight="2" className="ss-practice-bubble__label ss-mt-sm">{tr('practice.corrections')}</Text>
                     <Text className="ss-mt-xs" dir="auto">{turn.corrections}</Text>
                   </>
-                )}
-                <Separator />
-                <Text weight="2">{tr('practice.partner')}</Text>
+                ) : null}
+                </PracticeBubble>
+                <PracticeBubble variant="partner">
+                <Text weight="2" className="ss-practice-bubble__label">{tr('practice.partner')}</Text>
                 <StreamingPracticeReply
                   text={turn.reply}
                   streamId={`free-${sessionId ?? 'new'}-${i}-${turn.reply}`}
@@ -572,6 +563,7 @@ export function PracticePage() {
                 {studyTtsSupported ? (
                   <ListenTtsButton text={turn.reply} ttsText={turn.replyTts} ttsLocale={learnLocale} className="ss-mt-sm" onError={speakReplyError} />
                 ) : null}
+                </PracticeBubble>
               </Box>
             );
             })}
@@ -586,7 +578,7 @@ export function PracticePage() {
           )}
 
           {showDialogUi && (
-          <Group header={<GroupHeader mode="secondary">{tr('practice.yourReply')}</GroupHeader>}>
+          <Group className="ss-practice-compose-bar" header={<GroupHeader mode="secondary">{tr('practice.yourReply')}</GroupHeader>}>
             <FormItem top={practiceStudyLangLabel(tr, learnLocale)}>
               <Textarea
                 ref={replyInputRef}

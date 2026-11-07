@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" fill="none">
+  <defs>
+    <filter id="soft" x="-15%" y="-15%" width="130%" height="130%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+  </defs>
+  <path d="M-20 680 L100 480 L195 560 L280 440 L410 520 L410 844 L-20 844Z" fill="#2563eb" fill-opacity="0.1"/>
+  <path d="M100 480 L195 560 L280 440" stroke="#2563eb" stroke-opacity="0.35" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <circle cx="195" cy="620" r="72" stroke="#2563eb" stroke-opacity="0.28" stroke-width="2.5" fill="none" filter="url(#soft)"/>
+  <path d="M140 720 Q195 680 250 720" stroke="#2563eb" stroke-opacity="0.2" stroke-width="1.5" fill="none"/>
+</svg>

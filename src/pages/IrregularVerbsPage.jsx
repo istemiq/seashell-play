@@ -4,8 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import * as dictionaryApi from '../api/dictionaryApi.js';
 import * as irregularVerbsApi from '../api/irregularVerbsApi.js';
 import { fetchUserLimits } from '../api/userApi.js';
-import { AdBanner } from '../components/AdBanner.jsx';
-import { DismissibleHint } from '../components/DismissibleHint.jsx';
+import { AdBanner } from '../components/AdBanner.jsx';
 import { EnCardTranslationLocalePicker } from '../components/EnCardTranslationLocalePicker.jsx';
 import { DictCardMoreActions } from '../components/DictCardMoreActions.jsx';
 import { SpeakAloudButton } from '../components/SpeakAloudButton.jsx';
@@ -610,8 +609,7 @@ export function IrregularVerbsPage() {
       {locale === 'en' && selectedVerbId == null ? (
         <EnCardTranslationLocalePicker
           modalMount={splitModalMount}
-          onLocaleChange={bumpExamplesLocale}
-          hideHint
+          onLocaleChange={bumpExamplesLocale}
         />
       ) : null}
 
@@ -620,21 +618,7 @@ export function IrregularVerbsPage() {
           <Group>
             <Cell
               chevron
-              onClick={() => setScreen('blocks')}
-              after={
-                <DismissibleHint hintId="verbs.hub" className="ss-hint--inline ss-hint--subtle">
-                  {locale === 'en' ? (
-                    <>
-                      {t('dict.cardLangHint')}
-                      <br />
-                      <br />
-                      {t('verbs.hubHint')}
-                    </>
-                  ) : (
-                    t('verbs.hubHint')
-                  )}
-                </DismissibleHint>
-              }
+              onClick={() => setScreen('blocks')}
             >
               {t('verbs.addWord')}
             </Cell>

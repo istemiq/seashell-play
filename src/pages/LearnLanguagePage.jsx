@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 
-import { DismissibleHint } from '../components/DismissibleHint.jsx';
 import { CheckIcon } from '../components/CheckIcon.jsx';
 import {
   Cell,
@@ -38,11 +37,6 @@ export function LearnLanguagePage() {
     <Panel>
       <PanelHeader
         before={<PanelHeaderBack onClick={() => void goBackOrHome()} />}
-        after={
-          <DismissibleHint hintId="learnLang.hint" className="ss-hint--inline ss-hint--subtle">
-            {t('learnLang.hint')}
-          </DismissibleHint>
-        }
       >
         {t('learnLang.title')}
       </PanelHeader>

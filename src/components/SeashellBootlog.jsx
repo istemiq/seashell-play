@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { useI18n } from '../i18n/I18nContext.jsx';
+import { useUiStyle } from '../hooks/useUiStyle.js';
 
 const CHAR_MS = 16;
 const LINE_PAUSE_MS = 280;
@@ -9,12 +10,41 @@ const CYCLE_PAUSE_MS = 4200;
 const LINE_COUNT = 8;
 const ROW_LINE_HEIGHT = 1.55;
 
+const TAGLINE_KEYS = ['home.tagline1', 'home.tagline2', 'home.tagline3', 'home.tagline4', 'home.tagline5'];
+
 function prefersReducedMotion() {
   if (typeof window === 'undefined') return true;
   return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
 }
 
-export function SeashellBootlog({ userDisplayName, lang }) {
+function FriendlyBootlog({ userDisplayName, lang, className = '' }) {
+  const { t } = useI18n();
+  const trimmed = typeof userDisplayName === 'string' ? userDisplayName.trim() : '';
+  const welcome = trimmed ? t('boot.userInit', { name: trimmed }) : t('boot.userWait');
+  const taglines = useMemo(() => TAGLINE_KEYS.map((key) => t(key)), [t]);
+  const [tagIdx, setTagIdx] = useState(0);
+
+  useEffect(() => {
+    if (prefersReducedMotion() || taglines.length < 2) return undefined;
+    const timer = setInterval(() => {
+      setTagIdx((i) => (i + 1) % taglines.length);
+    }, 4200);
+    return () => clearInterval(timer);
+  }, [taglines.length]);
+
+  return (
+    <div
+      className={`seashell-bootlog seashell-bootlog--friendly ${className}`.trim()}
+      lang={lang}
+      aria-hidden="true"
+    >
+      <div className="seashell-bootlog__welcome">{welcome}</div>
+      <div className="seashell-bootlog__tagline">{taglines[tagIdx] ?? ''}</div>
+    </div>
+  );
+}
+
+function AcademicBootlog({ userDisplayName, lang, className = '' }) {
   const { t } = useI18n();
   const trimmed = typeof userDisplayName === 'string' ? userDisplayName.trim() : '';
   const allLines = useMemo(() => {
@@ -72,7 +102,7 @@ export function SeashellBootlog({ userDisplayName, lang }) {
 
   return (
     <div
-      className="seashell-bootlog"
+      className={`seashell-bootlog ${className}`.trim()}
       lang={lang}
       aria-hidden="true"
       style={{ '--bootlog-lines': LINE_COUNT, '--bootlog-row-height': ROW_LINE_HEIGHT }}
@@ -106,5 +136,23 @@ export function SeashellBootlog({ userDisplayName, lang }) {
         );
       })}
     </div>
+  );
+}
+
+export function SeashellBootlog({ userDisplayName, lang, className = '' }) {
+  const uiStyle = useUiStyle();
+
+  if (uiStyle === 'focus') {
+    return null;
+  }
+
+  if (uiStyle === 'academic') {
+    return (
+      <AcademicBootlog userDisplayName={userDisplayName} lang={lang} className={className} />
+    );
+  }
+
+  return (
+    <FriendlyBootlog userDisplayName={userDisplayName} lang={lang} className={className} />
   );
 }

@@ -14,9 +14,7 @@ export default {
   'common.delete': 'Sil',
   'common.save': 'Kaydet',
   'common.close': 'Kapat',
-  'common.loading': 'Yükleniyor',
-  'common.gotIt': 'Anladım',
-  'common.showHint': 'İpucunu göster',
+  'common.loading': 'Yükleniyor',
   'home.profile': 'Profil',
   'home.sections': 'Bölümler',
   'home.tagline1': 'Pratik yaparak öğren.',

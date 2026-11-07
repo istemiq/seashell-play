@@ -14,9 +14,7 @@ export default {
   'common.delete': "حذف",
   'common.save': "ذخیره",
   'common.close': "بستن",
-  'common.loading': "در حال بارگذاری",
-  'common.gotIt': "متوجه شدم",
-  'common.showHint': "نمایش راهنما",
+  'common.loading': "در حال بارگذاری",
   'home.profile': "پروفایل",
   'home.sections': "بخش‌ها",
   'home.tagline1': 'با تمرین یاد بگیر.',

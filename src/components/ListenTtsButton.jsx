@@ -82,7 +82,7 @@ export function ListenTtsButton({
 
   const errorNote =
     errorMsg && !loading ? (
-      <span className="ss-hint ss-hint--subtle" role="alert" style={{ display: 'block', marginTop: 4 }}>
+      <span role="alert" style={{ display: 'block', marginTop: 4, fontSize: '0.85em', opacity: 0.72 }}>
         {errorMsg}
       </span>
     ) : null;

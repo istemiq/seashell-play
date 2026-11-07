@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" fill="none">
+  <defs>
+    <filter id="blur" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+  </defs>
+  <path d="M-10 580 Q100 460 200 520 T410 480 L410 844 L-10 844Z" fill="#2a7f8c" fill-opacity="0.18" filter="url(#blur)"/>
+  <path d="M0 620 Q120 540 210 580 T390 550" stroke="#2a7f8c" stroke-opacity="0.45" stroke-width="2" fill="none"/>
+  <path d="M0 660 Q100 620 200 650 T390 630" stroke="#2a7f8c" stroke-opacity="0.25" stroke-width="1.2" fill="none"/>
+  <!-- sailboat line art -->
+  <g transform="translate(260 560)" stroke="#2a7f8c" stroke-opacity="0.5" stroke-width="1.8" fill="none" stroke-linecap="round">
+    <path d="M0 40 L0 0 L28 20 Z"/>
+    <path d="M-20 40 Q0 48 20 40"/>
+  </g>
+</svg>

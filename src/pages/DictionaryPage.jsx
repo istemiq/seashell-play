@@ -17,8 +17,7 @@ import {
   Checkbox,
   ModalDismissButton,
   Snackbar,
-} from '../components/Ui.jsx';
-import { DismissibleHint } from '../components/DismissibleHint.jsx';
+} from '../components/Ui.jsx';
 import { AdBanner } from '../components/AdBanner.jsx';
 import { fetchUserLimits } from '../api/userApi.js';
 import { isDailyLimitError, isAdUnavailableError, runWithAdRetry } from '../utils/limitsGate.js';
@@ -31,6 +30,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import * as api from '../api/dictionaryApi.js';
+import { invalidateWordDetailCache } from '../api/dictionaryApi.js';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { usePlatformUser } from '../hooks/usePlatformUser.js';
 import { usePremium } from '../hooks/usePremium.js';
@@ -222,7 +222,10 @@ export function DictionaryPage() {
     setActiveSetId(null);
     setScreen('dictionary');
     setNewWord('');
+    setWords([]);
+    setLoading(true);
     wordDetailHistoryRef.current = false;
+    invalidateWordDetailCache();
   }, [learnLocale]);
 
   const { selectWord, pickWord, clearWordPick, getBlockState, addTextToDictionary } = useTappableDictionaryAdd({
@@ -995,12 +998,7 @@ export function DictionaryPage() {
               <Cell
                 chevron
                 disabled={setsLoading}
-                onClick={() => setScreen('groups')}
-                after={
-                  <DismissibleHint hintId="dict.groups" className="ss-hint--inline ss-hint--subtle">
-                    {t('dict.groupsHint')}
-                  </DismissibleHint>
-                }
+                onClick={() => setScreen('groups')}
               >
                 {t('dict.myGroups')}
               </Cell>
@@ -1096,15 +1094,7 @@ export function DictionaryPage() {
                 <div className="seashell-group-header-row">
                   <GroupHeader mode="secondary">
                     {screen === 'group' ? t('dict.newWordInGroup') : t('dict.newWord')}
-                  </GroupHeader>
-                  <DismissibleHint
-                    hintId={screen === 'group' ? 'dict.add.group' : 'dict.add'}
-                    className="ss-hint--inline ss-hint--subtle"
-                  >
-                    {screen === 'group'
-                      ? dictMessageForLearn(t, 'dict.addHintGroup', learnLocale)
-                      : dictMessageForLearn(t, 'dict.addHint', learnLocale)}
-                  </DismissibleHint>
+                  </GroupHeader>
                 </div>
               }
             >
@@ -1139,7 +1129,7 @@ export function DictionaryPage() {
           )}
 
           {(screen === 'dictionary' || screen === 'group') && (
-            <Group header={<GroupHeader mode="secondary">{screen === 'group' ? t('dict.wordsInGroup') : t('dict.myWords')}</GroupHeader>}>
+            <Group className="ss-dict-list" header={<GroupHeader mode="secondary">{screen === 'group' ? t('dict.wordsInGroup') : t('dict.myWords')}</GroupHeader>}>
               {loading && (
                 <Box className="ss-center-load">
                   <Spinner />
@@ -1147,18 +1137,14 @@ export function DictionaryPage() {
               )}
               {!loading && words.length === 0 && (
                 <Box className="seashell-inline-action-row">
-                  <Text style={{ flex: 1 }}>{t('dict.emptyWords')}</Text>
-                  {!error && (
-                    <DismissibleHint hintId="dict.emptyWords" className="ss-hint--inline ss-hint--subtle">
-                      {t('dict.emptyWordsHint')}
-                    </DismissibleHint>
-                  )}
+                  <Text style={{ flex: 1 }}>{t('dict.emptyWords')}</Text>
                 </Box>
               )}
               {!loading &&
                 words.map((w) => (
                   <Cell
                     key={w.id}
+                    className="ss-dict-word-cell"
                     onClick={() => openWord(w.id)}
                     onMouseDown={() => api.prefetchWord(w.id)}
                     onTouchStart={() => api.prefetchWord(w.id)}
@@ -1202,12 +1188,11 @@ export function DictionaryPage() {
           {showCardTranslationLocalePicker(learnLocale) && (
             <CardTranslationLocalePicker
               modalMount={splitModalMount}
-              learnLocale={learnLocale}
-              hideHint
+              learnLocale={learnLocale}
               onLocaleChange={handleCardLocaleChange}
             />
           )}
-        <Group>
+        <Group className="ss-dict-detail-card">
           {detailLoading && (
             <Box className="ss-center-load">
               <Spinner size="l" />

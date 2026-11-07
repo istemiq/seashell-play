@@ -1,4 +1,3 @@
-import { DismissibleHint } from '../components/DismissibleHint.jsx';
 import {
   Panel,
   PanelHeader,
@@ -20,6 +19,7 @@ import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { PracticeLevelPicker } from '../components/PracticeLevelPicker.jsx';
 import { SplitModalSlotContext } from '../context/SplitModalSlotContext.js';
 import { useNavigate, useParams } from 'react-router-dom';
+import { PracticeBubble } from '../components/PracticeBubble.jsx';
 import { PracticeEchoText } from '../components/PracticeEchoText.jsx';
 import { PracticeTappableText } from '../components/PracticeTappableText.jsx';
 import { StreamingPracticeReply } from '../components/StreamingPracticeReply.jsx';
@@ -317,9 +317,6 @@ export function WordPracticePage() {
         after={
           <div className="ss-panel-header__tools">
             <PracticeLevelPicker modalMount={splitModalMount} />
-            <DismissibleHint hintId="dict.wordPractice.hint" className="ss-hint--inline ss-hint--subtle">
-              {dictMessageForLearn(tr, 'dict.wordPracticeHint', learnLocale, { word: wordLabel || '…' })}
-            </DismissibleHint>
           </div>
         }
       >
@@ -351,41 +348,43 @@ export function WordPracticePage() {
           )}
 
           {showStartButton && (
-            <Group>
+            <Group className="ss-practice-action">
               <Cell i18nKey="practice.startDialog" onClick={() => void startWordDialog()} />
             </Group>
           )}
 
           {!booting && turns.length > 0 && (
-            <Group>
+            <Group className="ss-practice-action">
               <Cell i18nKey="practice.newDialog" onClick={startNewDialog} />
             </Group>
           )}
 
           {!booting && showDialogUi && (turns.length > 0 || loading) && (
-          <Group header={<GroupHeader mode="secondary">{tr('practice.dialog')}</GroupHeader>}>
+          <Group className="ss-practice-chat" header={<GroupHeader mode="secondary">{tr('practice.dialog')}</GroupHeader>}>
             {turns.map((turn, i) => (
                 <Box key={i} className="ss-practice-turn">
                   {!turn.opening && (
                     <>
-                      <Text weight="2">{tr('practice.you')}</Text>
+                      <PracticeBubble variant="user">
+                      <Text weight="2" className="ss-practice-bubble__label">{tr('practice.you')}</Text>
                       <PracticeTappableText text={turn.userText} />
-                      <Separator />
-                      <Text weight="2">{tr('practice.heard')}</Text>
+                      </PracticeBubble>
+                      <PracticeBubble variant="meta">
+                      <Text weight="2" className="ss-practice-bubble__label">{tr('practice.heard')}</Text>
                       <PracticeEchoText original={turn.userText} echo={turn.echo} />
-                      {turn.corrections && (
+                      {turn.corrections ? (
                         <>
-                          <Separator />
-                          <Text weight="2">{tr('practice.corrections')}</Text>
+                          <Text weight="2" className="ss-practice-bubble__label ss-mt-sm">{tr('practice.corrections')}</Text>
                           <Text className="ss-mt-xs" dir="auto">
                             {turn.corrections}
                           </Text>
                         </>
-                      )}
-                      <Separator />
+                      ) : null}
+                      </PracticeBubble>
                     </>
                   )}
-                  <Text weight="2">{tr('practice.partner')}</Text>
+                  <PracticeBubble variant="partner">
+                  <Text weight="2" className="ss-practice-bubble__label">{tr('practice.partner')}</Text>
                   <StreamingPracticeReply
                     text={turn.reply}
                     streamId={`word-${wordId}-${sessionId ?? 'new'}-${i}-${turn.reply}`}
@@ -400,6 +399,7 @@ export function WordPracticePage() {
                     onError={speakReplyError}
                   />
                   ) : null}
+                  </PracticeBubble>
                 </Box>
               ))}
             {loading && (
@@ -413,7 +413,7 @@ export function WordPracticePage() {
           )}
 
           {!booting && turns.length > 0 && (
-          <Group header={<GroupHeader mode="secondary">{tr('practice.yourReply')}</GroupHeader>}>
+          <Group className="ss-practice-compose-bar" header={<GroupHeader mode="secondary">{tr('practice.yourReply')}</GroupHeader>}>
             <FormItem top={practiceStudyLangLabel(tr, learnLocale)}>
               <Textarea
                 ref={replyInputRef}
