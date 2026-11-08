@@ -19,6 +19,7 @@ import { prewarmRuaccentWorker } from './ruTtsStressRuaccent.js';
 import { registerSttTranscribe } from './stt.js';
 import { handleGoogleSession } from './playAuth.js';
 import { handleTelegramBillingUpdate, verifyWebhookSecret } from './telegramBilling.js';
+import { handleTelegramMessageUpdate } from './telegramBooks.js';
 import { isProd, isVkAppsHostingOrigin, makeRateLimiter } from './routeHelpers.js';
 import { appAuthMiddleware, vkReviewerProbeMiddleware } from './authMiddleware.js';
 import { registerAdminStatsRoute, registerAdminRoutes } from './routes/admin.js';
@@ -108,17 +109,30 @@ registerAdminStatsRoute(app);
 // Must be registered before auth middleware: mp3 files are fetched by native player without headers.
 registerTtsStatic(app);
 
-// Telegram Bot webhook (Stars payments) — no user auth, secret token only.
+// Telegram Bot webhook (Stars payments + book uploads) — no user auth, secret token only.
 app.post('/api/telegram/webhook', async (req, res) => {
   if (!verifyWebhookSecret(req)) {
     return res.status(403).json({ error: 'Forbidden' });
   }
+  const update = req.body ?? {};
   try {
-    const result = await handleTelegramBillingUpdate(req.body ?? {});
-    res.json({ ok: true, ...result });
+    const result = await handleTelegramBillingUpdate(update);
+    if (result?.handled) {
+      return res.json({ ok: true, ...result });
+    }
+    // Остальные message-апдейты (книги, /start, хинты) — асинхронно:
+    // скачивание файла может занять время, Telegram ждать не должен.
+    if (update?.message) {
+      res.json({ ok: true, accepted: true });
+      handleTelegramMessageUpdate(update).catch((e) =>
+        console.error('[bot] webhook error', e),
+      );
+      return undefined;
+    }
+    return res.json({ ok: true, ...result });
   } catch (e) {
-    console.error('[billing] webhook error', e);
-    res.status(500).json({ error: 'Webhook handler failed' });
+    console.error('[telegram] webhook error', e);
+    return res.status(500).json({ error: 'Webhook handler failed' });
   }
 });
 

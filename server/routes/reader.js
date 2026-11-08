@@ -7,7 +7,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
 import crypto from 'node:crypto';
+import { fileURLToPath } from 'node:url';
 import { makeRateLimiter } from '../routeHelpers.js';
+import { listUserBooks, getUserBookFile, deleteUserBook } from '../userBooks.js';
 
 const CACHE_DIR = path.join(os.tmpdir(), 'seashell-book-cache');
 const MAX_BOOK_BYTES = 20 * 1024 * 1024;
@@ -33,6 +35,39 @@ const KAIKKI_EDITION = {
 };
 
 const MAX_DEFINE_WORD_LEN = 60;
+
+/**
+ * Локальные двуязычные словари (FreeDict/WikDict, сконвертированные
+ * scripts/import-freedict-dict.mjs → server/dictionaries/<src>-<dst>.json).
+ * Покрывают пары, где у локального Викисловаря нет статей (en→ru и т.п.).
+ */
+const DICT_DIR = path.join(
+  path.dirname(fileURLToPath(import.meta.url)),
+  '..',
+  'dictionaries',
+);
+const bilingualDictCache = new Map();
+
+function loadBilingualDict(src, dst) {
+  const key = `${src}-${dst}`;
+  if (bilingualDictCache.has(key)) return bilingualDictCache.get(key);
+  let dict = null;
+  try {
+    dict = JSON.parse(fs.readFileSync(path.join(DICT_DIR, `${key}.json`), 'utf8'));
+  } catch {
+    /* словаря для пары нет */
+  }
+  bilingualDictCache.set(key, dict);
+  return dict;
+}
+
+function dictLookup(dict, word) {
+  for (const w of wordCandidates(word)) {
+    const e = dict[w];
+    if (e?.t?.length) return { word: w, pos: e.p || '', translations: e.t };
+  }
+  return null;
+}
 
 const FORMATS = [
   { ext: 'epub', type: 'application/epub+zip' },
@@ -304,6 +339,18 @@ export function registerReaderRoutes(app) {
       entries: found?.entries ?? [],
     };
 
+    // Локальный двуязычный словарь (en-ru и др.): прямой перевод,
+    // даже когда Викисловарь словоформу/статью не содержит.
+    const dict = src ? loadBilingualDict(src, dst) : null;
+    if (dict) {
+      const hitDict = dictLookup(dict, found?.word ?? word) ||
+        (found?.lemma ? dictLookup(dict, found.lemma) : null);
+      if (hitDict) {
+        payload.translations = hitDict.translations;
+        payload.dictPos = hitDict.pos;
+      }
+    }
+
     try {
       fs.mkdirSync(path.dirname(cacheFile), { recursive: true });
       fs.writeFileSync(cacheFile, JSON.stringify(payload));
@@ -311,5 +358,34 @@ export function registerReaderRoutes(app) {
       /* cache write failed */
     }
     return res.json(payload);
+  });
+
+  // --- Мои книги: файлы, присланные боту (Desktop-обход для file input) ---
+  const myBooksLimit = makeRateLimiter({
+    windowMs: 60_000,
+    max: 60,
+    keyFn: (req) => `mybooks:${req.vkUserId ?? req.ip ?? 'anon'}`,
+  });
+
+  app.get('/api/reader/my-books', myBooksLimit, (req, res) => {
+    res.json({ books: listUserBooks(req.vkUserId) });
+  });
+
+  app.get('/api/reader/my-books/:id', myBooksLimit, (req, res) => {
+    const hit = getUserBookFile(req.vkUserId, req.params.id);
+    if (!hit) return res.status(404).json({ error: 'Not found' });
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Disposition');
+    res.setHeader(
+      'Content-Disposition',
+      `attachment; filename*=UTF-8''${encodeURIComponent(hit.entry.name)}`,
+    );
+    return res.sendFile(hit.file);
+  });
+
+  app.delete('/api/reader/my-books/:id', myBooksLimit, (req, res) => {
+    const ok = deleteUserBook(req.vkUserId, req.params.id);
+    if (!ok) return res.status(404).json({ error: 'Not found' });
+    return res.json({ ok: true });
   });
 }

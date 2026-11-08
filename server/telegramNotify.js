@@ -28,6 +28,7 @@ export async function sendTelegramMessage({
   chatId,
   text,
   disableNotification = false,
+  replyMarkup,
   retries = 2,
 }) {
   const botToken = String(token ?? '').trim();
@@ -37,6 +38,7 @@ export async function sendTelegramMessage({
     chat_id: chatId,
     text: String(text).slice(0, 4090),
     disable_notification: disableNotification,
+    ...(replyMarkup ? { reply_markup: replyMarkup } : {}),
   };
 
   let lastError;
