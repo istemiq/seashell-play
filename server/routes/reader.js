@@ -133,6 +133,57 @@ function defineCacheFile(word, src, edition) {
   return path.join(CACHE_DIR, 'define', `${key}.json`);
 }
 
+/**
+ * Google Translate (неофициальный gtx-эндпоинт, тот же что у веб-клиента).
+ * Переводит словоформы сразу («spelled», «counsellors») и отдаёт
+ * основной перевод + альтернативы по частям речи (dt=bd).
+ * @returns {Promise<{main: string, alternatives: string[]}|null>}
+ */
+async function googleTranslate(word, src, dst) {
+  const tl = GOOGLE_TL[dst] ?? 'en';
+  const sl = GOOGLE_SL[src] ?? src ?? 'auto';
+  const url =
+    `https://translate.googleapis.com/translate_a/single?client=gtx` +
+    `&sl=${encodeURIComponent(sl)}&tl=${encodeURIComponent(tl)}&dt=t&dt=bd&q=${encodeURIComponent(word)}`;
+  try {
+    const r = await fetch(url, {
+      signal: AbortSignal.timeout(8000),
+      headers: { 'User-Agent': 'Seashell-Reader/1.0 (language-learning app)' },
+    });
+    if (!r.ok) return null;
+    const data = await r.json();
+    const main = (Array.isArray(data?.[0]) ? data[0] : [])
+      .map((seg) => String(seg?.[0] ?? ''))
+      .join('')
+      .trim();
+    const alternatives = [];
+    for (const block of Array.isArray(data?.[1]) ? data[1] : []) {
+      for (const tr of Array.isArray(block?.[1]) ? block[1] : []) {
+        const s = String(tr ?? '').trim();
+        if (s && s.toLowerCase() !== main.toLowerCase() && !alternatives.includes(s)) {
+          alternatives.push(s);
+        }
+        if (alternatives.length >= 6) break;
+      }
+      if (alternatives.length >= 6) break;
+    }
+    if (!main) return null;
+    return { main, alternatives };
+  } catch {
+    return null;
+  }
+}
+
+/** Наши коды UI-локалей → целевой язык Google Translate. */
+const GOOGLE_TL = {
+  ru: 'ru', en: 'en', de: 'de', es: 'es', fr: 'fr', it: 'it',
+  pt: 'pt', tr: 'tr', ja: 'ja', zh: 'zh-CN', ko: 'ko', nl: 'nl', pl: 'pl',
+  ar: 'ar', fa: 'fa', uk: 'uk',
+};
+
+/** Коды языка книги → sl (Google понимает и наши локали; иначе auto). */
+const GOOGLE_SL = { zh: 'zh-CN' };
+
 function kaikkiUrl(edition, word) {
   const c1 = word.slice(0, 1);
   const c2 = word.slice(0, 2);
@@ -339,17 +390,29 @@ export function registerReaderRoutes(app) {
       entries: found?.entries ?? [],
     };
 
-    // Локальный двуязычный словарь (en-ru и др.): прямой перевод,
-    // даже когда Викисловарь словоформу/статью не содержит.
+    // 1) Google Translate — основной источник перевода (понимает словоформы).
+    const gt = await googleTranslate(word, src || null, dst);
+    const translations = [];
+    if (gt) {
+      translations.push(gt.main, ...gt.alternatives);
+      payload.translationsSource = 'google';
+    }
+
+    // 2) Локальный двуязычный словарь (en-ru и др.) — дополняем.
     const dict = src ? loadBilingualDict(src, dst) : null;
     if (dict) {
       const hitDict = dictLookup(dict, found?.word ?? word) ||
         (found?.lemma ? dictLookup(dict, found.lemma) : null);
       if (hitDict) {
-        payload.translations = hitDict.translations;
         payload.dictPos = hitDict.pos;
+        for (const tr of hitDict.translations) {
+          if (tr && !translations.some((x) => x.toLowerCase() === tr.toLowerCase())) {
+            translations.push(tr);
+          }
+        }
       }
     }
+    if (translations.length) payload.translations = translations.slice(0, 8);
 
     try {
       fs.mkdirSync(path.dirname(cacheFile), { recursive: true });
