@@ -16,3 +16,4 @@ video-*
 *.iml
 local.properties
 vite.config.js.timestamp-*.mjs
+.env.production
