@@ -119,7 +119,7 @@ export function HomePage({ fetchedUser }) {
 
   return (
     <Panel className={isAcademic ? '' : 'ss-styled-home'}>
-      <PanelHeader>{t('nav.home')}</PanelHeader>
+      {isAcademic ? <PanelHeader>{t('nav.home')}</PanelHeader> : null}
 
       {isAcademic ? (
         <>

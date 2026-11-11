@@ -2,23 +2,28 @@ import { loadSettings, updateSettings } from './settings.js';
 import { refreshAppTheme } from './theme.js';
 
 export const UI_STYLE_ACADEMIC = 'academic';
+export const UI_STYLE_SAKURA = 'sakura';
 
 export const UI_STYLE_CODES = new Set([
   UI_STYLE_ACADEMIC,
+  UI_STYLE_SAKURA,
 ]);
 
 /** @type {{ code: string, labelKey: string, hintKey?: string }[]} */
 export const UI_STYLE_OPTIONS = [
   { code: UI_STYLE_ACADEMIC, labelKey: 'settings.uiStyleAcademic', hintKey: 'settings.uiStyleAcademicHint' },
+  { code: UI_STYLE_SAKURA, labelKey: 'settings.uiStyleSakura', hintKey: 'settings.uiStyleSakuraHint' },
 ];
 
 const FONT_SANS =
   "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif";
 const FONT_MONO = "'JetBrains Mono', 'Fira Code', Consolas, 'Courier New', Courier, monospace";
 
+export const UI_STYLE_DEFAULT = UI_STYLE_SAKURA;
+
 export function normalizeUiStyle(code) {
   const c = String(code ?? '').trim();
-  return UI_STYLE_CODES.has(c) ? c : UI_STYLE_ACADEMIC;
+  return UI_STYLE_CODES.has(c) ? c : UI_STYLE_DEFAULT;
 }
 
 export function uiStyleShellClass(code) {
@@ -69,5 +74,5 @@ export function setUiStylePreference(styleCode) {
 }
 
 export function getUiStyleLabelKey(code) {
-  return UI_STYLE_OPTIONS.find((o) => o.code === normalizeUiStyle(code))?.labelKey ?? 'settings.uiStyleAcademic';
+  return UI_STYLE_OPTIONS.find((o) => o.code === normalizeUiStyle(code))?.labelKey ?? 'settings.uiStyleSakura';
 }

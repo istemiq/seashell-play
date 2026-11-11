@@ -13,14 +13,12 @@ export function SeashellShimmerLoader() {
   const reduced = prefersReducedMotion();
 
   useEffect(() => {
-    if (reduced) return undefined;
-
     const id = window.setInterval(() => {
       setDots((d) => (d >= 3 ? 0 : d + 1));
     }, SHIMMER_CYCLE_MS);
 
     return () => window.clearInterval(id);
-  }, [reduced]);
+  }, []);
 
   return (
     <span

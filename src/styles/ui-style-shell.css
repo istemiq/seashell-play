@@ -56,6 +56,11 @@ html[data-seashell-ui-style='focus'] .seashell-shimmer,
   letter-spacing: 0.01em;
 }
 
+/* Focus — меньше декора на главной */
+html[data-seashell-ui-style='focus'] .seashell-crt .ss-hint--subtle,
+.seashell-crt.seashell-ui-style-focus .ss-hint--subtle {
+  opacity: 0.72;
+}
 
 html[data-seashell-ui-style='focus'] .seashell-crt .ss-tagline,
 .seashell-crt.seashell-ui-style-focus .ss-tagline {
@@ -95,4 +100,32 @@ html:not([data-seashell-ui-style='academic']):not([data-seashell-ui-style='']),
   --vkui--size_border_radius--compact: var(--ss-ui-radius-compact);
   --vkui--size_border_radius_paper--regular: var(--ss-ui-radius-regular);
   text-shadow: none;
+}
+
+/* ── Sakura: акварель и крона прямо на шелле (надёжнее слоёв-бэкдропа) ── */
+.seashell-crt.seashell-ui-style-sakura {
+  background:
+    url('/ui-backdrops/sakura-scene.svg?v=3') right top / auto 100% no-repeat,
+    radial-gradient(70% 45% at 70% 12%, rgba(255, 255, 255, 0.85), transparent 75%),
+    radial-gradient(55% 40% at 18% 48%, rgba(255, 255, 255, 0.8), transparent 72%),
+    radial-gradient(45% 30% at 50% 90%, rgba(255, 255, 255, 0.7), transparent 70%),
+    radial-gradient(100% 55% at 88% -8%, rgba(188, 217, 234, 0.4), transparent 60%),
+    radial-gradient(65% 40% at 2% 30%, rgba(207, 230, 242, 0.35), transparent 65%),
+    radial-gradient(55% 38% at 10% 80%, rgba(216, 234, 244, 0.3), transparent 62%),
+    radial-gradient(55% 38% at 92% 84%, rgba(246, 219, 228, 0.28), transparent 60%),
+    linear-gradient(180deg, #eef5f9 0%, #f7fafc 45%, #f2f7fa 100%);
+  background-attachment: local;
+}
+
+.seashell-crt.seashell-ui-style-sakura.seashell-theme-dark,
+html[data-seashell-ui-style='sakura'][data-seashell-theme='dark'] .seashell-crt {
+  background:
+    url('/ui-backdrops/sakura-scene-dark.svg?v=3') right top / auto 100% no-repeat,
+    radial-gradient(55% 40% at 72% 12%, rgba(120, 160, 190, 0.16), transparent 72%),
+    radial-gradient(125% 70% at 86% -10%, rgba(50, 90, 115, 0.5), transparent 62%),
+    radial-gradient(95% 55% at 4% 30%, rgba(30, 48, 64, 0.55), transparent 68%),
+    radial-gradient(75% 48% at 14% 80%, rgba(60, 44, 66, 0.32), transparent 66%),
+    radial-gradient(85% 50% at 90% 82%, rgba(44, 30, 50, 0.38), transparent 64%),
+    linear-gradient(180deg, #131c25 0%, #10161c 55%, #131a22 100%);
+  background-attachment: local;
 }

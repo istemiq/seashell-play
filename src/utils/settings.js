@@ -60,7 +60,7 @@ export const DEFAULT_SETTINGS = {
   ttsLocaleByLearn: {},
   fontScale: 'normal',
   /** Visual shell: academic | calm | paper | evening | ongo | focus */
-  uiStyle: 'academic',
+  uiStyle: 'sakura',
   /** CEFR-style dialogue/practice level: beginner | elementary | intermediate | upper | advanced */
   practiceLevel: 'intermediate',
 };

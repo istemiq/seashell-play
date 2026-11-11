@@ -27,7 +27,7 @@ function resetBodyScrollLock() {
 
 function nudgeScrollContainers() {
   for (const el of document.querySelectorAll('.ss-panel, .seashell-pinch-viewport, .vkuiPanel__in')) {
-    el.scrollTop = el.scrollTop;
+    el.scrollTop += 0;
   }
 }
 
@@ -67,6 +67,15 @@ function collectTouchRoots() {
   return out;
 }
 
+let touchLayerStuck = false;
+
+function restoreTouchLayer() {
+  touchLayerStuck = false;
+  for (const el of collectTouchRoots()) {
+    el.style.pointerEvents = '';
+  }
+}
+
 /** Telegram WebView (esp. Android) sometimes keeps an invisible layer that eats touches after lock. */
 function unstickTouchLayer() {
   if (typeof document === 'undefined') return;
@@ -74,14 +83,13 @@ function unstickTouchLayer() {
   for (const el of targets) {
     el.style.pointerEvents = 'none';
   }
-  const restore = () => {
-    for (const el of targets) {
-      el.style.pointerEvents = '';
-    }
-  };
+  touchLayerStuck = true;
   requestAnimationFrame(() => {
-    requestAnimationFrame(restore);
+    requestAnimationFrame(restoreTouchLayer);
   });
+  // Страховка: rAF в скрытой/замороженной странице может не выполниться,
+  // и pointer-events:none зависнет навсегда → приложение глухо к тапам.
+  window.setTimeout(restoreTouchLayer, 150);
 }
 
 function armTouchRecovery() {
@@ -116,6 +124,7 @@ function hookTelegramLifecycleEvents(maybeResume, suspendAppInteraction) {
 
 /** Drop stale pointer/touch state before WebView freezes (screen lock, app switch). */
 export function suspendAppInteraction() {
+  if (touchLayerStuck) restoreTouchLayer();
   blurFocusedInput();
   armTouchRecovery();
   void import('../ads/adsonar.js').then((m) => m.clearAdsonarSticky()).catch(() => {});
@@ -128,6 +137,7 @@ export function resumeAppInteraction() {
     resumeTelegramApp();
   }
 
+  if (touchLayerStuck) restoreTouchLayer();
   blurFocusedInput();
   resetBodyScrollLock();
   nudgeLayout();
@@ -142,7 +152,11 @@ function burstResume() {
   resumeAppInteraction();
   const delays = isAndroid() ? [150, 450, 1000, 2000, 3000] : [150, 450, 1000];
   for (const ms of delays) {
-    burstTimers.push(window.setTimeout(resumeAppInteraction, ms));
+    burstTimers.push(
+      window.setTimeout(() => {
+        if (document.visibilityState !== 'hidden') resumeAppInteraction();
+      }, ms),
+    );
   }
   armTouchRecovery();
 }

@@ -1,3 +1,169 @@
 /**
- * Tile navigation — currently unused (academic style only).
+ * Tile navigation for non-academic UI styles (sakura).
  */
+
+.seashell-crt .ss-style-tiles {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  padding: 0;
+}
+
+.seashell-crt .ss-style-tiles--cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.seashell-crt .ss-style-tile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 64px;
+  padding: 12px 8px 12px 12px;
+  box-sizing: border-box;
+  border: 1px solid var(--crt-cell-border, var(--crt-border));
+  border-radius: var(--ss-ui-radius-regular, 0);
+  background: var(--crt-bg-elev);
+  color: var(--crt-fg);
+  font-family: var(--ss-ui-font-family);
+  font-size: 0.92em;
+  text-align: left;
+  cursor: pointer;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+}
+
+.seashell-crt .ss-style-tile:hover {
+  background: var(--crt-cell-hover, var(--crt-bg-elev));
+  border-color: var(--crt-accent);
+}
+
+.seashell-crt .ss-style-tile:active {
+  transform: scale(0.98);
+}
+
+.seashell-crt .ss-style-tile__icon-slot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  color: var(--crt-accent);
+}
+
+.seashell-crt .ss-style-tile__icon {
+  display: inline-flex;
+}
+
+.seashell-crt .ss-style-tile__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.seashell-crt .ss-style-tile__label {
+  color: var(--crt-fg);
+  font-weight: 500;
+  font-size: 0.9em;
+  letter-spacing: 0.01em;
+  line-height: 1.28;
+  overflow-wrap: break-word;
+  hyphens: none;
+}
+
+.seashell-crt .ss-style-tile__sub {
+  color: var(--crt-fg-dim);
+  font-size: var(--ss-font-size-caption, 0.85em);
+  line-height: 1.3;
+}
+
+.seashell-crt .ss-style-tile__chev {
+  flex: none;
+  width: 10px;
+  color: var(--crt-fg-dim);
+  font-size: 1.2em;
+  line-height: 1;
+}
+
+.seashell-crt .ss-style-tile--featured {
+  border-color: var(--crt-cell-border, var(--crt-border));
+}
+
+/* ── Hero: имя + аватар композиционно, без boot-текста ── */
+.seashell-crt .ss-home-hero {
+  padding: 4px 0 14px;
+}
+
+.seashell-crt .ss-home-hero__card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border: none;
+  background: transparent;
+}
+
+.seashell-crt .ss-home-hero__avatar-wrap {
+  flex: none;
+}
+
+.seashell-crt .ss-home-hero__avatar-wrap .ss-avatar {
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.75);
+  box-shadow: 0 0 0 1px var(--crt-border);
+  object-fit: cover;
+}
+
+.seashell-crt .ss-home-hero__text {
+  min-width: 0;
+}
+
+.seashell-crt .ss-home-hero__title {
+  margin: 0;
+  font-size: 1.15em;
+  font-weight: 600;
+  color: var(--crt-fg);
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.6), 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.seashell-crt .ss-home-hero__sub {
+  margin-top: 3px;
+  font-size: var(--ss-font-size-caption, 0.85em);
+  color: var(--crt-fg-dim);
+  line-height: 1.3;
+  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.55);
+}
+
+html[data-seashell-theme='dark'] .seashell-crt .ss-home-hero__title,
+.seashell-crt.seashell-theme-dark .ss-home-hero__title {
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+html[data-seashell-theme='dark'] .seashell-crt .ss-home-hero__sub,
+.seashell-crt.seashell-theme-dark .ss-home-hero__sub {
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
+}
+
+/* ── Композиция главной: воздух сверху, растёт с высотой окна ── */
+.seashell-crt .ss-styled-home .ss-home-hero {
+  margin-top: clamp(8px, 7vh, 84px);
+  padding-bottom: 18px;
+}
+
+.seashell-crt .ss-styled-home .ss-style-tiles {
+  gap: 12px;
+}
+
+/* Герой чуть крупнее — визуальный якорь композиции */
+.seashell-crt .ss-home-hero__card {
+  padding: 16px 18px;
+}
+
+.seashell-crt .ss-home-hero__title {
+  font-size: 1.22em;
+}

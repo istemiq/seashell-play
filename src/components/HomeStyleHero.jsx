@@ -12,22 +12,19 @@ export function HomeStyleHero({ userDisplayName, avatarUrl, fallbackName }) {
   }
 
   const trimmed = typeof userDisplayName === 'string' ? userDisplayName.trim() : '';
-  const title = trimmed ? t('boot.userInit', { name: trimmed }) : t('boot.userWait');
+  const name = trimmed || String(fallbackName ?? '').trim();
 
   return (
     <div className={`ss-home-hero ss-home-hero--${uiStyle}`}>
       <div className="ss-home-hero__card">
-        {(avatarUrl || fallbackName) && (
+        {(avatarUrl || name) && (
           <div className="ss-home-hero__avatar-wrap">
-            <Avatar
-              src={avatarUrl}
-              fallbackLabel={fallbackName || trimmed || '?'}
-              alt={trimmed}
-            />
+            <Avatar src={avatarUrl} fallbackLabel={name || '?'} alt={name} size={56} />
           </div>
         )}
         <div className="ss-home-hero__text">
-          <h2 className="ss-home-hero__title">{title}</h2>
+          {name ? <h2 className="ss-home-hero__title">{name}</h2> : null}
+          <div className="ss-home-hero__sub">{t('home.tagline1')}</div>
         </div>
       </div>
     </div>
