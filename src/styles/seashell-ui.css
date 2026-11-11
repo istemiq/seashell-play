@@ -2025,3 +2025,23 @@ html[dir='rtl'] .seashell-crt .seashell-card-lang-shell__head .ss-modal-dismiss 
 .seashell-crt .ss-reader--immersive .ss-reader-bar__in {
   padding-bottom: 6px;
 }
+
+/* Мягкая золотая вспышка всего экрана при точном совпадении надиктованного */
+.seashell-crt .ss-speak-match-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  background:
+    radial-gradient(130% 100% at 50% 50%, rgba(240, 200, 110, 0.38), rgba(235, 185, 90, 0.16) 55%, transparent 85%);
+  opacity: 0;
+  animation: ss-speak-match-flash-screen 1.4s ease-out forwards;
+}
+@keyframes ss-speak-match-flash-screen {
+  0% { opacity: 0; }
+  20% { opacity: 0.7; }
+  100% { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .seashell-crt .ss-speak-match-flash { animation-duration: 0.5s; }
+}

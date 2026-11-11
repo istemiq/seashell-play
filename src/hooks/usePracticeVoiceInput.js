@@ -34,9 +34,9 @@ function canUseHoldVoice() {
 
 function pickRecorderMime() {
   if (typeof MediaRecorder === 'undefined') return '';
-  const candidates = isCapacitorNative()
-    ? ['audio/mp4', 'audio/webm;codecs=opus', 'audio/webm', 'audio/ogg;codecs=opus']
-    : ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
+  // Android WebView may report audio/mp4 as supported but emit empty chunks —
+  // opus/webm first everywhere keeps the blob non-empty.
+  const candidates = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'];
   for (const mime of candidates) {
     if (MediaRecorder.isTypeSupported(mime)) return mime;
   }
@@ -65,6 +65,8 @@ export function usePracticeVoiceInput({
   const suspendedAtRef = useRef(0);
   const pointerActiveRef = useRef(false);
   const recordingRef = useRef(false);
+  const pendingResultRef = useRef(false);
+  const pendingResultTimerRef = useRef(null);
   const silenceWatchStopRef = useRef(null);
   const stopMediaRecordingRef = useRef(() => {});
 
@@ -91,6 +93,8 @@ export function usePracticeVoiceInput({
   const disposeRecognizer = useCallback(() => {
     const rec = recRef.current;
     recRef.current = null;
+    pendingResultRef.current = false;
+    clearTimeout(pendingResultTimerRef.current);
     if (!rec) return;
     try {
       rec.abort();
@@ -130,7 +134,10 @@ export function usePracticeVoiceInput({
 
   const uploadRecording = useCallback(
     async (blob) => {
-      if (!blob?.size) return;
+      if (!blob?.size) {
+        setVoiceError(t('errors.speechFailed'));
+        return;
+      }
       setTranscribing(true);
       setVoiceError(null);
       try {
@@ -286,6 +293,8 @@ export function usePracticeVoiceInput({
     rec.maxAlternatives = 1;
 
     rec.onresult = (ev) => {
+      pendingResultRef.current = false;
+      clearTimeout(pendingResultTimerRef.current);
       const text = ev.results?.[0]?.[0]?.transcript?.trim();
       if (text) onTranscript(text);
     };
@@ -300,6 +309,10 @@ export function usePracticeVoiceInput({
 
     rec.onend = () => {
       setListening(false);
+      if (pendingResultRef.current) {
+        pendingResultRef.current = false;
+        setVoiceError(t('errors.speechFailed'));
+      }
     };
 
     recRef.current = rec;
@@ -310,6 +323,34 @@ export function usePracticeVoiceInput({
     disposeRecognizer();
   }, [speechLang, disposeRecognizer]);
 
+  // Tap-again finish: rec.stop() lets the engine deliver the final transcript,
+  // unlike abort() which discards everything captured so far.
+  const finishRecognition = useCallback(() => {
+    const rec = recRef.current;
+    if (!rec) {
+      setListening(false);
+      return;
+    }
+    pendingResultRef.current = true;
+    clearTimeout(pendingResultTimerRef.current);
+    pendingResultTimerRef.current = setTimeout(() => {
+      if (!pendingResultRef.current) return;
+      pendingResultRef.current = false;
+      disposeRecognizer();
+      setListening(false);
+      setVoiceError(t('errors.speechFailed'));
+    }, 5000);
+    try {
+      rec.stop();
+    } catch {
+      pendingResultRef.current = false;
+      clearTimeout(pendingResultTimerRef.current);
+      disposeRecognizer();
+      setListening(false);
+      setVoiceError(t('errors.speechFailed'));
+    }
+  }, [disposeRecognizer, t]);
+
   const toggleVoice = useCallback(() => {
     if (mode === 'toggle-record') {
       void toggleRecordVoice();
@@ -317,7 +358,7 @@ export function usePracticeVoiceInput({
     }
     if (mode !== 'tap') return;
     if (listening) {
-      stopVoice();
+      finishRecognition();
       return;
     }
     if (blockStart || transcribing) return;
@@ -326,7 +367,7 @@ export function usePracticeVoiceInput({
     if (!rec) return;
     setListening(true);
     safeStartRecognizer(rec);
-  }, [blockStart, ensureRecognizer, listening, mode, safeStartRecognizer, stopVoice, toggleRecordVoice, transcribing]);
+  }, [blockStart, ensureRecognizer, finishRecognition, listening, mode, safeStartRecognizer, toggleRecordVoice, transcribing]);
 
   const onVoicePointerDown = useCallback(
     (ev) => {
@@ -414,4 +455,4 @@ export function usePracticeVoiceInput({
     onVoiceTouchEnd,
     stopVoice,
   };
-};
+}

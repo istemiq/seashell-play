@@ -111,6 +111,7 @@ export function SpeakAloudButton({
 
   return (
     <div className="seashell-speak-aloud">
+      {matchFlash ? <div className="ss-speak-match-flash" aria-hidden="true" /> : null}
       <Button
         size="l"
         flat
@@ -155,6 +156,11 @@ export function SpeakAloudButton({
           </Text>
         </div>
       </div>
+      {voiceError ? (
+        <Footnote className="ss-mt-6" style={{ color: 'var(--ss-color-text-negative, #e64646)' }} dir="auto">
+          {voiceError}
+        </Footnote>
+      ) : null}
       {!voiceAvailable && !disabled ? (
         <Footnote className="ss-mt-6 ss-opacity-soft" dir="auto">
           {t('errors.voiceBrowserUnavailable')}
