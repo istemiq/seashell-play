@@ -195,15 +195,8 @@ async function myMemoryTranslate(text, src, dst) {
     const data = await r.json();
     const main = String(data?.responseData?.translatedText ?? '').trim();
     if (!main || /MYMEMORY WARNING|QUERY LENGTH LIMIT/i.test(main)) return null;
-    const alternatives = [];
-    for (const m of Array.isArray(data?.matches) ? data.matches : []) {
-      const s = String(m?.translation ?? '').trim();
-      if (s && s.toLowerCase() !== main.toLowerCase() && !alternatives.includes(s)) {
-        alternatives.push(s);
-      }
-      if (alternatives.length >= 4) break;
-    }
-    return { main, alternatives };
+    // Альтернативы MyMemory — шум из translation memory (apple → «синтенсія»), не отдаём.
+    return { main, alternatives: [] };
   } catch {
     return null;
   }
