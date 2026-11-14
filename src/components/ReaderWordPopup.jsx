@@ -63,17 +63,18 @@ export function ReaderWordPopup({ anchorRect, word, loading, data, error, onAdd,
           {data?.form ? <div className="ss-word-popup__form">{data.form}</div> : null}
           {data?.translations?.length ? (
             <div className="ss-word-popup__trans">{data.translations.join('; ')}</div>
-          ) : null}
-          {entries.slice(0, 3).map((e, i) => (
-            <div key={i} className="ss-word-popup__entry">
-              {entries.length > 1 ? <div className="ss-word-popup__lang">{e.lang}</div> : null}
-              <ol className="ss-word-popup__glosses">
-                {e.glosses.slice(0, 5).map((g, j) => (
-                  <li key={j}>{g}</li>
-                ))}
-              </ol>
-            </div>
-          ))}
+          ) : (
+            entries.slice(0, 3).map((e, i) => (
+              <div key={i} className="ss-word-popup__entry">
+                {entries.length > 1 ? <div className="ss-word-popup__lang">{e.lang}</div> : null}
+                <ol className="ss-word-popup__glosses">
+                  {e.glosses.slice(0, 5).map((g, j) => (
+                    <li key={j}>{g}</li>
+                  ))}
+                </ol>
+              </div>
+            ))
+          )}
           <Footnote className="ss-word-popup__src">{t('reader.dictSource')}</Footnote>
         </div>
       ) : (

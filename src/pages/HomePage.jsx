@@ -172,7 +172,7 @@ export function HomePage({ fetchedUser }) {
             avatarUrl={avatarUrl}
             fallbackName={fetchedUser?.first_name}
           />
-          <HomeQuoteScreen />
+          <HomeQuoteScreen userName={fetchedUser?.username || userDisplayName} />
           <StyleNavTiles items={tileItems} className="ss-home-tiles" columns={2} />
         </>
       )}

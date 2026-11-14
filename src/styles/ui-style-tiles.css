@@ -217,6 +217,15 @@ html[data-seashell-theme='dark'] .seashell-crt .ss-home-quote__translation,
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
 }
 
+.seashell-crt .ss-home-quote__sig {
+  margin-top: 7px;
+  font-size: 0.68em;
+  letter-spacing: 0.05em;
+  color: var(--crt-fg-dim);
+  opacity: 0.7;
+  font-family: var(--ss-ui-font-mono, monospace);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .seashell-crt .ss-home-quote__body {
     animation: none;

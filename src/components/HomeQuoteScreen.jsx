@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { fetchDictionaryQuotes } from '../api/dictionaryApi.js';
+import { useI18n } from '../i18n/I18nContext.jsx';
 
 const QUOTE_CYCLE_MS = 7000;
 
@@ -9,11 +10,23 @@ function prefersReducedMotion() {
   return window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
 }
 
+/** "Имя Фамилия" / "@nick" → "имя.фамилия" для подписи источника цитат. */
+function quoteSourceSlug(userName) {
+  const slug = String(userName ?? '')
+    .trim()
+    .toLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, '.')
+    .replace(/^\.+|\.+$/g, '');
+  return slug || 'seashell';
+}
+
 /**
- * «Экранчик» на главной (не-Academic стили): высвечивает позитивные цитаты
- * из сгенерированных примеров словаря — включает в настрой обучения.
+ * «Экранчик» под именем на главной (не-Academic стили): высвечивает позитивные
+ * цитаты из сгенерированных примеров словаря. Блок занимает своё место сразу
+ * (плейсхолдер-цитата), чтобы плитки не прыгали при загрузке.
  */
-export function HomeQuoteScreen({ className = '' }) {
+export function HomeQuoteScreen({ userName, className = '' }) {
+  const { t } = useI18n();
   const [quotes, setQuotes] = useState(null);
   const [quoteIdx, setQuoteIdx] = useState(0);
   const timerRef = useRef(null);
@@ -23,9 +36,9 @@ export function HomeQuoteScreen({ className = '' }) {
     void (async () => {
       try {
         const list = await fetchDictionaryQuotes();
-        if (!cancelled) setQuotes(Array.isArray(list) ? list : []);
+        if (!cancelled && Array.isArray(list) && list.length) setQuotes(list);
       } catch {
-        if (!cancelled) setQuotes([]);
+        /* остаёмся на плейсхолдере */
       }
     })();
     return () => {
@@ -46,13 +59,13 @@ export function HomeQuoteScreen({ className = '' }) {
     };
   }, [count]);
 
-  if (!count) return null;
-
-  const quote = quotes[quoteIdx % count];
+  const quote = count
+    ? quotes[quoteIdx % count]
+    : { text: t('home.quotePlaceholder'), translation: t('home.quotePlaceholderTr') };
 
   return (
     <div className={`ss-home-quote ${className}`.trim()} aria-live="polite">
-      <div key={quoteIdx} className="ss-home-quote__body">
+      <div key={count ? quoteIdx : -1} className="ss-home-quote__body">
         <div className="ss-home-quote__text" dir="auto">
           {quote.text}
         </div>
@@ -62,6 +75,7 @@ export function HomeQuoteScreen({ className = '' }) {
           </div>
         ) : null}
       </div>
+      <div className="ss-home-quote__sig">{quoteSourceSlug(userName)}.dictionary.examples</div>
     </div>
   );
 }

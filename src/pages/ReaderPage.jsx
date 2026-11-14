@@ -21,6 +21,8 @@ import { useI18n } from '../i18n/I18nContext.jsx';
 import * as dictionaryApi from '../api/dictionaryApi.js';
 import { fetchCatalogBook, defineWord, listMyBooks, fetchMyBook, deleteMyBook } from '../api/readerApi.js';
 import { resolveContentLocaleForApi } from '../utils/contentLocale.js';
+import { loadSettings, updateSettings } from '../utils/settings.js';
+import { UI_LOCALES } from '../i18n/config.js';
 import { setCustomBackHandler } from '../utils/backNavigation.js';
 import { listBooks, getBook, saveBook, deleteBook } from '../utils/bookStorage.js';
 import { getWebApp } from '../platform/telegramApp.js';
@@ -149,6 +151,10 @@ export function ReaderPage() {
   const [lookupAdding, setLookupAdding] = useState(false);
   const [myBooks, setMyBooks] = useState([]);
   const [immersive, setImmersive] = useState(false);
+  const [translateLang, setTranslateLang] = useState(
+    () => loadSettings().readerTranslateLang || '',
+  );
+  const [langMenuOpen, setLangMenuOpen] = useState(false);
   // В Telegram Desktop (tdesktop/macos) file input в Mini App не открывает пикер —
   // прячем кнопку, загрузка там идёт через отправку файла боту.
   const hideFileInput = ['tdesktop', 'macos'].includes(getWebApp()?.platform ?? '');
@@ -370,13 +376,17 @@ export function ReaderPage() {
 
   const bookSrcRef = useRef(null);
   bookSrcRef.current = book?.src ?? null;
+  // dst — язык перевода: выбранный пользователем или язык словарных карточек
+  const defineDstRef = useRef(resolveContentLocaleForApi());
+  defineDstRef.current = translateLang || resolveContentLocaleForApi();
+  const translateDst = defineDstRef.current;
 
   const openLookup = (hit) => {
     if (!hit?.word) return;
     const w = hit.word;
     setLookup({ word: w, rect: hit.rect, loading: true, data: null, error: null, addedWord: null });
     // dst — язык словарных карточек (не UI-локаль): попап и словарь говорят на одном языке
-    defineWord(w, { src: bookSrcRef.current, dst: resolveContentLocaleForApi() })
+    defineWord(w, { src: bookSrcRef.current, dst: defineDstRef.current })
       .then((data) =>
         setLookup((cur) => (cur?.word === w ? { ...cur, loading: false, data } : cur)),
       )
@@ -526,6 +536,18 @@ export function ReaderPage() {
     }
   };
 
+  // Меню языка перевода закрывается по тапу вне его
+  useEffect(() => {
+    if (!langMenuOpen) return undefined;
+    const onDown = (e) => {
+      if (!e.target.closest?.('.ss-reader__lang-menu, .ss-reader__lang-btn')) {
+        setLangMenuOpen(false);
+      }
+    };
+    document.addEventListener('pointerdown', onDown, true);
+    return () => document.removeEventListener('pointerdown', onDown, true);
+  }, [langMenuOpen]);
+
   const tooLong = (selectedText?.length ?? 0) > MAX_SELECTION_LEN;
   const barActive = Boolean(selectedText || adding || addedText);
 
@@ -540,6 +562,34 @@ export function ReaderPage() {
       {book ? (
         <>
           <div className={`ss-reader${immersive ? ' ss-reader--immersive' : ''}`}>
+            <button
+              type="button"
+              className="ss-reader__lang-btn"
+              onClick={() => setLangMenuOpen((v) => !v)}
+              aria-label={t('reader.translateTo')}
+              title={t('reader.translateTo')}
+            >
+              {translateDst.toUpperCase()}
+            </button>
+            {langMenuOpen ? (
+              <div className="ss-reader__lang-menu" role="menu">
+                {UI_LOCALES.map((l) => (
+                  <button
+                    key={l.code}
+                    type="button"
+                    role="menuitem"
+                    className={`ss-reader__lang-item${translateDst === l.code ? ' is-active' : ''}`}
+                    onClick={() => {
+                      setTranslateLang(l.code);
+                      updateSettings({ readerTranslateLang: l.code });
+                      setLangMenuOpen(false);
+                    }}
+                  >
+                    {l.nativeName}
+                  </button>
+                ))}
+              </div>
+            ) : null}
             <button
               type="button"
               className="ss-reader__fs"
