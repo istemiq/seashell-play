@@ -241,8 +241,10 @@ export function registerDictionaryRoutes(app) {
       const seen = new Set();
       for (const row of rows) {
         const text = String(row.text ?? '').trim();
-        if (!text || text.length > 240) continue;
+        // Короткие цитаты: длинные не влезают в шапку и обрезаются клэмпом.
+        if (!text || text.length > 110) continue;
         const translation = stripRegisterTail(String(row.translation ?? '').trim());
+        if (translation.length > 120) continue;
         if (isNegativeQuote(text) || isNegativeQuote(translation)) continue;
         const key = text.toLowerCase();
         if (seen.has(key)) continue;

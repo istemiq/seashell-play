@@ -96,7 +96,8 @@ function readLocaleFile(locale, name, targetLang = 'en') {
  */
 const EXAMPLES_TONE_NOTE =
   '\n\n**Tone of examples:** prefer calm, everyday, mildly positive or neutral contexts ' +
-  '(home, nature, food, music, work, friends, small everyday wins). Avoid sad, scary, ' +
+  '(home, nature, food, music, work, friends, small everyday wins). Keep each example ' +
+  'short — a single brief sentence, up to about 10–12 words. Avoid sad, scary, ' +
   'violent or otherwise gloomy situations unless the headword itself requires them.\n';
 
 /** User prompt for dictionary generation (word-examples). */
