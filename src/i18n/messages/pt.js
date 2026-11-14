@@ -1012,6 +1012,7 @@ export default {
   'reader.dictSource': 'Fonte: Wikcionário (CC BY-SA)',
   'reader.srcGoogle': 'Fonte: Google Translate',
   'reader.srcMyMemory': 'Fonte: MyMemory',
+  'reader.srcDict': 'Fonte: FreeDict',
   'reader.addedToDict': 'No dicionário',
   'reader.fullscreen': 'Tela cheia',
 };

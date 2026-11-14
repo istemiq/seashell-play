@@ -1028,6 +1028,7 @@ export default {
   'reader.dictSource': 'Kaynak: Vikisözlük (CC BY-SA)',
   'reader.srcGoogle': 'Kaynak: Google Translate',
   'reader.srcMyMemory': 'Kaynak: MyMemory',
+  'reader.srcDict': 'Kaynak: FreeDict',
   'reader.addedToDict': 'Sözlükte',
   'reader.fullscreen': 'Tam ekran',
 };

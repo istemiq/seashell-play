@@ -1011,6 +1011,7 @@ export default {
   'reader.dictSource': 'Fuente: Wikcionario (CC BY-SA)',
   'reader.srcGoogle': 'Fuente: Google Translate',
   'reader.srcMyMemory': 'Fuente: MyMemory',
+  'reader.srcDict': 'Fuente: FreeDict',
   'reader.addedToDict': 'En el diccionario',
   'reader.fullscreen': 'Pantalla completa',
 };

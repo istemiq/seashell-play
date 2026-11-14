@@ -1011,6 +1011,7 @@ export default {
   'reader.dictSource': 'المصدر: ويكاموس (CC BY-SA)',
   'reader.srcGoogle': 'المصدر: ترجمة Google',
   'reader.srcMyMemory': 'المصدر: MyMemory',
+  'reader.srcDict': 'المصدر: FreeDict',
   'reader.addedToDict': 'في القاموس',
   'reader.fullscreen': 'ملء الشاشة',
 };

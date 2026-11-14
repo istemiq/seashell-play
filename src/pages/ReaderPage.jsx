@@ -417,8 +417,9 @@ export function ReaderPage() {
     // dst — язык словарных карточек (не UI-локаль): попап и словарь говорят на одном языке
     defineWord(w, { src: bookSrcRef.current, dst: defineDstRef.current })
       .then(async (data) => {
-        // Если серверу не достать перевод (Google банит DC-адреса) — спрашиваем из браузера.
-        if (!data?.translations?.length) {
+        // Google банит DC-адреса сервера — пробуем напрямую из браузера:
+        // и когда перевода нет совсем, и когда сервер дал шумный MyMemory.
+        if (!data?.translations?.length || data.translationsSource === 'mymemory') {
           const tr = await translateClientSide(w, {
             src: bookSrcRef.current,
             dst: defineDstRef.current,

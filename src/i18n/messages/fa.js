@@ -1011,6 +1011,7 @@ export default {
   'reader.dictSource': 'منبع: ویکی‌واژه (CC BY-SA)',
   'reader.srcGoogle': 'منبع: مترجم گوگل',
   'reader.srcMyMemory': 'منبع: MyMemory',
+  'reader.srcDict': 'منبع: FreeDict',
   'reader.addedToDict': 'در فرهنگ‌نامه',
   'reader.fullscreen': 'تمام‌صفحه',
 };

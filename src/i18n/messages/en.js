@@ -1201,6 +1201,7 @@ export default {
   'reader.dictSource': 'Source: Wiktionary (CC BY-SA)',
   'reader.srcGoogle': 'Source: Google Translate',
   'reader.srcMyMemory': 'Source: MyMemory',
+  'reader.srcDict': 'Source: FreeDict',
   'reader.addedToDict': 'In dictionary',
   'reader.fullscreen': 'Fullscreen',
 };

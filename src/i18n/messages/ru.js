@@ -1061,6 +1061,7 @@ export default {
   'reader.dictSource': 'Источник: Викисловарь (CC BY-SA)',
   'reader.srcGoogle': 'Источник: Google Translate',
   'reader.srcMyMemory': 'Источник: MyMemory',
+  'reader.srcDict': 'Источник: FreeDict',
   'reader.addedToDict': 'В словаре',
   'reader.fullscreen': 'Полный экран',
 };

@@ -438,22 +438,17 @@ export function registerReaderRoutes(app) {
       }
     }
 
-    // 1) Google Translate → 2) MyMemory (фолбэк, если Google банит IP сервера).
-    const gtGoogle = await googleTranslate(word, src || null, dst);
-    const gt = gtGoogle || (await myMemoryTranslate(word, src || null, dst));
     const translations = [];
-    if (gt) {
-      translations.push(gt.main, ...gt.alternatives);
-      payload.translationsSource = gtGoogle ? 'google' : 'mymemory';
-    }
+    let primarySource = null;
 
-    // 3) Локальный двуязычный словарь (en-ru и др.) — дополняем, только для слов.
+    // 1) Локальный двуязычный словарь (en-ru и др.) — точный для словарных слов.
     const dict = src && !isPhrase ? loadBilingualDict(src, dst) : null;
     if (dict) {
       const hitDict = dictLookup(dict, payload.word) ||
         (payload.lemma ? dictLookup(dict, payload.lemma) : null);
       if (hitDict) {
         payload.dictPos = hitDict.pos;
+        primarySource = 'dict';
         for (const tr of hitDict.translations) {
           if (tr && !translations.some((x) => x.toLowerCase() === tr.toLowerCase())) {
             translations.push(tr);
@@ -461,7 +456,22 @@ export function registerReaderRoutes(app) {
         }
       }
     }
-    if (translations.length) payload.translations = translations.slice(0, 8);
+
+    // 2) Google Translate → 3) MyMemory (последний шанс; на отдельных словах шумный).
+    const gtGoogle = await googleTranslate(word, src || null, dst);
+    const gt = gtGoogle || (await myMemoryTranslate(word, src || null, dst));
+    if (gt) {
+      if (!primarySource) primarySource = gtGoogle ? 'google' : 'mymemory';
+      for (const tr of [gt.main, ...gt.alternatives]) {
+        if (tr && !translations.some((x) => x.toLowerCase() === tr.toLowerCase())) {
+          translations.push(tr);
+        }
+      }
+    }
+    if (translations.length) {
+      payload.translations = translations.slice(0, 8);
+      payload.translationsSource = primarySource;
+    }
 
     return res.json(payload);
   });

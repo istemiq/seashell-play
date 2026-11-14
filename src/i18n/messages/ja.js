@@ -1011,6 +1011,7 @@ export default {
   'reader.dictSource': '出典：ウィクショナリー (CC BY-SA)',
   'reader.srcGoogle': '出典: Google翻訳',
   'reader.srcMyMemory': '出典: MyMemory',
+  'reader.srcDict': '出典: FreeDict',
   'reader.addedToDict': '辞書に追加済み',
   'reader.fullscreen': '全画面',
 };

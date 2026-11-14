@@ -1011,6 +1011,7 @@ export default {
   'reader.dictSource': '출처: 위키낱말사전 (CC BY-SA)',
   'reader.srcGoogle': '출처: Google 번역',
   'reader.srcMyMemory': '출처: MyMemory',
+  'reader.srcDict': '출처: FreeDict',
   'reader.addedToDict': '사전에 있음',
   'reader.fullscreen': '전체 화면',
 };

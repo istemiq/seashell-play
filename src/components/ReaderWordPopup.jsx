@@ -80,7 +80,9 @@ export function ReaderWordPopup({ anchorRect, word, loading, data, error, onAdd,
               data?.translations?.length
                 ? data.translationsSource === 'mymemory'
                   ? 'reader.srcMyMemory'
-                  : 'reader.srcGoogle'
+                  : data.translationsSource === 'dict'
+                    ? 'reader.srcDict'
+                    : 'reader.srcGoogle'
                 : 'reader.dictSource',
             )}
           </Footnote>
