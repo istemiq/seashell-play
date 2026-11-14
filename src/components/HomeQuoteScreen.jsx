@@ -11,7 +11,7 @@ function prefersReducedMotion() {
 }
 
 /** "Имя Фамилия" / "@nick" → "имя.фамилия" для подписи источника цитат. */
-function quoteSourceSlug(userName) {
+export function quoteSourceSlug(userName) {
   const slug = String(userName ?? '')
     .trim()
     .toLowerCase()
@@ -25,7 +25,7 @@ function quoteSourceSlug(userName) {
  * цитаты из сгенерированных примеров словаря. Блок занимает своё место сразу
  * (плейсхолдер-цитата), чтобы плитки не прыгали при загрузке.
  */
-export function HomeQuoteScreen({ userName, className = '' }) {
+export function HomeQuoteScreen({ className = '' }) {
   const { t } = useI18n();
   const [quotes, setQuotes] = useState(null);
   const [quoteIdx, setQuoteIdx] = useState(0);
@@ -75,7 +75,6 @@ export function HomeQuoteScreen({ userName, className = '' }) {
           </div>
         ) : null}
       </div>
-      <div className="ss-home-quote__sig">{quoteSourceSlug(userName)}.dictionary.examples</div>
     </div>
   );
 }

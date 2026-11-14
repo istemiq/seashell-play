@@ -2,8 +2,9 @@ import { Avatar } from './Ui.jsx';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { useUiStyle } from '../hooks/useUiStyle.js';
 import { UI_STYLE_ACADEMIC } from '../utils/uiStyle.js';
+import { quoteSourceSlug } from './HomeQuoteScreen.jsx';
 
-export function HomeStyleHero({ userDisplayName, avatarUrl, fallbackName }) {
+export function HomeStyleHero({ userDisplayName, avatarUrl, fallbackName, userName }) {
   const { t } = useI18n();
   const uiStyle = useUiStyle();
 
@@ -27,6 +28,7 @@ export function HomeStyleHero({ userDisplayName, avatarUrl, fallbackName }) {
           <div className="ss-home-hero__sub">{t('home.tagline1')}</div>
         </div>
       </div>
+      <div className="ss-home-hero__sig">{quoteSourceSlug(userName || name)}.dictionary.examples</div>
     </div>
   );
 }
