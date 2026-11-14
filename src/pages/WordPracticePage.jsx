@@ -12,6 +12,7 @@ import {
   Separator,
   Spinner,
   Snackbar,
+  Button,
   Cell,
 } from '../components/Ui.jsx';
 
@@ -273,6 +274,16 @@ export function WordPracticePage() {
     prefetchStudyTts(last.reply, learnLocale, { ttsText: last.replyTts });
   }, [turns, loading, learnLocale, studyTtsSupported]);
 
+  // Новый ход → доскроллить чат до последнего ответа (не трогаем при чтении истории).
+  const lastTurnCountRef = useRef(0);
+  useEffect(() => {
+    const prev = lastTurnCountRef.current;
+    lastTurnCountRef.current = turns.length;
+    if (!turns.length || turns.length === prev) return;
+    const panel = document.querySelector('.ss-panel');
+    panel?.scrollTo?.({ top: panel.scrollHeight, behavior: 'smooth' });
+  }, [turns.length]);
+
   const startWordDialog = useCallback(() => {
     if (!Number.isFinite(wordId) || loading || booting) return;
     startDialog();
@@ -388,6 +399,7 @@ export function WordPracticePage() {
                   <StreamingPracticeReply
                     text={turn.reply}
                     streamId={`word-${wordId}-${sessionId ?? 'new'}-${i}-${turn.reply}`}
+                    enabled={i === turns.length - 1}
                   />
                   {studyTtsSupported ? (
                   <ListenTtsButton
@@ -427,7 +439,9 @@ export function WordPracticePage() {
               />
             </FormItem>
             <FormItem>
-              <Cell
+              <Button
+                stretched
+                mode="primary"
                 disabled={!input.trim() || loading || booting || turns.length === 0 || voiceBusy}
                 onClick={() => {
                   if (!input.trim() || loading || booting || turns.length === 0 || voiceBusy) return;
@@ -435,7 +449,7 @@ export function WordPracticePage() {
                 }}
               >
                 {tr('practice.reply')}
-              </Cell>
+              </Button>
               {studySttSupported ? (
               <PracticeVoiceCell
                 tr={tr}

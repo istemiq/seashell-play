@@ -61,7 +61,7 @@ export function focusMobileInput(el) {
 
   const scrollField = () => {
     try {
-      el.scrollIntoView({ block: 'center', inline: 'nearest', behavior: 'auto' });
+      el.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'auto' });
     } catch {
       try {
         el.scrollIntoView(false);

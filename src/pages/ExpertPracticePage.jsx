@@ -419,6 +419,16 @@ export function ExpertPracticePage() {
     prefetchStudyTts(last.reply, learnLocale, { ttsText: last.replyTts });
   }, [turns, loading, learnLocale, studyTtsSupported]);
 
+  // Новый ход → доскроллить чат до последнего ответа (не трогаем при чтении истории).
+  const lastTurnCountRef = useRef(0);
+  useEffect(() => {
+    const prev = lastTurnCountRef.current;
+    lastTurnCountRef.current = turns.length;
+    if (!turns.length || turns.length === prev) return;
+    const panel = document.querySelector('.ss-panel');
+    panel?.scrollTo?.({ top: panel.scrollHeight, behavior: 'smooth' });
+  }, [turns.length]);
+
   const startExpertDialog = useCallback(() => {
     if (!expertId || loading) return;
     startDialog();
@@ -913,6 +923,7 @@ export function ExpertPracticePage() {
                 <StreamingPracticeReply
                   text={turn.reply}
                   streamId={`expert-${expertId}-${sessionId ?? 'new'}-${i}-${turn.reply}`}
+                  enabled={i === turns.length - 1}
                   selectedWord={replyBlock.selectedWord}
                   loadingWord={replyBlock.loading ? replyBlock.loadingWord : null}
                   addedWord={replyBlock.addedWord}
@@ -957,7 +968,9 @@ export function ExpertPracticePage() {
               />
             </FormItem>
             <FormItem>
-              <Cell
+              <Button
+                stretched
+                mode="primary"
                 disabled={!input.trim() || loading || turns.length === 0 || voiceBusy}
                 onClick={() => {
                   if (!input.trim() || loading || turns.length === 0 || voiceBusy) return;
@@ -965,7 +978,7 @@ export function ExpertPracticePage() {
                 }}
               >
                 {tr('practice.reply')}
-              </Cell>
+              </Button>
               {studySttSupported ? (
               <PracticeVoiceCell
                 tr={tr}

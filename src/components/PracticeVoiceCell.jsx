@@ -1,4 +1,4 @@
-import { Cell } from './Ui.jsx';
+import { Button } from './Ui.jsx';
 import {
   practiceVoiceCellDisabled,
   practiceVoiceCellLabel,
@@ -33,7 +33,9 @@ export function PracticeVoiceCell({
   });
 
   return (
-    <Cell
+    <Button
+      mode="secondary"
+      stretched
       className="ss-practice-voice-cell"
       disabled={disabled}
       onClick={usesTap ? toggleVoice : undefined}
@@ -46,6 +48,6 @@ export function PracticeVoiceCell({
       style={usesHold ? { touchAction: 'none', userSelect: 'none' } : undefined}
     >
       {practiceVoiceCellLabel({ tr, tb, transcribing, listening })}
-    </Cell>
+    </Button>
   );
 }

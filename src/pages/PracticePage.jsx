@@ -11,6 +11,7 @@ import {
   FormItem,
   Spinner,
   Snackbar,
+  Button,
   Cell,
 } from '../components/Ui.jsx';
 
@@ -271,6 +272,16 @@ export function PracticePage() {
     prefetchStudyTts(last.reply, learnLocale, { ttsText: last.replyTts });
   }, [turns, loading, learnLocale, studyTtsSupported]);
 
+  // Новый ход → доскроллить чат до последнего ответа (не трогаем при чтении истории).
+  const lastTurnCountRef = useRef(0);
+  useEffect(() => {
+    const prev = lastTurnCountRef.current;
+    lastTurnCountRef.current = turns.length;
+    if (!turns.length || turns.length === prev) return;
+    const panel = document.querySelector('.ss-panel');
+    panel?.scrollTo?.({ top: panel.scrollHeight, behavior: 'smooth' });
+  }, [turns.length]);
+
   const startNewDialog = useCallback(() => {
     stopVoice();
     void discardEmptyPracticeSession(sessionId, turns);
@@ -488,10 +499,12 @@ export function PracticePage() {
           )}
 
           {showDialogUi && (
-          <Group className="ss-practice-chat" header={<GroupHeader mode="secondary">{tr('practice.dialog')}</GroupHeader>}>
+          <Group className="ss-practice-chat" header={<GroupHeader mode="secondary">{tr('practice.dialog')}</GroupHeader>}>
+
             {turns.length === 0 && (
               <Box className="seashell-inline-action-row">
-                <Text style={{ flex: 1 }}>{dictMessageForLearn(tr, 'practice.empty', learnLocale)}</Text>
+                <Text style={{ flex: 1 }}>{dictMessageForLearn(tr, 'practice.empty', learnLocale)}</Text>
+
               </Box>
             )}
             {turns.map((turn, i) => {
@@ -549,6 +562,7 @@ export function PracticePage() {
                 <StreamingPracticeReply
                   text={turn.reply}
                   streamId={`free-${sessionId ?? 'new'}-${i}-${turn.reply}`}
+                  enabled={i === turns.length - 1}
                   selectedWord={replyBlock.selectedWord}
                   loadingWord={replyBlock.loading ? replyBlock.loadingWord : null}
                   addedWord={replyBlock.addedWord}
@@ -592,14 +606,17 @@ export function PracticePage() {
               />
             </FormItem>
             <FormItem>
-              <Cell
+              <Button
+                stretched
+                mode="primary"
                 disabled={!input.trim() || loading || voiceBusy || !showDialogUi}
-                i18nKey="practice.reply"
                 onClick={() => {
                   if (!input.trim() || loading || voiceBusy || !showDialogUi) return;
                   void sendText();
                 }}
-              />
+              >
+                {tr('practice.reply')}
+              </Button>
               {studySttSupported ? (
               <PracticeVoiceCell
                 tr={tr}

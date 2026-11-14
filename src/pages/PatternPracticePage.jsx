@@ -376,6 +376,16 @@ export function PatternPracticePage() {
     prefetchStudyTts(last.reply, learnLocale, { ttsText: last.replyTts });
   }, [turns, loading, learnLocale, studyTtsSupported]);
 
+  // Новый ход → доскроллить чат до последнего ответа (не трогаем при чтении истории).
+  const lastTurnCountRef = useRef(0);
+  useEffect(() => {
+    const prev = lastTurnCountRef.current;
+    lastTurnCountRef.current = turns.length;
+    if (!turns.length || turns.length === prev) return;
+    const panel = document.querySelector('.ss-panel');
+    panel?.scrollTo?.({ top: panel.scrollHeight, behavior: 'smooth' });
+  }, [turns.length]);
+
   const startNewDialog = useCallback(() => {
     restoreGenRef.current += 1;
     stopVoice();
@@ -683,6 +693,7 @@ export function PatternPracticePage() {
                     <StreamingPracticeReply
                       text={turn.reply}
                       streamId={`pattern-${sessionId ?? 'new'}-${i}-${turn.reply}`}
+                      enabled={i === turns.length - 1}
                     />
                     {studyTtsSupported ? (
                       <ListenTtsButton
@@ -718,9 +729,14 @@ export function PatternPracticePage() {
                   />
                 </FormItem>
                 <FormItem>
-                  <Cell disabled={!input.trim() || loading || voiceBusy} onClick={sendText}>
+                  <Button
+                    stretched
+                    mode="primary"
+                    disabled={!input.trim() || loading || voiceBusy}
+                    onClick={sendText}
+                  >
                     {tr('practice.reply')}
-                  </Cell>
+                  </Button>
                   {studySttSupported ? (
                     <PracticeVoiceCell
                       tr={tr}

@@ -13,7 +13,7 @@ export function useAutofocusInput(active, deps = []) {
       const el = ref.current;
       if (!el || el.disabled) return;
       try {
-        el.focus({ preventScroll: false });
+        el.focus({ preventScroll: true });
         const len = String(el.value ?? '').length;
         if (typeof el.setSelectionRange === 'function') {
           el.setSelectionRange(len, len);
