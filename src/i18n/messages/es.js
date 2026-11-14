@@ -20,6 +20,7 @@ export default {
   'home.profile': "Perfil",
   'home.sections': "Secciones",
   'home.tagline1': "Aprende haciendo.",
+  'home.dictQuote': 'De tu diccionario',
   'home.tagline2': "Amplía tu vocabulario.",
   'home.tagline3': "Sigue practicando.",
   'home.tagline4': "Habla con confianza.",

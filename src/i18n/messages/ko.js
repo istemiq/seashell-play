@@ -20,6 +20,7 @@ export default {
   'home.profile': "프로필",
   'home.sections': "섹션",
   'home.tagline1': "실전으로 배우세요.",
+  'home.dictQuote': '내 사전에서',
   'home.tagline2': "어휘를 넓히세요.",
   'home.tagline3': "꾸준히 연습하세요.",
   'home.tagline4': "당당하게 말하세요.",

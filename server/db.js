@@ -421,6 +421,22 @@ export async function listWordsInSet(vkUserId, setId, targetLang = 'en') {
   }));
 }
 
+/** Случайные AI-примеры словаря для «экранчика цитат» на главной (только сгенерированные, без пользовательских). */
+export async function listRandomQuoteExamples(vkUserId, targetLang = 'en', poolSize = 80) {
+  const lang = normalizeTargetLang(targetLang);
+  const { rows } = await pool.query(
+    `SELECT e.text, e.translation, w.word
+     FROM examples e
+     JOIN words w ON w.id = e.word_id
+     WHERE w.vk_user_id = $1 AND w.target_lang = $2 AND e.idx < $3
+       AND e.text IS NOT NULL AND TRIM(e.text) <> ''
+     ORDER BY RANDOM()
+     LIMIT $4`,
+    [vkUserId, lang, WORD_EXAMPLE_COUNT, poolSize],
+  );
+  return rows;
+}
+
 export async function getWordWithExamples(vkUserId, wordId, targetLang = null) {
   const { rows: wRows } = await pool.query(
     'SELECT id, word, created_at, gloss_ru, gloss_note_ru, verb_usage, content_locale, target_lang FROM words WHERE id = $1 AND vk_user_id = $2',

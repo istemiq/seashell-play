@@ -20,6 +20,7 @@ export default {
   'home.profile': "الملف الشخصي",
   'home.sections': "الأقسام",
   'home.tagline1': 'تعلّم بالممارسة.',
+  'home.dictQuote': 'من قاموسك',
   'home.tagline2': 'وسّع مفرداتك.',
   'home.tagline3': 'واظب على التمرين.',
   'home.tagline4': 'تكلّم بثقة.',

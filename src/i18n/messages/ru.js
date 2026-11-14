@@ -29,6 +29,7 @@ export default {
   'onboarding.nameRequired': 'Введите имя',
   'home.sections': 'Разделы',
   'home.tagline1': 'Учись на практике.',
+  'home.dictQuote': 'Из твоего словаря',
   'home.tagline2': 'Расширяй словарный запас.',
   'home.tagline3': 'Продолжай тренироваться.',
   'home.tagline4': 'Говори смелее.',

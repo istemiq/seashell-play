@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { clearAdsonarSticky } from '../ads/index.js';
 import { fetchUserAvatarBlobUrl } from '../api/userApi.js';
 import { HomeStyleHero } from '../components/HomeStyleHero.jsx';
+import { HomeQuoteScreen } from '../components/HomeQuoteScreen.jsx';
 import { SeashellBootlog } from '../components/SeashellBootlog.jsx';
 import { StyleNavTiles } from '../components/StyleNavTiles.jsx';
 import { GlobeIcon } from '../components/GlobeIcon.jsx';
@@ -172,6 +173,7 @@ export function HomePage({ fetchedUser }) {
             fallbackName={fetchedUser?.first_name}
           />
           <StyleNavTiles items={tileItems} className="ss-home-tiles" columns={2} />
+          <HomeQuoteScreen />
         </>
       )}
     </Panel>

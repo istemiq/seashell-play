@@ -167,3 +167,65 @@ html[data-seashell-theme='dark'] .seashell-crt .ss-home-hero__sub,
 .seashell-crt .ss-home-hero__title {
   font-size: 1.22em;
 }
+
+/* ── Экранчик цитат из словаря (не-Academic главная) ── */
+.seashell-crt .ss-home-quote {
+  margin-top: clamp(16px, 3.5vh, 32px);
+  padding: 14px 18px 16px;
+  border: 1px solid var(--crt-cell-border, var(--crt-border));
+  border-radius: var(--ss-ui-radius-large, 16px);
+  background: var(--crt-bg-elev);
+  color: var(--crt-fg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  text-align: center;
+  overflow: hidden;
+}
+
+.seashell-crt .ss-home-quote__label {
+  font-size: var(--ss-font-size-caption, 0.78em);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--crt-fg-dim);
+  margin-bottom: 8px;
+}
+
+.seashell-crt .ss-home-quote__body {
+  animation: ss-home-quote-fade-in 0.9s ease-out;
+}
+
+@keyframes ss-home-quote-fade-in {
+  0% { opacity: 0; transform: translateY(6px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.seashell-crt .ss-home-quote__text {
+  font-size: 1em;
+  font-weight: 500;
+  font-style: italic;
+  line-height: 1.45;
+  overflow-wrap: break-word;
+}
+
+.seashell-crt .ss-home-quote__translation {
+  margin-top: 6px;
+  font-size: 0.86em;
+  line-height: 1.4;
+  color: var(--crt-fg-dim);
+  overflow-wrap: break-word;
+}
+
+.seashell-crt .ss-home-quote__word {
+  margin-top: 8px;
+  font-size: 0.78em;
+  letter-spacing: 0.02em;
+  color: var(--crt-fg-dim);
+  opacity: 0.85;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .seashell-crt .ss-home-quote__body {
+    animation: none;
+  }
+}

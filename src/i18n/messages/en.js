@@ -29,6 +29,7 @@ export default {
   'onboarding.nameRequired': "Please enter a name",
   'home.sections': "Sections",
   'home.tagline1': "Learn by doing.",
+  'home.dictQuote': 'From your dictionary',
   'home.tagline2': "Grow your vocabulary.",
   'home.tagline3': "Keep practicing.",
   'home.tagline4': "Speak up.",

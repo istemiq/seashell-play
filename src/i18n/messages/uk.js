@@ -20,6 +20,7 @@ export default {
   'home.profile': "Профіль",
   'home.sections': "Розділи",
   'home.tagline1': "Вчись на практиці.",
+  'home.dictQuote': 'Зі словника',
   'home.tagline2': "Розширюй словниковий запас.",
   'home.tagline3': "Продовжуй тренуватися.",
   'home.tagline4': "Говори сміливіше.",

@@ -20,6 +20,7 @@ export default {
   'home.profile': "プロフィール",
   'home.sections': "セクション",
   'home.tagline1': "実践で学ぶ。",
+  'home.dictQuote': 'あなたの辞書から',
   'home.tagline2': "語彙を広げよう。",
   'home.tagline3': "練習を続けよう。",
   'home.tagline4': "声に出して話そう。",

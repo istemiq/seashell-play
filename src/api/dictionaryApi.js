@@ -80,6 +80,14 @@ export async function fetchWords() {
   return r.json();
 }
 
+/** Подборка позитивных цитат из сгенерированных примеров словаря (для главной). */
+export async function fetchDictionaryQuotes() {
+  const r = await request('/dictionary/quotes');
+  if (!r.ok) throw new Error(await readHttpError(r));
+  const data = await r.json();
+  return Array.isArray(data?.quotes) ? data.quotes : [];
+}
+
 export async function fetchWordsInSet(setId) {
   const id = setId != null ? parseInt(String(setId), 10) : NaN;
   if (!Number.isFinite(id) || id <= 0) {

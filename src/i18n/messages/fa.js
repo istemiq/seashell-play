@@ -20,6 +20,7 @@ export default {
   'home.profile': "پروفایل",
   'home.sections': "بخش‌ها",
   'home.tagline1': 'با تمرین یاد بگیر.',
+  'home.dictQuote': 'از واژه‌نامه‌ات',
   'home.tagline2': 'واژگانت را گسترش بده.',
   'home.tagline3': 'مداومت کن.',
   'home.tagline4': 'با اطمینان حرف بزن.',

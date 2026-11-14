@@ -18,6 +18,7 @@ import {
   renameSet,
   deleteSetAndOrphanWords,
   replaceWordSets,
+  listRandomQuoteExamples,
 } from '../db.js';
 import { insertCustomExample } from '../customExamplesDb.js';
 import {
@@ -192,7 +193,70 @@ async function irregularVerbDictionaryImport(verbId, contentLocale) {
   return { verb, payload };
 }
 
+/**
+ * Блэклист негативных тем для цитат на главной. Покрывает англ. текст примера
+ * и рус. перевод — остальные локали полагаются на тон-заметку в промпте генерации.
+ */
+const QUOTE_NEGATIVE_RE = new RegExp(
+  '\\b(death|die[ds]?|dying|dead|kill(?:ed|ing|s)?|murder|wars?|hate[ds]?|hatred|sad(?:ly|ness)?|' +
+    'cry|cried|crying|tears?|pain(?:ful|s)?|sick(?:ness)?|illness|disease|fever|fail(?:ed|s|ure)?|' +
+    'fear(?:ed|ful|s)?|afraid|angry|anger|stupid|dumb|ugly|alone|lonely|nightmare|blood(?:y)?|' +
+    'wound(?:ed|s)?|poison(?:ous)?|crime|criminal|guns?|weapon|suffer(?:ed|ing|s)?|grief|' +
+    'funeral|graves?|bur(?:y|ied)|mourn|cruel|evil|hell|depress(?:ed|ion|ing)?|anxiety|anxious|' +
+    'stress(?:ed|ful)?|worr(?:y|ied|ies)|terrible|horrible|awful|disaster|accident|crash(?:ed)?|' +
+    'injur(?:y|ed|ies)|hurts?|hurt(?:ing)?|vomit|cancer|virus|plague|poverty|debts?|prison|jail|' +
+    'arrest(?:ed)?|punish(?:ed|ment)?|guilty|shame(?:ful)?|embarrass(?:ed|ing)?|regret(?:ted|s)?|' +
+    'defeat(?:ed)?|enem(?:y|ies)|attack(?:ed|s)?|bombs?|shoot|shot|corpse|suicide|addict(?:ed|ion)?|' +
+    'drunk|alcohol|cigarette|smok(?:e|ing)|divorce|betray(?:ed|al)?|liar|lied|lying|cheat(?:ed|ing|s)?|' +
+    'steal|stole|stolen|thie(?:f|ves)|rage|furious|scream(?:ed|ing)?|destroy(?:ed)?|ruin(?:ed|s)?|' +
+    'broken|breakup|floods?|danger(?:ous)?|trap(?:ped)?|victim|abuse(?:d)?|toxic|rot(?:ten)?|' +
+    'mold|garbage|boring|bored|annoying|worst|worse)\\b',
+  'i',
+);
+
+const QUOTE_NEGATIVE_RU_RE =
+  /(смерт|умира|умерл|убий|войн|ненави|груст|печал|сл[её]з|плачу?т|болезн|страх|боял|одинок|кошмар|кров|ранен|рана|яд|преступ|оружи|страда|похорон|могил|жесток|депресс|тревог|ужас|катастроф|авари|рак\b|бедн|тюрьм|арест|наказ|виноват|стыд|позор|поражен|враг|атак|бомб|труп|наркот|алкогол|пьян|сигарет|развод|предал|лж[её]т|вор(?:уют|овал|ы)?|краж|гнев|кричи|руин|пожар|наводнен|голод|угроз|опасн|ловушк|жертв|грязн|мусор|скучн|гадк|дурак|тупиц|несчаст)/i;
+
+function isNegativeQuote(text) {
+  const s = String(text ?? '');
+  if (!s) return false;
+  return QUOTE_NEGATIVE_RE.test(s) || QUOTE_NEGATIVE_RU_RE.test(s);
+}
+
+/** Обрезает хвост пометок регистра « — … » / «(…)» в конце перевода. */
+function stripRegisterTail(translation) {
+  let out = String(translation ?? '');
+  out = out.replace(/\s*—\s*(?:formal|informal|lit\.|fig\.|coll\.|slang|разг\.|устар\.|книжн\.|офиц\.|перен\.|букв\.)[^—]*$/iu, '');
+  out = out.replace(/\s*(?:\([^)]*\)\s*)+$/, '');
+  return out.trim();
+}
+
 export function registerDictionaryRoutes(app) {
+  // --- Цитаты для главной: случайные сгенерированные примеры, только без негатива ---
+  app.get('/api/dictionary/quotes', async (req, res) => {
+    try {
+      const targetLang = resolveTargetLang(req);
+      const rows = await listRandomQuoteExamples(req.vkUserId, targetLang, 80);
+      const quotes = [];
+      const seen = new Set();
+      for (const row of rows) {
+        const text = String(row.text ?? '').trim();
+        if (!text || text.length > 240) continue;
+        const translation = stripRegisterTail(String(row.translation ?? '').trim());
+        if (isNegativeQuote(text) || isNegativeQuote(translation)) continue;
+        const key = text.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        quotes.push({ text, translation, word: String(row.word ?? '').trim() });
+        if (quotes.length >= 8) break;
+      }
+      res.json({ quotes });
+    } catch (e) {
+      console.error(e);
+      respondDatabaseError(res, e);
+    }
+  });
+
   // --- Словарь: список, карточка, добавление, удаление, обновление примеров ---
   app.get('/api/words', async (req, res) => {
     try {

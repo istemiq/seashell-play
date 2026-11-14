@@ -20,6 +20,7 @@ export default {
   'home.profile': 'Profil',
   'home.sections': 'Bölümler',
   'home.tagline1': 'Pratik yaparak öğren.',
+  'home.dictQuote': 'Sözlüğünden',
   'home.tagline2': 'Kelime dağarcığını genişlet.',
   'home.tagline3': 'Pratik yapmaya devam et.',
   'home.tagline4': 'Cesurca konuş.',

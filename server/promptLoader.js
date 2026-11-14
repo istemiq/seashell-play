@@ -90,13 +90,22 @@ function readLocaleFile(locale, name, targetLang = 'en') {
   throw new Error(`Missing prompt file for locale ${code} target ${study}: ${name}`);
 }
 
+/**
+ * Тон примеров: домашний экран показывает цитаты из словаря — просим нейтрально-тёплый
+ * повседневный контекст, чтобы примеры не попадали в блэклист цитат и поднимали настрой.
+ */
+const EXAMPLES_TONE_NOTE =
+  '\n\n**Tone of examples:** prefer calm, everyday, mildly positive or neutral contexts ' +
+  '(home, nature, food, music, work, friends, small everyday wins). Avoid sad, scary, ' +
+  'violent or otherwise gloomy situations unless the headword itself requires them.\n';
+
 /** User prompt for dictionary generation (word-examples). */
 export function loadWordExamplesUserPrompt(locale, targetLang = 'en') {
   const study = normalizeStudyLang(targetLang);
   if (study === 'en') {
-    return readLocaleFile(locale, 'word-examples.txt', 'en');
+    return readLocaleFile(locale, 'word-examples.txt', 'en') + EXAMPLES_TONE_NOTE;
   }
-  return readTargetTemplate(study, 'word-examples.template.txt');
+  return readTargetTemplate(study, 'word-examples.template.txt') + EXAMPLES_TONE_NOTE;
 }
 
 /** System prompt for dictionary generation. */
@@ -194,7 +203,7 @@ export function loadIrregularVerbExamplesPrompt(locale, extraVars = {}) {
     ...templateVarsFromLocale(locale),
     FORMAT_SAMPLE: formatSample.trim(),
     ...extraVars,
-  });
+  }) + EXAMPLES_TONE_NOTE;
 }
 
 const IRREGULAR_FORM_LABEL_KEYS = {
@@ -269,7 +278,7 @@ export function loadIrregularVerbExamplesSingleFormPrompt(locale, { formKey, ...
     FORM_KEY: formKey,
     FORM_LABEL: formLabel,
     ...extraVars,
-  });
+  }) + EXAMPLES_TONE_NOTE;
 }
 
 /** Пользовательский пример: родная фраза → естественное предложение на языке обучения. */
