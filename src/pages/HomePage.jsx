@@ -167,13 +167,13 @@ export function HomePage({ fetchedUser }) {
         </>
       ) : (
         <>
+          <HomeQuoteScreen />
           <HomeStyleHero
             userDisplayName={userDisplayName}
             avatarUrl={avatarUrl}
             fallbackName={fetchedUser?.first_name}
           />
           <StyleNavTiles items={tileItems} className="ss-home-tiles" columns={2} />
-          <HomeQuoteScreen />
         </>
       )}
     </Panel>

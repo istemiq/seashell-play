@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { fetchDictionaryQuotes } from '../api/dictionaryApi.js';
-import { useI18n } from '../i18n/I18nContext.jsx';
 
 const QUOTE_CYCLE_MS = 7000;
 
@@ -15,7 +14,6 @@ function prefersReducedMotion() {
  * из сгенерированных примеров словаря — включает в настрой обучения.
  */
 export function HomeQuoteScreen({ className = '' }) {
-  const { t } = useI18n();
   const [quotes, setQuotes] = useState(null);
   const [quoteIdx, setQuoteIdx] = useState(0);
   const timerRef = useRef(null);
@@ -54,7 +52,6 @@ export function HomeQuoteScreen({ className = '' }) {
 
   return (
     <div className={`ss-home-quote ${className}`.trim()} aria-live="polite">
-      <div className="ss-home-quote__label">{t('home.dictQuote')}</div>
       <div key={quoteIdx} className="ss-home-quote__body">
         <div className="ss-home-quote__text" dir="auto">
           {quote.text}
@@ -62,11 +59,6 @@ export function HomeQuoteScreen({ className = '' }) {
         {quote.translation ? (
           <div className="ss-home-quote__translation" dir="auto">
             {quote.translation}
-          </div>
-        ) : null}
-        {quote.word ? (
-          <div className="ss-home-quote__word" dir="auto">
-            — {quote.word}
           </div>
         ) : null}
       </div>

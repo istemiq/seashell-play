@@ -151,7 +151,7 @@ html[data-seashell-theme='dark'] .seashell-crt .ss-home-hero__sub,
 
 /* ── Композиция главной: воздух сверху, растёт с высотой окна ── */
 .seashell-crt .ss-styled-home .ss-home-hero {
-  margin-top: clamp(8px, 7vh, 84px);
+  margin-top: clamp(4px, 2.5vh, 28px);
   padding-bottom: 18px;
 }
 
@@ -168,27 +168,15 @@ html[data-seashell-theme='dark'] .seashell-crt .ss-home-hero__sub,
   font-size: 1.22em;
 }
 
-/* ── Экранчик цитат из словаря (не-Academic главная) ── */
+/* ── Цитаты из словаря вверху главной (не-Academic) — часть композиции, без карточки ── */
 .seashell-crt .ss-home-quote {
-  margin-top: clamp(16px, 3.5vh, 32px);
-  padding: 14px 18px 16px;
-  border: 1px solid var(--crt-cell-border, var(--crt-border));
-  border-radius: var(--ss-ui-radius-large, 16px);
-  background: var(--crt-bg-elev);
-  color: var(--crt-fg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  margin-top: clamp(10px, 2.5vh, 26px);
+  padding: 0 14px;
   text-align: center;
-  overflow: hidden;
-}
-
-.seashell-crt .ss-home-quote__label {
-  font-size: var(--ss-font-size-caption, 0.78em);
-  font-weight: 500;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: var(--crt-fg-dim);
-  margin-bottom: 8px;
+  min-height: 4.4em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .seashell-crt .ss-home-quote__body {
@@ -201,27 +189,32 @@ html[data-seashell-theme='dark'] .seashell-crt .ss-home-hero__sub,
 }
 
 .seashell-crt .ss-home-quote__text {
-  font-size: 1em;
+  font-size: 0.98em;
   font-weight: 500;
   font-style: italic;
   line-height: 1.45;
+  color: var(--crt-fg);
   overflow-wrap: break-word;
+  text-shadow: 0 1px 8px rgba(255, 255, 255, 0.65), 0 0 2px rgba(255, 255, 255, 0.5);
 }
 
 .seashell-crt .ss-home-quote__translation {
-  margin-top: 6px;
-  font-size: 0.86em;
+  margin-top: 5px;
+  font-size: 0.82em;
   line-height: 1.4;
   color: var(--crt-fg-dim);
   overflow-wrap: break-word;
+  text-shadow: 0 1px 6px rgba(255, 255, 255, 0.55);
 }
 
-.seashell-crt .ss-home-quote__word {
-  margin-top: 8px;
-  font-size: 0.78em;
-  letter-spacing: 0.02em;
-  color: var(--crt-fg-dim);
-  opacity: 0.85;
+html[data-seashell-theme='dark'] .seashell-crt .ss-home-quote__text,
+.seashell-crt.seashell-theme-dark .ss-home-quote__text {
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5), 0 0 2px rgba(0, 0, 0, 0.4);
+}
+
+html[data-seashell-theme='dark'] .seashell-crt .ss-home-quote__translation,
+.seashell-crt.seashell-theme-dark .ss-home-quote__translation {
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.45);
 }
 
 @media (prefers-reduced-motion: reduce) {
