@@ -170,7 +170,7 @@ html[data-seashell-theme='dark'] .seashell-crt .ss-home-hero__sub,
 
 /* ── Цитаты из словаря вверху главной (не-Academic) — часть композиции, без карточки ── */
 .seashell-crt .ss-home-quote {
-  margin-top: clamp(10px, 2.5vh, 26px);
+  margin: clamp(2px, 1vh, 10px) 0 clamp(10px, 2vh, 22px);
   padding: 0 14px;
   text-align: center;
   min-height: 4.4em;
