@@ -1010,6 +1010,8 @@ export default {
   'reader.lookupFailed': 'Nenhuma definição encontrada',
   'reader.translateTo': 'Traduzir para',
   'reader.dictSource': 'Fonte: Wikcionário (CC BY-SA)',
+  'reader.srcGoogle': 'Fonte: Google Translate',
+  'reader.srcMyMemory': 'Fonte: MyMemory',
   'reader.addedToDict': 'No dicionário',
   'reader.fullscreen': 'Tela cheia',
 };

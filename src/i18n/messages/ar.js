@@ -1009,6 +1009,8 @@ export default {
   'reader.lookupFailed': 'لم يتم العثور على تعريف',
   'reader.translateTo': 'الترجمة إلى',
   'reader.dictSource': 'المصدر: ويكاموس (CC BY-SA)',
+  'reader.srcGoogle': 'المصدر: ترجمة Google',
+  'reader.srcMyMemory': 'المصدر: MyMemory',
   'reader.addedToDict': 'في القاموس',
   'reader.fullscreen': 'ملء الشاشة',
 };

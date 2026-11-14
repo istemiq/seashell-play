@@ -1009,6 +1009,8 @@ export default {
   'reader.lookupFailed': '정의를 찾을 수 없음',
   'reader.translateTo': '번역 대상',
   'reader.dictSource': '출처: 위키낱말사전 (CC BY-SA)',
+  'reader.srcGoogle': '출처: Google 번역',
+  'reader.srcMyMemory': '출처: MyMemory',
   'reader.addedToDict': '사전에 있음',
   'reader.fullscreen': '전체 화면',
 };

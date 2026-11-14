@@ -1059,6 +1059,8 @@ export default {
   'reader.lookupFailed': 'Перевод не найден',
   'reader.translateTo': 'Переводить на',
   'reader.dictSource': 'Источник: Викисловарь (CC BY-SA)',
+  'reader.srcGoogle': 'Источник: Google Translate',
+  'reader.srcMyMemory': 'Источник: MyMemory',
   'reader.addedToDict': 'В словаре',
   'reader.fullscreen': 'Полный экран',
 };

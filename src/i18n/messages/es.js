@@ -1009,6 +1009,8 @@ export default {
   'reader.lookupFailed': 'No se encontró definición',
   'reader.translateTo': 'Traducir a',
   'reader.dictSource': 'Fuente: Wikcionario (CC BY-SA)',
+  'reader.srcGoogle': 'Fuente: Google Translate',
+  'reader.srcMyMemory': 'Fuente: MyMemory',
   'reader.addedToDict': 'En el diccionario',
   'reader.fullscreen': 'Pantalla completa',
 };

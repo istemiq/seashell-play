@@ -1026,6 +1026,8 @@ export default {
   'reader.lookupFailed': 'Tanım bulunamadı',
   'reader.translateTo': 'Çeviri dili',
   'reader.dictSource': 'Kaynak: Vikisözlük (CC BY-SA)',
+  'reader.srcGoogle': 'Kaynak: Google Translate',
+  'reader.srcMyMemory': 'Kaynak: MyMemory',
   'reader.addedToDict': 'Sözlükte',
   'reader.fullscreen': 'Tam ekran',
 };

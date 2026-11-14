@@ -446,13 +446,12 @@ export function registerReaderRoutes(app) {
     }
 
     // 1) Google Translate → 2) MyMemory (фолбэк, если Google банит IP сервера).
-    const gt =
-      (await googleTranslate(word, src || null, dst)) ||
-      (await myMemoryTranslate(word, src || null, dst));
+    const gtGoogle = await googleTranslate(word, src || null, dst);
+    const gt = gtGoogle || (await myMemoryTranslate(word, src || null, dst));
     const translations = [];
     if (gt) {
       translations.push(gt.main, ...gt.alternatives);
-      payload.translationsSource = 'google';
+      payload.translationsSource = gtGoogle ? 'google' : 'mymemory';
     }
 
     // 3) Локальный двуязычный словарь (en-ru и др.) — дополняем, только для слов.

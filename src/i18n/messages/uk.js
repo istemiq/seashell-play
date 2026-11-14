@@ -1013,6 +1013,8 @@ export default {
   'reader.lookupFailed': 'Визначення не знайдено',
   'reader.translateTo': 'Перекладати на',
   'reader.dictSource': 'Джерело: Вікісловник (CC BY-SA)',
+  'reader.srcGoogle': 'Джерело: Google Translate',
+  'reader.srcMyMemory': 'Джерело: MyMemory',
   'reader.addedToDict': 'У словнику',
   'reader.fullscreen': 'Повний екран',
 };

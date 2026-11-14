@@ -1199,6 +1199,8 @@ export default {
   'reader.lookupFailed': 'No definition found',
   'reader.translateTo': 'Translate to',
   'reader.dictSource': 'Source: Wiktionary (CC BY-SA)',
+  'reader.srcGoogle': 'Source: Google Translate',
+  'reader.srcMyMemory': 'Source: MyMemory',
   'reader.addedToDict': 'In dictionary',
   'reader.fullscreen': 'Fullscreen',
 };

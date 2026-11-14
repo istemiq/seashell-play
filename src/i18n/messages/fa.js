@@ -1009,6 +1009,8 @@ export default {
   'reader.lookupFailed': 'تعریفی یافت نشد',
   'reader.translateTo': 'ترجمه به',
   'reader.dictSource': 'منبع: ویکی‌واژه (CC BY-SA)',
+  'reader.srcGoogle': 'منبع: مترجم گوگل',
+  'reader.srcMyMemory': 'منبع: MyMemory',
   'reader.addedToDict': 'در فرهنگ‌نامه',
   'reader.fullscreen': 'تمام‌صفحه',
 };

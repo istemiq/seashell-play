@@ -75,7 +75,15 @@ export function ReaderWordPopup({ anchorRect, word, loading, data, error, onAdd,
               </div>
             ))
           )}
-          <Footnote className="ss-word-popup__src">{t('reader.dictSource')}</Footnote>
+          <Footnote className="ss-word-popup__src">
+            {t(
+              data?.translations?.length
+                ? data.translationsSource === 'mymemory'
+                  ? 'reader.srcMyMemory'
+                  : 'reader.srcGoogle'
+                : 'reader.dictSource',
+            )}
+          </Footnote>
         </div>
       ) : (
         <div className="ss-word-popup__body">{t('reader.lookupFailed')}</div>

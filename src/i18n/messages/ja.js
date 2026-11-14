@@ -1009,6 +1009,8 @@ export default {
   'reader.lookupFailed': '定義が見つかりません',
   'reader.translateTo': '翻訳先',
   'reader.dictSource': '出典：ウィクショナリー (CC BY-SA)',
+  'reader.srcGoogle': '出典: Google翻訳',
+  'reader.srcMyMemory': '出典: MyMemory',
   'reader.addedToDict': '辞書に追加済み',
   'reader.fullscreen': '全画面',
 };
