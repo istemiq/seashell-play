@@ -19,7 +19,7 @@ import {
 } from '../components/Ui.jsx';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import * as dictionaryApi from '../api/dictionaryApi.js';
-import { fetchCatalogBook, defineWord, listMyBooks, fetchMyBook, deleteMyBook } from '../api/readerApi.js';
+import { fetchCatalogBook, defineWord, listMyBooks, fetchMyBook, deleteMyBook, translateClientSide } from '../api/readerApi.js';
 import { resolveContentLocaleForApi } from '../utils/contentLocale.js';
 import { loadSettings, updateSettings } from '../utils/settings.js';
 import { UI_LOCALES } from '../i18n/config.js';
@@ -297,7 +297,13 @@ export function ReaderPage() {
       if (text) {
         setSelectedText(text);
         setAddedText(null);
-        setLookup(null);
+        // Выделенная фраза (phrasal verb, предложение) → сразу попап с переводом.
+        if (/\s/.test(text) && text.length <= MAX_SELECTION_LEN) {
+          const r = sel.getRangeAt(0).getBoundingClientRect();
+          openLookup({ word: text, rect: r });
+        } else {
+          setLookup(null);
+        }
       }
     };
     document.addEventListener('selectionchange', onSelectionChange);
@@ -340,6 +346,28 @@ export function ReaderPage() {
       setSelectedText(text);
       setAddedText(null);
       setLookup(null);
+      // Фраза в epub — попап с переводом; rect выделения пересчитываем
+      // из iframe-координат в координаты вьюпорта.
+      if (/\s/.test(text) && text.length <= MAX_SELECTION_LEN) {
+        try {
+          const range = renditionRef.current?.getRange(cfiRange);
+          const r = range?.getBoundingClientRect?.();
+          const frame = contents?.document?.defaultView?.frameElement;
+          const fr = frame?.getBoundingClientRect?.();
+          const rect =
+            r && fr
+              ? {
+                  left: r.left + fr.left,
+                  right: r.right + fr.left,
+                  top: r.top + fr.top,
+                  bottom: r.bottom + fr.top,
+                }
+              : null;
+          openLookup({ word: text, rect });
+        } catch {
+          /* ignore */
+        }
+      }
     }
   };
 
@@ -384,12 +412,21 @@ export function ReaderPage() {
   const openLookup = (hit) => {
     if (!hit?.word) return;
     const w = hit.word;
-    setLookup({ word: w, rect: hit.rect, loading: true, data: null, error: null, addedWord: null });
+    const rect = hit.rect || { left: 16, right: 16, top: 80, bottom: 80 };
+    setLookup({ word: w, rect, loading: true, data: null, error: null, addedWord: null });
     // dst — язык словарных карточек (не UI-локаль): попап и словарь говорят на одном языке
     defineWord(w, { src: bookSrcRef.current, dst: defineDstRef.current })
-      .then((data) =>
-        setLookup((cur) => (cur?.word === w ? { ...cur, loading: false, data } : cur)),
-      )
+      .then(async (data) => {
+        // Если серверу не достать перевод (Google банит DC-адреса) — спрашиваем из браузера.
+        if (!data?.translations?.length) {
+          const tr = await translateClientSide(w, {
+            src: bookSrcRef.current,
+            dst: defineDstRef.current,
+          });
+          if (tr?.length) data = { ...data, translations: tr, translationsSource: 'google' };
+        }
+        setLookup((cur) => (cur?.word === w ? { ...cur, loading: false, data } : cur));
+      })
       .catch(() =>
         setLookup((cur) => (cur?.word === w ? { ...cur, loading: false, error: true } : cur)),
       );

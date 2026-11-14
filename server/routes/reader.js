@@ -32,9 +32,10 @@ const KAIKKI_EDITION = {
   ko: 'kowiktionary',
   nl: 'nlwiktionary',
   pl: 'plwiktionary',
+  uk: 'ukwiktionary',
 };
 
-const MAX_DEFINE_WORD_LEN = 60;
+const MAX_DEFINE_WORD_LEN = 300;
 
 /**
  * Локальные двуязычные словари (FreeDict/WikDict, сконвертированные
@@ -128,8 +129,8 @@ async function fetchBook(id) {
   return null;
 }
 
-function defineCacheFile(word, src, edition) {
-  const key = crypto.createHash('sha1').update(`${edition}|${src}|${word}`).digest('hex');
+function defineCacheFile(word, src, dst) {
+  const key = crypto.createHash('sha1').update(`${dst}|${src}|${word}`).digest('hex');
   return path.join(CACHE_DIR, 'define', `${key}.json`);
 }
 
@@ -168,6 +169,40 @@ async function googleTranslate(word, src, dst) {
       if (alternatives.length >= 6) break;
     }
     if (!main) return null;
+    return { main, alternatives };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * MyMemory (translated.net) — фолбэк, когда с серверного IP
+ * Google Translate недоступен (Google банит датацентровые адреса).
+ * Бесплатный анонимный лимит ~5k запросов/день на IP.
+ */
+async function myMemoryTranslate(text, src, dst) {
+  const tl = GOOGLE_TL[dst] ?? 'en';
+  const sl = GOOGLE_SL[src] ?? src ?? 'en';
+  const url =
+    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}` +
+    `&langpair=${encodeURIComponent(sl)}|${encodeURIComponent(tl)}`;
+  try {
+    const r = await fetch(url, {
+      signal: AbortSignal.timeout(8000),
+      headers: { 'User-Agent': 'Seashell-Reader/1.0 (language-learning app)' },
+    });
+    if (!r.ok) return null;
+    const data = await r.json();
+    const main = String(data?.responseData?.translatedText ?? '').trim();
+    if (!main || /MYMEMORY WARNING|QUERY LENGTH LIMIT/i.test(main)) return null;
+    const alternatives = [];
+    for (const m of Array.isArray(data?.matches) ? data.matches : []) {
+      const s = String(m?.translation ?? '').trim();
+      if (s && s.toLowerCase() !== main.toLowerCase() && !alternatives.includes(s)) {
+        alternatives.push(s);
+      }
+      if (alternatives.length >= 4) break;
+    }
     return { main, alternatives };
   } catch {
     return null;
@@ -371,38 +406,60 @@ export function registerReaderRoutes(app) {
     const src = String(req.query.src ?? '').trim().toLowerCase();
     const dst = String(req.query.dst ?? '').trim().toLowerCase();
     const edition = KAIKKI_EDITION[dst] || 'dictionary';
+    // Фразы (phrasal verbs, предложения) идут только в переводчик — в Викисловаре их нет.
+    const isPhrase = /\s/.test(word);
 
-    const cacheFile = defineCacheFile(word, src, edition);
+    // В кэше — только вики-данные (entries). Переводы запрашиваем всегда
+    // свежие: иначе единичный сбой Google навсегда отрезал бы перевод.
+    let payload = null;
+    const cacheFile = defineCacheFile(word, src, dst);
     try {
-      const cached = fs.readFileSync(cacheFile, 'utf8');
-      return res.json(JSON.parse(cached));
+      const cached = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+      payload = {
+        word: cached.word ?? word,
+        lemma: cached.lemma ?? null,
+        form: cached.form ?? null,
+        src: src || null,
+        dst: edition,
+        entries: cached.entries ?? [],
+      };
     } catch {
       /* no cache */
     }
 
-    const found = await resolveDefine(word, src, edition);
-    const payload = {
-      word: found?.word ?? word,
-      lemma: found?.lemma ?? null,
-      form: found?.form ?? null,
-      src: src || null,
-      dst: edition,
-      entries: found?.entries ?? [],
-    };
+    if (!payload) {
+      const found = isPhrase ? null : await resolveDefine(word, src, edition);
+      payload = {
+        word: found?.word ?? word,
+        lemma: found?.lemma ?? null,
+        form: found?.form ?? null,
+        src: src || null,
+        dst: edition,
+        entries: found?.entries ?? [],
+      };
+      try {
+        fs.mkdirSync(path.dirname(cacheFile), { recursive: true });
+        fs.writeFileSync(cacheFile, JSON.stringify(payload));
+      } catch {
+        /* cache write failed */
+      }
+    }
 
-    // 1) Google Translate — основной источник перевода (понимает словоформы).
-    const gt = await googleTranslate(word, src || null, dst);
+    // 1) Google Translate → 2) MyMemory (фолбэк, если Google банит IP сервера).
+    const gt =
+      (await googleTranslate(word, src || null, dst)) ||
+      (await myMemoryTranslate(word, src || null, dst));
     const translations = [];
     if (gt) {
       translations.push(gt.main, ...gt.alternatives);
       payload.translationsSource = 'google';
     }
 
-    // 2) Локальный двуязычный словарь (en-ru и др.) — дополняем.
-    const dict = src ? loadBilingualDict(src, dst) : null;
+    // 3) Локальный двуязычный словарь (en-ru и др.) — дополняем, только для слов.
+    const dict = src && !isPhrase ? loadBilingualDict(src, dst) : null;
     if (dict) {
-      const hitDict = dictLookup(dict, found?.word ?? word) ||
-        (found?.lemma ? dictLookup(dict, found.lemma) : null);
+      const hitDict = dictLookup(dict, payload.word) ||
+        (payload.lemma ? dictLookup(dict, payload.lemma) : null);
       if (hitDict) {
         payload.dictPos = hitDict.pos;
         for (const tr of hitDict.translations) {
@@ -414,12 +471,6 @@ export function registerReaderRoutes(app) {
     }
     if (translations.length) payload.translations = translations.slice(0, 8);
 
-    try {
-      fs.mkdirSync(path.dirname(cacheFile), { recursive: true });
-      fs.writeFileSync(cacheFile, JSON.stringify(payload));
-    } catch {
-      /* cache write failed */
-    }
     return res.json(payload);
   });
 

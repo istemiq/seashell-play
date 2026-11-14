@@ -37,6 +37,41 @@ export async function defineWord(word, { src, dst } = {}) {
   return r.json();
 }
 
+/**
+ * Прямой вызов Google Translate из браузера — фолбэк на случай,
+ * когда серверный IP заблокирован Google (DC-адреса). Эндпоинт
+ * gtx отдаёт CORS *, поэтому fetch из Mini App/WebView работает.
+ * @returns {Promise<string[]|null>} переводы или null при недоступности
+ */
+export async function translateClientSide(text, { src, dst } = {}) {
+  const tl = dst || 'en';
+  const sl = src || 'auto';
+  const url =
+    `https://translate.googleapis.com/translate_a/single?client=gtx` +
+    `&sl=${encodeURIComponent(sl)}&tl=${encodeURIComponent(tl)}&dt=t&dt=bd&q=${encodeURIComponent(text)}`;
+  try {
+    const r = await fetch(url);
+    if (!r.ok) return null;
+    const data = await r.json();
+    const main = (Array.isArray(data?.[0]) ? data[0] : [])
+      .map((seg) => String(seg?.[0] ?? ''))
+      .join('')
+      .trim();
+    if (!main) return null;
+    const out = [main];
+    for (const block of Array.isArray(data?.[1]) ? data[1] : []) {
+      for (const tr of Array.isArray(block?.[1]) ? block[1] : []) {
+        const s = String(tr ?? '').trim();
+        if (s && s.toLowerCase() !== main.toLowerCase() && !out.includes(s)) out.push(s);
+        if (out.length >= 6) return out;
+      }
+    }
+    return out;
+  } catch {
+    return null;
+  }
+}
+
 /** @returns {Promise<{ data: ArrayBuffer, contentType: string }>} */
 export async function fetchCatalogBook(gutenbergId) {
   let r;
