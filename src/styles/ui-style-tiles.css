@@ -152,7 +152,7 @@ html[data-seashell-theme='dark'] .seashell-crt .ss-home-hero__sub,
 /* ── Композиция главной: воздух сверху, растёт с высотой окна ── */
 .seashell-crt .ss-styled-home .ss-home-hero {
   margin-top: clamp(4px, 2.5vh, 28px);
-  padding-bottom: 8px;
+  padding-bottom: 16px;
 }
 
 .seashell-crt .ss-styled-home .ss-style-tiles {
@@ -225,7 +225,7 @@ html[data-seashell-theme='dark'] .seashell-crt .ss-home-quote__translation,
 }
 
 .seashell-crt .ss-home-hero__sig {
-  margin: 4px 0 0 2px;
+  margin: 10px 0 0 2px;
   font-size: 0.68em;
   letter-spacing: 0.05em;
   color: var(--crt-fg-dim);
