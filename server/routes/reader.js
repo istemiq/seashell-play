@@ -175,33 +175,6 @@ async function googleTranslate(word, src, dst) {
   }
 }
 
-/**
- * MyMemory (translated.net) — фолбэк, когда с серверного IP
- * Google Translate недоступен (Google банит датацентровые адреса).
- * Бесплатный анонимный лимит ~5k запросов/день на IP.
- */
-async function myMemoryTranslate(text, src, dst) {
-  const tl = GOOGLE_TL[dst] ?? 'en';
-  const sl = GOOGLE_SL[src] ?? src ?? 'en';
-  const url =
-    `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}` +
-    `&langpair=${encodeURIComponent(sl)}|${encodeURIComponent(tl)}`;
-  try {
-    const r = await fetch(url, {
-      signal: AbortSignal.timeout(8000),
-      headers: { 'User-Agent': 'Seashell-Reader/1.0 (language-learning app)' },
-    });
-    if (!r.ok) return null;
-    const data = await r.json();
-    const main = String(data?.responseData?.translatedText ?? '').trim();
-    if (!main || /MYMEMORY WARNING|QUERY LENGTH LIMIT/i.test(main)) return null;
-    // Альтернативы MyMemory — шум из translation memory (apple → «синтенсія»), не отдаём.
-    return { main, alternatives: [] };
-  } catch {
-    return null;
-  }
-}
-
 /** Наши коды UI-локалей → целевой язык Google Translate. */
 const GOOGLE_TL = {
   ru: 'ru', en: 'en', de: 'de', es: 'es', fr: 'fr', it: 'it',
@@ -457,11 +430,11 @@ export function registerReaderRoutes(app) {
       }
     }
 
-    // 2) Google Translate → 3) MyMemory (последний шанс; на отдельных словах шумный).
-    const gtGoogle = await googleTranslate(word, src || null, dst);
-    const gt = gtGoogle || (await myMemoryTranslate(word, src || null, dst));
+    // 2) Google Translate (MyMemory убран — на словах давал мусор из TM).
+    //    С DC-IP сервера Google банится — тогда клиент спрашивает его сам.
+    const gt = await googleTranslate(word, src || null, dst);
     if (gt) {
-      if (!primarySource) primarySource = gtGoogle ? 'google' : 'mymemory';
+      if (!primarySource) primarySource = 'google';
       for (const tr of [gt.main, ...gt.alternatives]) {
         if (tr && !translations.some((x) => x.toLowerCase() === tr.toLowerCase())) {
           translations.push(tr);
