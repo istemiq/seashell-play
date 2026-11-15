@@ -8,3 +8,8 @@
 ## Verification
 - `npm test` for server tests (needs Docker/Postgres for some suites; DB-dependent tests may skip).
 - Lint changed files with `npx eslint <files>` — pre-existing lint debt lives in untouched `src/` files.
+- `node scripts/check-locales.mjs` — locale coverage guard (modules, prompts, TTS/STT, reader dst).
+
+## Locales policy
+- English (`en`) is the primary development target. New UI i18n keys go into `src/i18n/messages/en.js` (optionally `ru.js`) only — `translate()` falls back to English for every other locale, so do NOT touch the other 9 locale files for routine English work.
+- Non-English learning locales are frozen: don't edit `src/modules/<code>/` or `server/prompts/targets/<code>/` unless fixing a reported bug in that locale.

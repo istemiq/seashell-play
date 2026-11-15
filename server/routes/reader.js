@@ -32,7 +32,7 @@ const KAIKKI_EDITION = {
   ko: 'kowiktionary',
   nl: 'nlwiktionary',
   pl: 'plwiktionary',
-  uk: 'ukwiktionary',
+  // uk/ar/fa изданий на kaikki нет — фолбэк на 'dictionary' (English).
 };
 
 const MAX_DEFINE_WORD_LEN = 300;
