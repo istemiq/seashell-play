@@ -62,6 +62,12 @@ const ICONS = {
       <path d="M12 6.5v14" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
     </>
   ),
+  trainers: (
+    <>
+      <path d="M5 19.5h4v-4h4v-4h4v-4h2" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M5 19.5h14" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" />
+    </>
+  ),
   readme: (
     <>
       <path d="M6.5 5.5h8.75a2 2 0 0 1 2 2v11H8.25A1.75 1.75 0 0 0 6.5 20.25V5.5Z" stroke="currentColor" strokeWidth="1.75" strokeLinejoin="round" />

@@ -37,6 +37,12 @@ const WordPracticePage = lazy(() =>
 const PatternPracticePage = lazy(() =>
   import('./pages/PatternPracticePage.jsx').then((m) => ({ default: m.PatternPracticePage })),
 );
+const TrainersHubPage = lazy(() =>
+  import('./pages/TrainersHubPage.jsx').then((m) => ({ default: m.TrainersHubPage })),
+);
+const PronounTrainerPage = lazy(() =>
+  import('./pages/PronounTrainerPage.jsx').then((m) => ({ default: m.PronounTrainerPage })),
+);
 const IrregularVerbsPage = lazy(() =>
   import('./pages/IrregularVerbsPage.jsx').then((m) => ({ default: m.IrregularVerbsPage })),
 );
@@ -119,6 +125,8 @@ function AppRoutes({ fetchedUser }) {
           <Route path="practice/word/:wordId" element={<WordPracticePage />} />
           <Route path="practice/pattern" element={<PatternPracticePage />} />
           <Route path="practice" element={<PracticeHubPage />} />
+          <Route path="trainers" element={<TrainersHubPage />} />
+          <Route path="trainers/pronouns" element={<PronounTrainerPage />} />
           <Route path="practice/chat" element={<PracticePage />} />
           <Route path="practice/expert" element={<ExpertPracticePage />} />
           <Route path="practice/expert/:expertId" element={<ExpertPracticePage />} />

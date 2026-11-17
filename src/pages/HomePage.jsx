@@ -79,6 +79,12 @@ export function HomePage({ fetchedUser }) {
         onClick: () => navigate('/practice'),
       },
       {
+        key: 'trainers',
+        iconName: 'trainers',
+        label: t('nav.trainers'),
+        onClick: () => navigate('/trainers'),
+      },
+      {
         key: 'reader',
         iconName: 'reader',
         label: t('nav.reader'),
@@ -147,6 +153,7 @@ export function HomePage({ fetchedUser }) {
               <Cell chevron i18nKey="nav.irregularVerbs" onClick={() => navigate('/irregular-verbs')} />
             ) : null}
             <Cell chevron i18nKey="nav.practice" onClick={() => navigate('/practice')} />
+            <Cell chevron i18nKey="nav.trainers" onClick={() => navigate('/trainers')} />
             <Cell chevron i18nKey="nav.reader" onClick={() => navigate('/reader')} />
             <Cell chevron i18nKey="nav.premium" onClick={() => navigate('/premium')} />
             <Cell chevron i18nKey="nav.settings" onClick={() => navigate('/settings')} />

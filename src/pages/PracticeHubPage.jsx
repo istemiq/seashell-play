@@ -7,8 +7,6 @@ import { useI18n } from '../i18n/I18nContext.jsx';
 import { useEscapeBack } from '../hooks/useEscapeBack.js';
 import { useNavigateBackOrHome } from '../utils/useNavigateBackOrHome.js';
 import { useUiStyle } from '../hooks/useUiStyle.js';
-import { loadSettings } from '../utils/settings.js';
-import { savePatternPracticeSessionId } from '../utils/practiceSession.js';
 import { UI_STYLE_ACADEMIC } from '../utils/uiStyle.js';
 import { Cell, Group, GroupHeader } from '../components/Ui.jsx';
 
@@ -35,15 +33,6 @@ export function PracticeHubPage() {
         label: tr('practice.hubExpert'),
         onClick: () => navigate('/practice/expert'),
       },
-      {
-        key: 'hubPattern',
-        iconName: 'hubPattern',
-        label: tr('practice.hubPattern'),
-        onClick: () => {
-          savePatternPracticeSessionId(loadSettings().learnLocale, null);
-          navigate('/practice/pattern');
-        },
-      },
     ],
     [navigate, tr],
   );
@@ -58,14 +47,6 @@ export function PracticeHubPage() {
         <Group className="ss-practice-hub ss-nav-menu" header={<GroupHeader mode="secondary">{tr('practice.hubChoose')}</GroupHeader>}>
           <Cell chevron i18nKey="practice.hubFree" onClick={() => navigate('/practice/chat')} />
           <Cell chevron i18nKey="practice.hubExpert" onClick={() => navigate('/practice/expert')} />
-          <Cell
-            chevron
-            i18nKey="practice.hubPattern"
-            onClick={() => {
-              savePatternPracticeSessionId(loadSettings().learnLocale, null);
-              navigate('/practice/pattern');
-            }}
-          />
         </Group>
       ) : (
         <StyleNavTiles items={tileItems} className="ss-hub-tiles" columns={1} />
