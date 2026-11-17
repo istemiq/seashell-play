@@ -1044,6 +1044,7 @@ export default {
   'dict.wordPracticePlaceholderBa': '바시키르어로 짧게 답하기…',
   'practice.inBashkir': '바시키르어로',
 
+
   'nav.trainers': '트레이너',
   'trainers.beginner': '초급',
   'trainers.pronouns': '대명사',
@@ -1057,6 +1058,7 @@ export default {
   'trainer.lockedHint': '먼저 \'선택\' 단계를 끝내세요',
   'trainer.tapToReveal': '눌러서 번역 보기',
   'trainer.tapToSee': '옵션을 눌러 의미가 어떻게 달라지는지 보세요.',
+  'trainer.sitExtra': '같은 규칙 — 새로운 문장.',
   'trainer.typeToSee': '빈칸의 단어를 입력하세요.',
   'trainer.typePlaceholder': '단어 입력',
   'trainer.check': '확인',

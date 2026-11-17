@@ -1061,6 +1061,7 @@ export default {
   'dict.wordPracticePlaceholderBa': 'Başkurtça kısa yanıt…',
   'practice.inBashkir': 'Başkurtça',
 
+
   'nav.trainers': 'Alıştırmalar',
   'trainers.beginner': 'Başlangıç',
   'trainers.pronouns': 'Zamirler',
@@ -1074,6 +1075,7 @@ export default {
   'trainer.lockedHint': 'Önce Seçim seviyesini bitir',
   'trainer.tapToReveal': 'Çeviri için dokun',
   'trainer.tapToSee': 'Anlamın nasıl değiştiğini görmek için bir seçeneğe dokun.',
+  'trainer.sitExtra': 'Aynı fikir — yeni bir cümle.',
   'trainer.typeToSee': 'Eksik kelimeyi yaz.',
   'trainer.typePlaceholder': 'Kelimeyi yaz',
   'trainer.check': 'Kontrol et',

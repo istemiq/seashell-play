@@ -1044,6 +1044,7 @@ export default {
   'dict.wordPracticePlaceholderBa': 'バシキール語で短い返答…',
   'practice.inBashkir': 'バシキール語で',
 
+
   'nav.trainers': 'トレーナー',
   'trainers.beginner': '初級',
   'trainers.pronouns': '代名詞',
@@ -1057,6 +1058,7 @@ export default {
   'trainer.lockedHint': 'まず「選択」レベルを終わらせよう',
   'trainer.tapToReveal': 'タップで翻訳を表示',
   'trainer.tapToSee': '選択肢をタップすると意味の違いがわかるよ。',
+  'trainer.sitExtra': '同じルール — 新しい文。',
   'trainer.typeToSee': '空欄の単語を入力しよう。',
   'trainer.typePlaceholder': '単語を入力',
   'trainer.check': 'チェック',

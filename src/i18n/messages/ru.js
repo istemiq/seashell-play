@@ -1069,6 +1069,7 @@ export default {
 
 
 
+
   'nav.trainers': 'Тренажёры',
   'trainers.beginner': 'Beginner',
   'trainers.pronouns': 'Местоимения',
@@ -1082,6 +1083,7 @@ export default {
   'trainer.lockedHint': 'Сначала пройди уровень «Выбор»',
   'trainer.tapToReveal': 'Нажми — покажу перевод',
   'trainer.tapToSee': 'Нажми на вариант — увидишь, как меняется смысл.',
+  'trainer.sitExtra': 'Та же идея — новая фраза.',
   'trainer.typeToSee': 'Впиши пропущенное слово.',
   'trainer.typePlaceholder': 'Впиши слово',
   'trainer.check': 'Проверить',

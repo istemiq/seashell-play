@@ -1044,6 +1044,7 @@ export default {
   'dict.wordPracticePlaceholderBa': 'إجابة قصيرة بالباشكيرية…',
   'practice.inBashkir': 'بالباشكيرية',
 
+
   'nav.trainers': 'تمارين',
   'trainers.beginner': 'مبتدئ',
   'trainers.pronouns': 'الضمائر',
@@ -1057,6 +1058,7 @@ export default {
   'trainer.lockedHint': 'أنهِ مستوى «اختيار» أولاً',
   'trainer.tapToReveal': 'اضغط لإظهار الترجمة',
   'trainer.tapToSee': 'اضغط على خيار لترى كيف يتغيّر المعنى.',
+  'trainer.sitExtra': 'نفس الفكرة — جملة جديدة.',
   'trainer.typeToSee': 'اكتب الكلمة الناقصة.',
   'trainer.typePlaceholder': 'اكتب الكلمة',
   'trainer.check': 'تحقق',

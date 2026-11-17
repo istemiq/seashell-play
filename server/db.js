@@ -204,6 +204,14 @@ export async function initDb() {
      ON irregular_verb_example_batches (verb_id, content_locale, created_at DESC)`,
   );
 
+  // Сгенерированный контент тренажёров: один прогон LLM на урок,
+  // дальше раздаётся всем пользователям из базы.
+  await pool.query(`CREATE TABLE IF NOT EXISTS trainer_examples (
+    lesson_id TEXT PRIMARY KEY,
+    payload JSONB NOT NULL,
+    created_at BIGINT NOT NULL
+  )`);
+
   const { ensurePlatformAccountsSchema } = await import('./platformUsersDb.js');
   await ensurePlatformAccountsSchema();
 }

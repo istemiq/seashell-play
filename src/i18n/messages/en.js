@@ -1209,6 +1209,7 @@ export default {
 
 
 
+
   'nav.trainers': 'Trainers',
   'trainers.beginner': 'Beginner',
   'trainers.pronouns': 'Pronouns',
@@ -1222,6 +1223,7 @@ export default {
   'trainer.lockedHint': 'Finish the Choice level first',
   'trainer.tapToReveal': 'Tap to reveal',
   'trainer.tapToSee': 'Tap an option to see how the meaning shifts.',
+  'trainer.sitExtra': 'Same idea — a new sentence.',
   'trainer.typeToSee': 'Type the missing word.',
   'trainer.typePlaceholder': 'Type the word',
   'trainer.check': 'Check',

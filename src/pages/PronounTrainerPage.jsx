@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button, Input, Panel, PanelHeader, PanelHeaderBack } from '../components/Ui.jsx';
@@ -8,7 +8,14 @@ import { useEscapeBack } from '../hooks/useEscapeBack.js';
 import { useNavigateBackOrHome } from '../utils/useNavigateBackOrHome.js';
 import { isEnglishLearnModule, useLearnLocale } from '../hooks/useLearnLocale.js';
 import { speakEnglish } from '../utils/tts.js';
-import { PRONOUN_STEPS_EN, PRONOUN_WORDS_EN } from '../data/pronounTrainerEn.js';
+import { fetchTrainerExamples } from '../api/trainerApi.js';
+import {
+  PRONOUN_STEPS_EN,
+  PRONOUN_WORDS_EN,
+  pronounGeneratedSteps,
+} from '../data/pronounTrainerEn.js';
+
+const LESSON_ID = 'pronouns-en';
 
 const PROGRESS_KEY = 'seashell.trainer.pronouns.en.choiceDone';
 const WORDS_KEY = 'seashell.trainer.pronouns.en.wordsDone';
@@ -72,15 +79,35 @@ export function PronounTrainerPage() {
   const [picked, setPicked] = useState(null);
   const [input, setInput] = useState('');
   const [writeStatus, setWriteStatus] = useState('idle'); // idle | wrong | right
+  const [generated, setGenerated] = useState(null); // {frames, wordExamples} | null
 
-  const step = PRONOUN_STEPS_EN[stepIdx];
+  useEffect(() => {
+    let live = true;
+    fetchTrainerExamples(LESSON_ID)
+      .then((r) => {
+        if (live && r?.found) setGenerated(r);
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
+
+  // Бандловые шаги + сгенерированные сервером фреймы (если уже в базе).
+  const steps = useMemo(
+    () => [...PRONOUN_STEPS_EN, ...pronounGeneratedSteps(generated?.frames)],
+    [generated],
+  );
+  const wordExamples = generated?.wordExamples || {};
+
+  const step = steps[stepIdx];
   const word = PRONOUN_WORDS_EN[wordIdx];
   const wordImageSrc = `/trainer/pronouns/${word.id}.png`;
   const isLastWord = wordIdx === PRONOUN_WORDS_EN.length - 1;
   const options = useMemo(() => shuffledPair(step.options), [step]);
   const sentence = (word) => `${step.before}${word || '___'}${step.after}`;
   const targetSentence = sentence(step.target);
-  const isLast = stepIdx === PRONOUN_STEPS_EN.length - 1;
+  const isLast = stepIdx === steps.length - 1;
 
   const resetStep = () => {
     setPicked(null);
@@ -228,10 +255,18 @@ export function PronounTrainerPage() {
             <span className={`ss-trainer-wordtr ${revealed ? 'ss-trainer-wordtr--open' : ''}`}>
               {revealed ? t(word.trKey) : t('trainer.tapToReveal')}
             </span>
+            {revealed && wordExamples[word.id] ? (
+              <span className="ss-trainer-wordex">{wordExamples[word.id]}</span>
+            ) : null}
           </button>
 
           <div className="ss-trainer-actions">
-            <ListenTtsButton text={word.word} labelKey="dict.listen" mode="secondary" stretched />
+            <ListenTtsButton
+              text={revealed && wordExamples[word.id] ? wordExamples[word.id] : word.word}
+              labelKey="dict.listen"
+              mode="secondary"
+              stretched
+            />
             <Button stretched mode="primary" onClick={nextWord}>
               {isLastWord ? t('trainer.finish') : t('trainer.next')}
             </Button>
@@ -260,7 +295,7 @@ export function PronounTrainerPage() {
           <div className="ss-trainer-meta">
             <span className="ss-trainer-axis">{t(step.axis)}</span>
             <span className="ss-trainer-progress">
-              {stepIdx + 1} / {PRONOUN_STEPS_EN.length}
+              {stepIdx + 1} / {steps.length}
             </span>
           </div>
           <div className="ss-trainer-situation">{t(step.situation)}</div>

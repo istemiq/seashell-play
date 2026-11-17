@@ -115,3 +115,100 @@ export const PRONOUN_STEPS_EN = [
     ],
   },
 ];
+
+/**
+ * Шаблоны контрастных осей для сгенерированных сервером фреймов
+ * (GET /api/trainer/examples?lesson=pronouns-en). Инсайты общие для
+ * любой рамки оси — контраст форм не меняется от предложения к предложению.
+ */
+export const PRONOUN_AXES_EN = {
+  'i-me': {
+    axis: 'trainer.pronouns.axisI',
+    target: 'me',
+    options: [
+      { word: 'I', tag: 'trainer.pronouns.tagDoer', text: 'trainer.pronouns.i1wrong' },
+      { word: 'me', tag: 'trainer.pronouns.tagTarget', text: 'trainer.pronouns.i1right' },
+    ],
+  },
+  'i-my': {
+    axis: 'trainer.pronouns.axisMy',
+    target: 'my',
+    options: [
+      { word: 'my', tag: 'trainer.pronouns.tagThing', text: 'trainer.pronouns.i2right' },
+      { word: 'me', tag: 'trainer.pronouns.tagToMe', text: 'trainer.pronouns.i2wrong' },
+    ],
+  },
+  'he-him': {
+    axis: 'trainer.pronouns.axisHe',
+    target: 'He',
+    options: [
+      { word: 'He', tag: 'trainer.pronouns.tagSource', text: 'trainer.pronouns.i3right' },
+      { word: 'Him', tag: 'trainer.pronouns.tagReceiver', text: 'trainer.pronouns.i3wrong' },
+    ],
+  },
+  'she-her': {
+    axis: 'trainer.pronouns.axisShe',
+    target: 'her',
+    options: [
+      { word: 'she', tag: 'trainer.pronouns.tagSelf', text: 'trainer.pronouns.i4wrong' },
+      { word: 'her', tag: 'trainer.pronouns.tagReceiver', text: 'trainer.pronouns.i4right' },
+    ],
+  },
+  'we-us': {
+    axis: 'trainer.pronouns.axisWe',
+    target: 'us',
+    options: [
+      { word: 'we', tag: 'trainer.pronouns.tagWeAct', text: 'trainer.pronouns.i5wrong' },
+      { word: 'us', tag: 'trainer.pronouns.tagWithUs', text: 'trainer.pronouns.i5right' },
+    ],
+  },
+  'they-them': {
+    axis: 'trainer.pronouns.axisThey',
+    target: 'They',
+    options: [
+      { word: 'They', tag: 'trainer.pronouns.tagTheyAct', text: 'trainer.pronouns.i6right' },
+      { word: 'Them', tag: 'trainer.pronouns.tagToThem', text: 'trainer.pronouns.i6wrong' },
+    ],
+  },
+  'you-your': {
+    axis: 'trainer.pronouns.axisYou',
+    target: 'your',
+    options: [
+      { word: 'you', tag: 'trainer.pronouns.tagYouSelf', text: 'trainer.pronouns.i7wrong' },
+      { word: 'your', tag: 'trainer.pronouns.tagYourThing', text: 'trainer.pronouns.i7right' },
+    ],
+  },
+  'it-its': {
+    axis: 'trainer.pronouns.axisIt',
+    target: 'its',
+    options: [
+      { word: 'it', tag: 'trainer.pronouns.tagItself', text: 'trainer.pronouns.i8wrong' },
+      { word: 'its', tag: 'trainer.pronouns.tagLink', text: 'trainer.pronouns.i8right' },
+    ],
+  },
+};
+
+/**
+ * Превращает сгенерированные фреймы {axis, before, after} в шаги тренажёра
+ * по шаблону оси. Невалидные/неизвестные оси отбрасываются.
+ */
+export function pronounGeneratedSteps(frames) {
+  return (Array.isArray(frames) ? frames : [])
+    .map((f) => {
+      const tpl = PRONOUN_AXES_EN[String(f?.axis || '')];
+      if (!tpl || typeof f?.before !== 'string' || typeof f?.after !== 'string') return null;
+      const words = tpl.options.map((o) => o.word.toLowerCase());
+      const target = words.includes(String(f?.target || '').toLowerCase())
+        ? tpl.options[words.indexOf(String(f.target).toLowerCase())].word
+        : tpl.target;
+      return {
+        axis: tpl.axis,
+        before: f.before,
+        after: f.after,
+        situation: 'trainer.sitExtra',
+        target,
+        options: tpl.options,
+      };
+    })
+    .filter(Boolean);
+}

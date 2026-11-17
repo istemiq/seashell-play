@@ -1044,6 +1044,7 @@ export default {
   'dict.wordPracticePlaceholderBa': 'پاسخ کوتاه به باشقیری…',
   'practice.inBashkir': 'به باشقیری',
 
+
   'nav.trainers': 'تمرین‌ها',
   'trainers.beginner': 'مبتدی',
   'trainers.pronouns': 'ضمیرها',
@@ -1057,6 +1058,7 @@ export default {
   'trainer.lockedHint': 'اول سطح «انتخاب» را تمام کن',
   'trainer.tapToReveal': 'برای دیدن ترجمه بزن',
   'trainer.tapToSee': 'روی یک گزینه بزن تا ببینی معنا چطور عوض می‌شود.',
+  'trainer.sitExtra': 'همان ایده — یک جملهٔ جدید.',
   'trainer.typeToSee': 'واژهٔ جاافتاده را بنویس.',
   'trainer.typePlaceholder': 'واژه را بنویس',
   'trainer.check': 'بررسی',

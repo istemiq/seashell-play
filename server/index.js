@@ -27,6 +27,7 @@ import { registerUserRoutes } from './routes/user.js';
 import { registerPracticeRoutes } from './routes/practice.js';
 import { registerDictionaryRoutes } from './routes/dictionary.js';
 import { registerReaderRoutes } from './routes/reader.js';
+import { registerTrainerRoutes } from './routes/trainer.js';
 
 const app = express();
 const PORT = Number(process.env.PORT) || 3001;
@@ -153,6 +154,7 @@ registerSttTranscribe(app, { makeRateLimiter });
 registerPracticeRoutes(app);
 registerDictionaryRoutes(app);
 registerReaderRoutes(app);
+registerTrainerRoutes(app);
 
 function assertProductionSecurityConfig() {
   if (!isProd) return;

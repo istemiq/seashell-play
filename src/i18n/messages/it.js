@@ -1044,6 +1044,7 @@ export default {
   'dict.wordPracticePlaceholderBa': 'Risposta breve in baskir…',
   'practice.inBashkir': 'In baskir',
 
+
   'nav.trainers': 'Esercizi',
   'trainers.beginner': 'Principiante',
   'trainers.pronouns': 'Pronomi',
@@ -1057,6 +1058,7 @@ export default {
   'trainer.lockedHint': 'Finisci prima il livello Scelta',
   'trainer.tapToReveal': 'Tocca per vedere la traduzione',
   'trainer.tapToSee': 'Tocca un\'opzione per vedere come cambia il senso.',
+  'trainer.sitExtra': 'Stessa idea — una frase nuova.',
   'trainer.typeToSee': 'Scrivi la parola mancante.',
   'trainer.typePlaceholder': 'Scrivi la parola',
   'trainer.check': 'Verifica',

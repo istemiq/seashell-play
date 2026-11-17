@@ -1048,6 +1048,7 @@ export default {
   'dict.wordPracticePlaceholderBa': 'Коротка відповідь башкирською…',
   'practice.inBashkir': 'Башкирською',
 
+
   'nav.trainers': 'Тренажери',
   'trainers.beginner': 'Початковий',
   'trainers.pronouns': 'Займенники',
@@ -1061,6 +1062,7 @@ export default {
   'trainer.lockedHint': 'Спочатку пройди рівень «Вибір»',
   'trainer.tapToReveal': 'Натисни — покажу переклад',
   'trainer.tapToSee': 'Натисни на варіант — побачиш, як змінюється сенс.',
+  'trainer.sitExtra': 'Та сама ідея — нова фраза.',
   'trainer.typeToSee': 'Впиши пропущене слово.',
   'trainer.typePlaceholder': 'Впиши слово',
   'trainer.check': 'Перевірити',
