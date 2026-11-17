@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Panel, PanelHeader, PanelHeaderBack } from '../components/Ui.jsx';
@@ -10,7 +10,8 @@ import { useUiStyle } from '../hooks/useUiStyle.js';
 import { loadSettings } from '../utils/settings.js';
 import { savePatternPracticeSessionId } from '../utils/practiceSession.js';
 import { UI_STYLE_ACADEMIC } from '../utils/uiStyle.js';
-import { Cell, Group, GroupHeader } from '../components/Ui.jsx';
+import { Cell, Group } from '../components/Ui.jsx';
+import { NavIcon } from '../components/NavIcon.jsx';
 
 export function TrainersHubPage() {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ export function TrainersHubPage() {
   const { t: tr } = useI18n();
   const uiStyle = useUiStyle();
   const isAcademic = uiStyle === UI_STYLE_ACADEMIC;
+  const [beginnerOpen, setBeginnerOpen] = useState(true);
   useEscapeBack(goBackOrHome);
 
   const openPatterns = () => {
@@ -57,21 +59,38 @@ export function TrainersHubPage() {
         {tr('nav.trainers')}
       </PanelHeader>
 
+      <button
+        type="button"
+        className={`ss-trainer-folder ${beginnerOpen ? 'ss-trainer-folder--open' : ''}`}
+        onClick={() => setBeginnerOpen((v) => !v)}
+        aria-expanded={beginnerOpen}
+      >
+        <span className="ss-trainer-folder-icon" aria-hidden="true">
+          <NavIcon name="trainers" size={24} />
+        </span>
+        <span className="ss-trainer-folder-title">{tr('trainers.beginner')}</span>
+        <span className="ss-trainer-folder-count">{beginnerItems.length}</span>
+        <span className="ss-trainer-folder-chevron" aria-hidden="true">›</span>
+      </button>
+
+      {beginnerOpen ? (
+        <div className="ss-trainer-folder-body">
+          {isAcademic ? (
+            <Group className="ss-practice-hub ss-nav-menu">
+              <Cell chevron i18nKey="trainers.pronouns" onClick={() => navigate('/trainers/pronouns')} />
+            </Group>
+          ) : (
+            <StyleNavTiles items={beginnerItems} className="ss-hub-tiles" columns={1} />
+          )}
+        </div>
+      ) : null}
+
       {isAcademic ? (
-        <>
-          <Group className="ss-practice-hub ss-nav-menu" header={<GroupHeader mode="secondary">{tr('trainers.beginner')}</GroupHeader>}>
-            <Cell chevron i18nKey="trainers.pronouns" onClick={() => navigate('/trainers/pronouns')} />
-          </Group>
-          <Group className="ss-practice-hub ss-nav-menu">
-            <Cell chevron i18nKey="trainers.patterns" onClick={openPatterns} />
-          </Group>
-        </>
+        <Group className="ss-practice-hub ss-nav-menu">
+          <Cell chevron i18nKey="trainers.patterns" onClick={openPatterns} />
+        </Group>
       ) : (
-        <>
-          <GroupHeader mode="secondary" size="s">{tr('trainers.beginner')}</GroupHeader>
-          <StyleNavTiles items={beginnerItems} className="ss-hub-tiles" columns={1} />
-          <StyleNavTiles items={patternItems} className="ss-hub-tiles" columns={1} />
-        </>
+        <StyleNavTiles items={patternItems} className="ss-hub-tiles" columns={1} />
       )}
     </Panel>
   );

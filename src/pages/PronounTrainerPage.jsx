@@ -8,6 +8,8 @@ import { useEscapeBack } from '../hooks/useEscapeBack.js';
 import { useNavigateBackOrHome } from '../utils/useNavigateBackOrHome.js';
 import { isEnglishLearnModule, useLearnLocale } from '../hooks/useLearnLocale.js';
 import { speakEnglish } from '../utils/tts.js';
+import { translate } from '../i18n/translate.js';
+import { resolveContentLocaleForApi } from '../utils/contentLocale.js';
 import { fetchTrainerExamples } from '../api/trainerApi.js';
 import {
   PRONOUN_STEPS_EN,
@@ -92,6 +94,11 @@ export function PronounTrainerPage() {
       live = false;
     };
   }, []);
+
+  // Переводы слов — на язык словарных карточек (contentLocale),
+  // а не на язык интерфейса: при UI=en и русском словаре покажет «я».
+  const cardLocale = useMemo(() => resolveContentLocaleForApi(), []);
+  const tw = (key) => translate(cardLocale, key);
 
   // Бандловые шаги + сгенерированные сервером фреймы (если уже в базе).
   const steps = useMemo(
@@ -253,7 +260,7 @@ export function PronounTrainerPage() {
             </span>
             <span className="ss-trainer-wordtext">{word.word}</span>
             <span className={`ss-trainer-wordtr ${revealed ? 'ss-trainer-wordtr--open' : ''}`}>
-              {revealed ? t(word.trKey) : t('trainer.tapToReveal')}
+              {revealed ? tw(word.trKey) : t('trainer.tapToReveal')}
             </span>
             {revealed && wordExamples[word.id] ? (
               <span className="ss-trainer-wordex">{wordExamples[word.id]}</span>

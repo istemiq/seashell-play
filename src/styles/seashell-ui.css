@@ -2297,9 +2297,52 @@ html[dir='rtl'] .seashell-crt .seashell-card-lang-shell__head .ss-modal-dismiss 
   cursor: pointer;
   text-align: center;
 }
+.ss-trainer-folder {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  border-radius: 14px;
+  border: 1px solid var(--crt-border);
+  background: var(--ss-popup-bg, var(--crt-bg-elev));
+  color: var(--crt-fg);
+  cursor: pointer;
+  font-size: 1.05em;
+  font-weight: 600;
+  text-align: left;
+}
+.ss-trainer-folder-icon {
+  color: var(--crt-accent);
+  display: flex;
+}
+.ss-trainer-folder-title {
+  flex: 1;
+}
+.ss-trainer-folder-count {
+  font-size: 0.85em;
+  font-weight: 500;
+  color: var(--crt-fg-dim);
+  border: 1px solid var(--crt-border);
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.ss-trainer-folder-chevron {
+  color: var(--crt-fg-dim);
+  transition: transform 0.15s ease;
+}
+.ss-trainer-folder--open .ss-trainer-folder-chevron {
+  transform: rotate(90deg);
+}
+.ss-trainer-folder-body {
+  margin: -4px 0 12px 14px;
+  padding-left: 12px;
+  border-left: 2px solid var(--crt-accent-muted);
+}
 .ss-trainer-wordimg {
-  width: 132px;
-  height: 132px;
+  width: min(66vw, 280px);
+  height: min(66vw, 280px);
   border-radius: 12px;
   overflow: hidden;
   display: flex;
