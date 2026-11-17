@@ -2281,3 +2281,59 @@ html[dir='rtl'] .seashell-crt .seashell-card-lang-shell__head .ss-modal-dismiss 
   gap: 10px;
 }
 .ss-trainer-actions > * { flex: 1; }
+
+/* Карточка слова (уровень «Слова») */
+.ss-trainer-wordcard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 18px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--crt-border);
+  background: var(--ss-popup-bg, var(--crt-bg-elev));
+  color: var(--crt-fg);
+  cursor: pointer;
+  text-align: center;
+}
+.ss-trainer-wordimg {
+  width: 132px;
+  height: 132px;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--crt-accent-muted);
+}
+.ss-trainer-wordimg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.ss-trainer-wordimg--placeholder {
+  font-size: 3em;
+  font-weight: 600;
+  color: var(--crt-fg-dim);
+  opacity: 0.55;
+}
+.ss-trainer-wordtext {
+  font-size: 1.6em;
+  font-weight: 600;
+}
+.ss-trainer-wordtr {
+  font-size: 0.95em;
+  color: var(--crt-fg-dim);
+  min-height: 1.4em;
+  font-style: italic;
+}
+.ss-trainer-wordtr--open {
+  color: var(--crt-fg);
+  font-style: normal;
+  font-size: 1.05em;
+}
+.ss-trainer-back {
+  align-self: center;
+}

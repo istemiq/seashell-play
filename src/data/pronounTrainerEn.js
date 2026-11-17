@@ -4,6 +4,27 @@
  * две опции с семантическими тегами и объяснением сдвига смысла.
  * `target` — правильный вариант.
  */
+/**
+ * Уровень 0 — словарь к уроку. Карточка = картинка + слово + перевод
+ * «за шторкой» (i18n-ключ trKey). Картинки: public/trainer/pronouns/<id>.png
+ */
+export const PRONOUN_WORDS_EN = [
+  { id: 'i', word: 'I', trKey: 'trainer.word.i' },
+  { id: 'you', word: 'you', trKey: 'trainer.word.you' },
+  { id: 'he', word: 'he', trKey: 'trainer.word.he' },
+  { id: 'she', word: 'she', trKey: 'trainer.word.she' },
+  { id: 'it', word: 'it', trKey: 'trainer.word.it' },
+  { id: 'we', word: 'we', trKey: 'trainer.word.we' },
+  { id: 'they', word: 'they', trKey: 'trainer.word.they' },
+  { id: 'eat', word: 'eat', trKey: 'trainer.word.eat' },
+  { id: 'drink', word: 'drink', trKey: 'trainer.word.drink' },
+  { id: 'run', word: 'run', trKey: 'trainer.word.run' },
+  { id: 'read', word: 'read', trKey: 'trainer.word.read' },
+  { id: 'play', word: 'play', trKey: 'trainer.word.play' },
+  { id: 'walk', word: 'walk', trKey: 'trainer.word.walk' },
+  { id: 'sleep', word: 'sleep', trKey: 'trainer.word.sleep' },
+];
+
 export const PRONOUN_STEPS_EN = [
   {
     axis: 'trainer.pronouns.axisI',
