@@ -7,7 +7,6 @@ import { useI18n } from '../i18n/I18nContext.jsx';
 import { useEscapeBack } from '../hooks/useEscapeBack.js';
 import { useNavigateBackOrHome } from '../utils/useNavigateBackOrHome.js';
 import { useUiStyle } from '../hooks/useUiStyle.js';
-import { isEnglishLearnModule, useLearnLocale } from '../hooks/useLearnLocale.js';
 import { loadSettings } from '../utils/settings.js';
 import { savePatternPracticeSessionId } from '../utils/practiceSession.js';
 import { UI_STYLE_ACADEMIC } from '../utils/uiStyle.js';
@@ -19,8 +18,6 @@ export function TrainersHubPage() {
   const { t: tr } = useI18n();
   const uiStyle = useUiStyle();
   const isAcademic = uiStyle === UI_STYLE_ACADEMIC;
-  const learnLocale = useLearnLocale();
-  const englishModule = isEnglishLearnModule(learnLocale);
   useEscapeBack(goBackOrHome);
 
   const openPatterns = () => {
@@ -62,23 +59,17 @@ export function TrainersHubPage() {
 
       {isAcademic ? (
         <>
-          {englishModule ? (
-            <Group className="ss-practice-hub ss-nav-menu" header={<GroupHeader mode="secondary">{tr('trainer.levelBeginner')}</GroupHeader>}>
-              <Cell chevron i18nKey="trainers.pronouns" onClick={() => navigate('/trainers/pronouns')} />
-            </Group>
-          ) : null}
+          <Group className="ss-practice-hub ss-nav-menu" header={<GroupHeader mode="secondary">{tr('trainers.beginner')}</GroupHeader>}>
+            <Cell chevron i18nKey="trainers.pronouns" onClick={() => navigate('/trainers/pronouns')} />
+          </Group>
           <Group className="ss-practice-hub ss-nav-menu">
             <Cell chevron i18nKey="trainers.patterns" onClick={openPatterns} />
           </Group>
         </>
       ) : (
         <>
-          {englishModule ? (
-            <>
-              <GroupHeader mode="secondary" size="s">{tr('trainer.levelBeginner')}</GroupHeader>
-              <StyleNavTiles items={beginnerItems} className="ss-hub-tiles" columns={1} />
-            </>
-          ) : null}
+          <GroupHeader mode="secondary" size="s">{tr('trainers.beginner')}</GroupHeader>
+          <StyleNavTiles items={beginnerItems} className="ss-hub-tiles" columns={1} />
           <StyleNavTiles items={patternItems} className="ss-hub-tiles" columns={1} />
         </>
       )}

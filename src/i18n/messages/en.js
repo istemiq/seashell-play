@@ -1207,6 +1207,7 @@ export default {
   'reader.fullscreen': 'Fullscreen',
   'reader.pageProgress': 'Page {current} of {total}',
 
+  'trainers.beginner': 'Beginner',
   'trainers.pronouns': 'Pronouns',
   'trainers.patterns': 'My grammar patterns',
   'trainers.englishOnly': 'This trainer is part of the English course for now.',

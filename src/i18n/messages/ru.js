@@ -1067,6 +1067,7 @@ export default {
   'reader.fullscreen': 'Полный экран',
   'reader.pageProgress': 'Стр. {current} из {total}',
 
+  'trainers.beginner': 'Beginner',
   'trainers.pronouns': 'Местоимения',
   'trainers.patterns': 'Мои грамматические конструкции',
   'trainers.englishOnly': 'Этот тренажёр пока доступен в курсе английского.',

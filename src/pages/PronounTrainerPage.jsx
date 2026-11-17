@@ -156,7 +156,7 @@ export function PronounTrainerPage() {
 
   return (
     <Panel>
-      <PanelHeader before={<PanelHeaderBack onClick={() => navigate('/trainers')} />}>
+      <PanelHeader before={<PanelHeaderBack onClick={() => void goBackOrHome()} />}>
         {t('trainers.pronouns')}
       </PanelHeader>
 
@@ -250,7 +250,7 @@ export function PronounTrainerPage() {
             <Button stretched mode="primary" onClick={() => setLevel('write')}>
               {t('trainer.startWrite')}
             </Button>
-            <Button stretched mode="secondary" onClick={() => navigate('/trainers')}>
+            <Button stretched mode="secondary" onClick={() => navigate('/trainers', { replace: true })}>
               {t('trainer.backToTrainers')}
             </Button>
           </div>
