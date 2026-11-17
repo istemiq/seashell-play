@@ -155,12 +155,14 @@ export function ReaderPage() {
     () => loadSettings().readerTranslateLang || '',
   );
   const [langMenuOpen, setLangMenuOpen] = useState(false);
+  const [pageInfo, setPageInfo] = useState(null);
   // В Telegram Desktop (tdesktop/macos) file input в Mini App не открывает пикер —
   // прячем кнопку, загрузка там идёт через отправку файла боту.
   const hideFileInput = ['tdesktop', 'macos'].includes(getWebApp()?.platform ?? '');
   const renditionRef = useRef(null);
   const textAreaRef = useRef(null);
   const contentRef = useRef(null);
+  const epubLocationsReady = useRef(false);
 
   const resetReaderState = () => {
     setSelectedText(null);
@@ -168,6 +170,8 @@ export function ReaderPage() {
     setAdding(false);
     setError(null);
     setSnackbar(null);
+    setPageInfo(null);
+    epubLocationsReady.current = false;
     renditionRef.current = null;
   };
 
@@ -318,7 +322,33 @@ export function ReaderPage() {
   const handleEpubLocationChanged = (cfi) => {
     setLocation(cfi);
     if (posKey) localStorage.setItem(posKey, cfi);
+    const locs = renditionRef.current?.book?.locations;
+    const total = typeof locs?.length === 'function' ? locs.length() : 0;
+    if (total) {
+      const idx = locs.locationFromCfi(cfi);
+      setPageInfo({ current: Math.min(total, Math.max(1, idx + 1)), total });
+    }
   };
+
+  /** Условная страница в text-режиме = высота видимой области. */
+  const updateTextProgress = useCallback(() => {
+    const el = contentRef.current;
+    if (!el || book?.kind !== 'text') return;
+    const total = Math.max(1, Math.ceil(el.scrollHeight / el.clientHeight));
+    const current = Math.min(total, Math.floor(el.scrollTop / el.clientHeight) + 1);
+    setPageInfo({ current, total });
+  }, [book?.kind]);
+
+  // text-режим: прогресс при открытии книги и при ресайзе вьюпорта.
+  useEffect(() => {
+    if (book?.kind !== 'text') return undefined;
+    const el = contentRef.current;
+    if (!el) return undefined;
+    updateTextProgress();
+    const ro = typeof ResizeObserver === 'function' ? new ResizeObserver(updateTextProgress) : null;
+    ro?.observe(el);
+    return () => ro?.disconnect();
+  }, [book?.kind, updateTextProgress]);
 
   // Восстановить позицию при открытии книги
   useEffect(() => {
@@ -327,9 +357,12 @@ export function ReaderPage() {
       setLocation(localStorage.getItem(posKey) || 0);
     } else if (book?.kind === 'text' && contentRef.current) {
       const saved = localStorage.getItem(`${posKey}-scroll`);
-      if (saved) contentRef.current.scrollTop = parseInt(saved, 10);
+      if (saved) {
+        contentRef.current.scrollTop = parseInt(saved, 10);
+        requestAnimationFrame(updateTextProgress);
+      }
     }
-  }, [posKey, book?.kind]);
+  }, [posKey, book?.kind, updateTextProgress]);
 
   const handleEpubTextSelected = (cfiRange, contents) => {
     let text = '';
@@ -572,6 +605,7 @@ export function ReaderPage() {
     if (contentRef.current && posKey) {
       localStorage.setItem(`${posKey}-scroll`, String(contentRef.current.scrollTop));
     }
+    updateTextProgress();
   };
 
   // Меню языка перевода закрывается по тапу вне его
@@ -645,6 +679,20 @@ export function ReaderPage() {
                   locationChanged={handleEpubLocationChanged}
                   getRendition={(r) => {
                     renditionRef.current = r;
+                    // Условные страницы epub (~1024 символа) — как «locations» в читалках.
+                    const eb = r?.book;
+                    if (eb?.locations && !epubLocationsReady.current) {
+                      epubLocationsReady.current = true;
+                      Promise.resolve(eb.ready)
+                        .then(() => eb.locations.generate(1024))
+                        .then(() => {
+                          const total = eb.locations.length();
+                          const cfi = r.currentLocation?.()?.start?.cfi;
+                          const idx = cfi ? eb.locations.locationFromCfi(cfi) : 0;
+                          setPageInfo({ current: Math.min(total, Math.max(1, idx + 1)), total });
+                        })
+                        .catch(() => {});
+                    }
                     r.hooks?.content?.register?.((contents) => {
                       const doc = contents.document;
                       doc?.addEventListener('click', (e) =>
@@ -676,6 +724,22 @@ export function ReaderPage() {
 
             <div className="ss-reader-bar">
               <div className="ss-reader-bar__in">
+                {pageInfo ? (
+                  <div className="ss-reader-progress">
+                    <div className="ss-reader-progress__track">
+                      <div
+                        className="ss-reader-progress__fill"
+                        style={{ width: `${(pageInfo.current / pageInfo.total) * 100}%` }}
+                      />
+                    </div>
+                    <span className="ss-reader-progress__label">
+                      {t('reader.pageProgress', {
+                        current: pageInfo.current,
+                        total: pageInfo.total,
+                      })}
+                    </span>
+                  </div>
+                ) : null}
                 {barActive ? (
                   <>
                     <div className="ss-reader-bar__row">

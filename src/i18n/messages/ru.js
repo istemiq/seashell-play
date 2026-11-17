@@ -1064,4 +1064,5 @@ export default {
   'reader.srcDict': 'Источник: FreeDict',
   'reader.addedToDict': 'В словаре',
   'reader.fullscreen': 'Полный экран',
+  'reader.pageProgress': 'Стр. {current} из {total}',
 };

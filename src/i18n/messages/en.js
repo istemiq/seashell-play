@@ -1204,4 +1204,5 @@ export default {
   'reader.srcDict': 'Source: FreeDict',
   'reader.addedToDict': 'In dictionary',
   'reader.fullscreen': 'Fullscreen',
+  'reader.pageProgress': 'Page {current} of {total}',
 };

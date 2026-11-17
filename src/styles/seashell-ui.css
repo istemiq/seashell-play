@@ -1816,6 +1816,35 @@ html[dir='rtl'] .seashell-crt .seashell-card-lang-shell__head .ss-modal-dismiss 
   flex: 1;
 }
 
+.seashell-crt .ss-reader-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.seashell-crt .ss-reader-progress__track {
+  flex: 1;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--ss-color-bg-secondary, rgba(255, 255, 255, 0.12));
+  overflow: hidden;
+}
+
+.seashell-crt .ss-reader-progress__fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--crt-accent, #7db8ff);
+  transition: width 0.2s ease;
+}
+
+.seashell-crt .ss-reader-progress__label {
+  flex: none;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--crt-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
 @media (min-width: 720px) {
   .seashell-crt .ss-reader__text {
     max-width: 860px;
