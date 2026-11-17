@@ -39,8 +39,8 @@ export const PRONOUN_STEPS_EN = [
   },
   {
     axis: 'trainer.pronouns.axisMy',
-    before: 'Where is ',
-    after: ' coffee?',
+    before: 'This is ',
+    after: ' book.',
     situation: 'trainer.pronouns.sit2',
     target: 'my',
     options: [
@@ -51,7 +51,7 @@ export const PRONOUN_STEPS_EN = [
   {
     axis: 'trainer.pronouns.axisHe',
     before: '',
-    after: ' knows the way.',
+    after: ' runs.',
     situation: 'trainer.pronouns.sit3',
     target: 'He',
     options: [
@@ -61,8 +61,8 @@ export const PRONOUN_STEPS_EN = [
   },
   {
     axis: 'trainer.pronouns.axisShe',
-    before: 'I gave ',
-    after: ' the keys.',
+    before: 'I see ',
+    after: '.',
     situation: 'trainer.pronouns.sit4',
     target: 'her',
     options: [
@@ -72,7 +72,7 @@ export const PRONOUN_STEPS_EN = [
   },
   {
     axis: 'trainer.pronouns.axisWe',
-    before: 'Come with ',
+    before: 'Play with ',
     after: '.',
     situation: 'trainer.pronouns.sit5',
     target: 'us',
@@ -84,34 +84,34 @@ export const PRONOUN_STEPS_EN = [
   {
     axis: 'trainer.pronouns.axisThey',
     before: '',
-    after: ' left early.',
+    after: ' sleep.',
     situation: 'trainer.pronouns.sit6',
     target: 'They',
     options: [
-      { word: 'They', tag: 'trainer.pronouns.tagTheyLeft', text: 'trainer.pronouns.i6right' },
+      { word: 'They', tag: 'trainer.pronouns.tagTheyAct', text: 'trainer.pronouns.i6right' },
       { word: 'Them', tag: 'trainer.pronouns.tagToThem', text: 'trainer.pronouns.i6wrong' },
-    ],
-  },
-  {
-    axis: 'trainer.pronouns.axisIt',
-    before: 'The cat licked ',
-    after: ' paw.',
-    situation: 'trainer.pronouns.sit7',
-    target: 'its',
-    options: [
-      { word: 'it', tag: 'trainer.pronouns.tagItself', text: 'trainer.pronouns.i7wrong' },
-      { word: 'its', tag: 'trainer.pronouns.tagLink', text: 'trainer.pronouns.i7right' },
     ],
   },
   {
     axis: 'trainer.pronouns.axisYou',
     before: 'Is this ',
-    after: ' bag?',
-    situation: 'trainer.pronouns.sit8',
+    after: ' ball?',
+    situation: 'trainer.pronouns.sit7',
     target: 'your',
     options: [
-      { word: 'you', tag: 'trainer.pronouns.tagYouSelf', text: 'trainer.pronouns.i8wrong' },
-      { word: 'your', tag: 'trainer.pronouns.tagYourThing', text: 'trainer.pronouns.i8right' },
+      { word: 'you', tag: 'trainer.pronouns.tagYouSelf', text: 'trainer.pronouns.i7wrong' },
+      { word: 'your', tag: 'trainer.pronouns.tagYourThing', text: 'trainer.pronouns.i7right' },
+    ],
+  },
+  {
+    axis: 'trainer.pronouns.axisIt',
+    before: 'The dog eats ',
+    after: ' food.',
+    situation: 'trainer.pronouns.sit8',
+    target: 'its',
+    options: [
+      { word: 'it', tag: 'trainer.pronouns.tagItself', text: 'trainer.pronouns.i8wrong' },
+      { word: 'its', tag: 'trainer.pronouns.tagLink', text: 'trainer.pronouns.i8right' },
     ],
   },
 ];
