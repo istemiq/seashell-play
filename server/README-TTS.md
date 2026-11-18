@@ -22,3 +22,9 @@
 - `TTS_RPM` (default: `30`) — лимит запросов в минуту на пользователя
 - `TTS_KEY_SECRET` (optional) — соль для ключа кэша (чтобы нельзя было угадывать файлы по тексту)
 
+
+### Kokoro (Apache-2.0) для покрытых локалей
+
+- Локали `en`, `en-GB`, `es`, `fr`, `it`, `pt(-BR)`, `ja`, `hi`, `zh` идут через Kokoro-сервис `http://127.0.0.1:5555` (`/opt/kokoro`, systemd `kokoro-tts`, скрипт `server/scripts/kokoro_server.py`)
+- `TTS_KOKORO_ENABLED` (default: `true`), `TTS_KOKORO_URL` (default: `http://127.0.0.1:5555`)
+- Если сервис недоступен — запрос падает обратно на Piper/espeak; остальные языки всегда на Piper

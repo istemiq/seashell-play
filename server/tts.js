@@ -59,6 +59,46 @@ export function localeUsesEspeakFallback(locale) {
   return ESPEAK_FALLBACK_LANGS.has(prefix);
 }
 
+/**
+ * Kokoro (Apache-2.0, /opt/kokoro) — richer voices for the locales it covers.
+ * Everything else stays on Piper/espeak. Service: `uvicorn kokoro_server` on :5555.
+ */
+const KOKORO_VOICES = {
+  en: { voice: 'af_heart', lang: 'en-us' },
+  'en-us': { voice: 'af_heart', lang: 'en-us' },
+  'en-gb': { voice: 'bf_alice', lang: 'en-gb' },
+  es: { voice: 'ef_dora', lang: 'es' },
+  fr: { voice: 'ff_siwis', lang: 'fr-fr' },
+  it: { voice: 'if_sara', lang: 'it' },
+  pt: { voice: 'pf_dora', lang: 'pt-br' },
+  'pt-br': { voice: 'pf_dora', lang: 'pt-br' },
+  ja: { voice: 'jf_alpha', lang: 'ja' },
+  hi: { voice: 'hf_alpha', lang: 'hi' },
+  zh: { voice: 'zf_xiaobei', lang: 'cmn' },
+};
+
+function kokoroFor(locale) {
+  if (!envBool('TTS_KOKORO_ENABLED', true)) return null;
+  const lc = String(locale ?? '').toLowerCase().replace(/_/g, '-');
+  return KOKORO_VOICES[lc] || KOKORO_VOICES[lc.split('-')[0]] || null;
+}
+
+async function synthesizeKokoroWav({ text, voice, lang, rate, wavPath }) {
+  const base = String(process.env.TTS_KOKORO_URL ?? 'http://127.0.0.1:5555')
+    .trim()
+    .replace(/\/$/, '');
+  const res = await fetch(`${base}/speak`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ text, voice, lang, speed: rate }),
+    signal: AbortSignal.timeout(60_000),
+  });
+  if (!res.ok) throw new Error(`kokoro HTTP ${res.status}`);
+  const j = await res.json();
+  if (!j?.wav_b64) throw new Error('kokoro: empty audio');
+  await fs.writeFile(wavPath, Buffer.from(j.wav_b64, 'base64'));
+}
+
 function espeakVoiceForLocale(locale) {
   const lc = String(locale ?? '').toLowerCase().replace(/_/g, '-');
   if (lc.startsWith('he')) return 'he';
@@ -353,10 +393,11 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
     throw e;
   }
 
-  const useEspeak = localeUsesEspeakFallback(locale);
-  const model = useEspeak ? 'espeak-ng' : voiceModelPath(locale);
+  const kokoro = kokoroFor(locale);
+  const useEspeak = !kokoro && localeUsesEspeakFallback(locale);
+  const model = kokoro ? `kokoro:${kokoro.voice}` : useEspeak ? 'espeak-ng' : voiceModelPath(locale);
   if (!model) {
-    const e = new Error('No Piper model for locale');
+    const e = new Error('No TTS voice for locale');
     e.httpStatus = 501;
     throw e;
   }
@@ -391,9 +432,33 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
       if (useEspeak) {
         await synthesizeEspeakMp3({ text: t, locale, rate: rateClamped, mp3Path: tmpMp3, wavPath: tmpWav });
       } else {
-        await execFileChecked(piperBinaryPath(), ['--model', model, '--output_file', tmpWav, '--length_scale', String(1 / rateClamped)], {
-          stdinText: t,
-        });
+        let synthesized = false;
+        if (kokoro) {
+          try {
+            await synthesizeKokoroWav({
+              text: t,
+              voice: kokoro.voice,
+              lang: kokoro.lang,
+              rate: rateClamped,
+              wavPath: tmpWav,
+            });
+            synthesized = true;
+          } catch {
+            /* Kokoro service down → fall back to Piper/espeak for this request */
+          }
+        }
+        if (!synthesized) {
+          if (localeUsesEspeakFallback(locale)) {
+            await synthesizeEspeakMp3({ text: t, locale, rate: rateClamped, mp3Path: tmpMp3, wavPath: tmpWav });
+            await fs.rename(tmpMp3, mp3Path);
+            await fs.rm(tmpWav, { force: true }).catch(() => {});
+            return { relUrl: `/tts/v1/${encodeURIComponent(locale || 'en-US')}/${key.slice(0, 2)}/${key}.mp3` };
+          }
+          const piperModel = voiceModelPath(locale);
+          await execFileChecked(piperBinaryPath(), ['--model', piperModel, '--output_file', tmpWav, '--length_scale', String(1 / rateClamped)], {
+            stdinText: t,
+          });
+        }
         await execFileChecked('ffmpeg', ['-y', '-i', tmpWav, '-f', 'mp3', '-codec:a', 'libmp3lame', '-qscale:a', '3', tmpMp3]);
       }
 
