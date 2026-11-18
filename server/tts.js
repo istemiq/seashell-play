@@ -66,7 +66,7 @@ export function localeUsesEspeakFallback(locale) {
 const KOKORO_VOICES = {
   en: { voice: 'af_heart', lang: 'en-us' },
   'en-us': { voice: 'af_heart', lang: 'en-us' },
-  'en-gb': { voice: 'af_heart', lang: 'en-us' }, // Kokoro GB voices carry a German accent; af_heart is clean
+  'en-gb': { voice: 'bf_emma', lang: 'en-gb' },
   es: { voice: 'ef_dora', lang: 'es' },
   fr: { voice: 'ff_siwis', lang: 'fr-fr' },
   it: { voice: 'if_sara', lang: 'it' },
