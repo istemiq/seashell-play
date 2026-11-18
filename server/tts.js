@@ -396,7 +396,7 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
   const kokoro = kokoroFor(locale);
   const useEspeak = !kokoro && localeUsesEspeakFallback(locale);
   // :kp2 busts files cached while Kokoro was erroring out to the Piper fallback.
-  const model = kokoro ? `kokoro:${kokoro.voice}:kp2` : useEspeak ? 'espeak-ng' : voiceModelPath(locale);
+  const model = kokoro ? `kokoro:${kokoro.voice}:kp3` : useEspeak ? 'espeak-ng' : voiceModelPath(locale);
   if (!model) {
     const e = new Error('No TTS voice for locale');
     e.httpStatus = 501;
@@ -461,7 +461,11 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
             stdinText: t,
           });
         }
-        await execFileChecked('ffmpeg', ['-y', '-i', tmpWav, '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-f', 'mp3', '-codec:a', 'libmp3lame', '-qscale:a', '3', tmpMp3]);
+        // loudnorm audibly distorts Kokoro's short clips — only quiet Piper output gets normalized.
+        const ffArgs = synthesized
+          ? ['-y', '-i', tmpWav, '-f', 'mp3', '-codec:a', 'libmp3lame', '-qscale:a', '3', tmpMp3]
+          : ['-y', '-i', tmpWav, '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-f', 'mp3', '-codec:a', 'libmp3lame', '-qscale:a', '3', tmpMp3];
+        await execFileChecked('ffmpeg', ffArgs);
       }
 
       // Atomic-ish write: rename within cache dir (same filesystem)
