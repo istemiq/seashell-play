@@ -66,6 +66,15 @@ class SpeakReq(BaseModel):
     speed: float = 1.0
 
 
+GAP_S = 0.6
+
+
+def synth_en(part, lang, voice, speed):
+    chunks = [np.asarray(a, dtype=np.float32) for _g, _p, a in
+              pipeline(PIPE_CODES[lang])(part, voice=voice, speed=speed)]
+    return np.concatenate(chunks) if chunks else None, 24000
+
+
 @app.post('/speak')
 def speak(req: SpeakReq):
     text = (req.text or '').strip()[:400]
@@ -73,15 +82,40 @@ def speak(req: SpeakReq):
         return {'error': 'empty'}
     lang = str(req.lang or '').lower()
     speed = min(1.3, max(0.7, req.speed or 1.0))
+    # «||» — явная пауза: сегменты синтезируются порознь, между ними тишина.
+    # Пунктуация не даёт реального зазора — Kokoro сливает фразы в один поток.
+    parts = [p.strip() for p in text.split('||') if p.strip()]
+    if not parts:
+        return {'error': 'empty'}
     with lock:
         if lang in EN_LANGS:
-            chunks = [np.asarray(a, dtype=np.float32) for _g, _p, a in
-                      pipeline(PIPE_CODES[lang])(text, voice=req.voice, speed=speed)]
-            if not chunks:
-                return {'error': 'no audio'}
-            samples, sr = np.concatenate(chunks), 24000
+            sr = 24000
+            gap = np.zeros(int(sr * GAP_S), dtype=np.float32)
+            out = []
+            for i, part in enumerate(parts):
+                seg, _ = synth_en(part, lang, req.voice, speed)
+                if seg is None:
+                    return {'error': 'no audio'}
+                out.append(seg)
+                if i < len(parts) - 1:
+                    out.append(gap)
+            samples = np.concatenate(out)
         elif lang in ONNX_LANGS:
-            samples, sr = onnx().create(text, voice=req.voice, speed=speed, lang=lang)
+            if len(parts) == 1:
+                samples, sr = onnx().create(parts[0], voice=req.voice, speed=speed, lang=lang)
+            else:
+                segs, sr0 = [], None
+                for part in parts:
+                    s, r = onnx().create(part, voice=req.voice, speed=speed, lang=lang)
+                    segs.append(np.asarray(s, dtype=np.float32))
+                    sr0 = r
+                gap = np.zeros(int(sr0 * GAP_S), dtype=np.float32)
+                out = []
+                for i, seg in enumerate(segs):
+                    out.append(seg)
+                    if i < len(segs) - 1:
+                        out.append(gap)
+                samples, sr = np.concatenate(out), sr0
         else:
             return {'error': f'unsupported lang {req.lang}'}
     buf = io.BytesIO()

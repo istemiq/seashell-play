@@ -395,6 +395,8 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
 
   const kokoro = kokoroFor(locale);
   const useEspeak = !kokoro && localeUsesEspeakFallback(locale);
+  // '||' — маркер паузы для Kokoro; Piper/espeak получают точку вместо него.
+  const tNoPause = t.replace(/\|\|/g, '.');
   // :kp2 busts files cached while Kokoro was erroring out to the Piper fallback.
   const model = kokoro ? `kokoro:${kokoro.voice}:kp3` : useEspeak ? 'espeak-ng' : voiceModelPath(locale);
   if (!model) {
@@ -432,7 +434,7 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
 
     try {
       if (useEspeak) {
-        await synthesizeEspeakMp3({ text: t, locale, rate: rateClamped, mp3Path: tmpMp3, wavPath: tmpWav });
+        await synthesizeEspeakMp3({ text: tNoPause, locale, rate: rateClamped, mp3Path: tmpMp3, wavPath: tmpWav });
       } else {
         let synthesized = false;
         if (kokoro) {
@@ -451,14 +453,14 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
         }
         if (!synthesized) {
           if (localeUsesEspeakFallback(locale)) {
-            await synthesizeEspeakMp3({ text: t, locale, rate: rateClamped, mp3Path: tmpMp3, wavPath: tmpWav });
+            await synthesizeEspeakMp3({ text: tNoPause, locale, rate: rateClamped, mp3Path: tmpMp3, wavPath: tmpWav });
             await fs.rename(tmpMp3, mp3Path);
             await fs.rm(tmpWav, { force: true }).catch(() => {});
             return { relUrl: `/tts/v1/${encodeURIComponent(locale || 'en-US')}/${key.slice(0, 2)}/${key}.mp3` };
           }
           const piperModel = voiceModelPath(locale);
           await execFileChecked(piperBinaryPath(), ['--model', piperModel, '--output_file', tmpWav, '--length_scale', String(1 / rateClamped)], {
-            stdinText: t,
+            stdinText: tNoPause,
           });
         }
         // loudnorm audibly distorts Kokoro's short clips — only quiet Piper output gets normalized.
