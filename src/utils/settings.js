@@ -43,6 +43,7 @@ import { isSuperAccountUser } from '../platform/superAccount.js';
 const STORAGE_KEY = 'seashell_settings_v1';
 const THEME_MIGRATION_KEY = 'seashell_theme_follow_tg_v1';
 const UI_LOCALE_EN_MIGRATION_KEY = 'seashell_ui_locale_en_default_v1';
+const US_TTS_DEFAULT_MIGRATION_KEY = 'seashell_tts_us_default_v1';
 
 export const DEFAULT_SETTINGS = {
   theme: 'system',
@@ -199,6 +200,18 @@ export function loadSettings() {
   ) {
     merged.uiLocale = 'en';
     window.localStorage.setItem(UI_LOCALE_EN_MIGRATION_KEY, '1');
+    saveSettings(merged);
+  }
+  // Разово переводим сохранённый британский акцент на американский:
+  // Kokoro en-GB на коротких словах звучит с акцентом. Флаг не даёт
+  // миграции перекрыть осознанный выбор «Британский» в настройках позже.
+  if (typeof window !== 'undefined' && !window.localStorage.getItem(US_TTS_DEFAULT_MIGRATION_KEY)) {
+    if (merged.ttsLocale === 'en-GB') merged.ttsLocale = 'en-US';
+    const map = merged.ttsLocaleByLearn;
+    if (map && typeof map === 'object' && map.en === 'en-GB') {
+      merged.ttsLocaleByLearn = { ...map, en: 'en-US' };
+    }
+    window.localStorage.setItem(US_TTS_DEFAULT_MIGRATION_KEY, '1');
     saveSettings(merged);
   }
   if (typeof window !== 'undefined') {

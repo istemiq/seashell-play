@@ -124,10 +124,14 @@ export function PronounTrainerPage() {
     setSentenceTr('');
   };
 
+  // Одиночное слово звучит в контексте: «it. It sleeps on the ball.» —
+  // изолированные слова Kokoro произносит с чужеродным акцентом.
+  const wordTtsText = (w, ex) => (ex ? `${w}. ${ex}` : `${w}.`);
+
   // Авто-озвучка: карточка слова и фраза шага звучат сразу при показе.
   // На уровне «Письмо» не озвучиваем — услышанный ответ убьёт упражнение.
   useEffect(() => {
-    const text = level === 'words' ? word.word : level === 'choice' ? targetSentence : '';
+    const text = level === 'words' ? wordTtsText(word.word, wordExamples[word.id]) : level === 'choice' ? targetSentence : '';
     if (!text) return;
     const timer = setTimeout(() => {
       void speakEnglish(text).catch(() => {});
@@ -293,7 +297,7 @@ export function PronounTrainerPage() {
               tabIndex={-1}
               onClick={(e) => {
                 e.stopPropagation();
-                void speakEnglish(revealed && wordExamples[word.id] ? wordExamples[word.id] : word.word).catch(() => {});
+                void speakEnglish(wordTtsText(word.word, wordExamples[word.id])).catch(() => {});
               }}
             >
               {imgFailed ? (
