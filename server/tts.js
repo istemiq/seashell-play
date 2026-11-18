@@ -353,7 +353,7 @@ async function synthesizeEspeakMp3({ text, locale, rate, mp3Path, wavPath }) {
     ['-v', voice, '-s', String(wpm), '-w', wavPath, text],
     { env: espeakChildEnv() },
   );
-  await execFileChecked('ffmpeg', ['-y', '-i', wavPath, '-f', 'mp3', '-codec:a', 'libmp3lame', '-qscale:a', '3', mp3Path]);
+  await execFileChecked('ffmpeg', ['-y', '-i', wavPath, '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-f', 'mp3', '-codec:a', 'libmp3lame', '-qscale:a', '3', mp3Path]);
 }
 
 export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
@@ -406,7 +406,8 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
   const rateClamped = Math.min(1.25, Math.max(0.75, r));
 
   const secret = String(process.env.TTS_KEY_SECRET ?? '').trim();
-  const key = sha256Hex([secret, locale || 'en-US', model, String(rateClamped), t].join('|'));
+  // 'ln' in the key busts pre-loudnorm cache: loudnorm normalizes quiet sources (Piper wav is soft).
+  const key = sha256Hex([secret, locale || 'en-US', model, String(rateClamped), t, 'ln'].join('|'));
 
   const dir = path.join(cacheRootDir(), 'v1', String(locale || 'en-US'), key.slice(0, 2));
   const mp3Path = path.join(dir, `${key}.mp3`);
@@ -460,7 +461,7 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
             stdinText: t,
           });
         }
-        await execFileChecked('ffmpeg', ['-y', '-i', tmpWav, '-f', 'mp3', '-codec:a', 'libmp3lame', '-qscale:a', '3', tmpMp3]);
+        await execFileChecked('ffmpeg', ['-y', '-i', tmpWav, '-af', 'loudnorm=I=-16:TP=-1.5:LRA=11', '-f', 'mp3', '-codec:a', 'libmp3lame', '-qscale:a', '3', tmpMp3]);
       }
 
       // Atomic-ish write: rename within cache dir (same filesystem)
