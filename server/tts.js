@@ -395,7 +395,8 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
 
   const kokoro = kokoroFor(locale);
   const useEspeak = !kokoro && localeUsesEspeakFallback(locale);
-  const model = kokoro ? `kokoro:${kokoro.voice}` : useEspeak ? 'espeak-ng' : voiceModelPath(locale);
+  // :fp32 bumps the cache key — mp3s synthesized on the fp16 model must not be served.
+  const model = kokoro ? `kokoro:${kokoro.voice}:fp32` : useEspeak ? 'espeak-ng' : voiceModelPath(locale);
   if (!model) {
     const e = new Error('No TTS voice for locale');
     e.httpStatus = 501;
