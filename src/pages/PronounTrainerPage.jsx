@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button, Input, Panel, PanelHeader, PanelHeaderBack } from '../components/Ui.jsx';
@@ -206,6 +206,16 @@ export function PronounTrainerPage() {
     setImgFailed(false);
   };
 
+  const swipeX = useRef(0);
+  const onWordSwipeStart = (e) => {
+    swipeX.current = e.touches[0].clientX;
+  };
+  const onWordSwipeEnd = (e) => {
+    const dx = e.changedTouches[0].clientX - swipeX.current;
+    if (dx <= -48) nextWord();
+    else if (dx >= 48) prevWord();
+  };
+
   if (!isEnglishLearnModule(learnLocale)) {
     return (
       <Panel>
@@ -259,7 +269,11 @@ export function PronounTrainerPage() {
       </div>
 
       {level === 'words' ? (
-        <div className="ss-trainer-body">
+        <div
+          className="ss-trainer-body"
+          onTouchStart={onWordSwipeStart}
+          onTouchEnd={onWordSwipeEnd}
+        >
           <div className="ss-trainer-meta">
             <span className="ss-trainer-axis">{t('trainer.levelWords')}</span>
             <span className="ss-trainer-progress">
