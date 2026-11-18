@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Button, Input, Panel, PanelHeader, PanelHeaderBack } from '../components/Ui.jsx';
-import { ListenTtsButton } from '../components/ListenTtsButton.jsx';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { useEscapeBack } from '../hooks/useEscapeBack.js';
 import { useNavigateBackOrHome } from '../utils/useNavigateBackOrHome.js';
@@ -274,7 +273,15 @@ export function PronounTrainerPage() {
             onClick={() => setRevealed((v) => !v)}
             aria-expanded={revealed}
           >
-            <span className="ss-trainer-wordimg">
+            <span
+              className="ss-trainer-wordimg"
+              role="button"
+              tabIndex={-1}
+              onClick={(e) => {
+                e.stopPropagation();
+                void speakEnglish(revealed && wordExamples[word.id] ? wordExamples[word.id] : word.word).catch(() => {});
+              }}
+            >
               {imgFailed ? (
                 <span className="ss-trainer-wordimg--placeholder" aria-hidden="true">
                   {word.word[0].toUpperCase()}
@@ -298,12 +305,6 @@ export function PronounTrainerPage() {
           </button>
 
           <div className="ss-trainer-actions">
-            <ListenTtsButton
-              text={revealed && wordExamples[word.id] ? wordExamples[word.id] : word.word}
-              labelKey="dict.listen"
-              mode="secondary"
-              stretched
-            />
             <Button stretched mode="primary" onClick={nextWord}>
               {isLastWord ? t('trainer.finish') : t('trainer.next')}
             </Button>
@@ -336,7 +337,14 @@ export function PronounTrainerPage() {
             </span>
           </div>
           <div className="ss-trainer-situation">{t(step.situation)}</div>
-          <div className="ss-trainer-sentence">
+          <div
+            className={`ss-trainer-sentence ${level === 'choice' || writeStatus === 'right' ? 'ss-trainer-sentence--tts' : ''}`}
+            onClick={() => {
+              if (level === 'choice' || writeStatus === 'right') {
+                void speakEnglish(targetSentence).catch(() => {});
+              }
+            }}
+          >
             <span>{step.before}</span>
             <span
               className={[
@@ -429,12 +437,6 @@ export function PronounTrainerPage() {
           )}
 
           <div className="ss-trainer-actions">
-            <ListenTtsButton
-              text={targetSentence}
-              labelKey="dict.listen"
-              mode="secondary"
-              stretched
-            />
             {picked || writeStatus === 'right' ? (
               <Button stretched mode="primary" onClick={nextStep}>
                 {isLast ? t('trainer.finish') : t('trainer.next')}

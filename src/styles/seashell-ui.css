@@ -2203,6 +2203,9 @@ html[dir='rtl'] .seashell-crt .seashell-card-lang-shell__head .ss-modal-dismiss 
   font-weight: 500;
   line-height: 1.4;
 }
+.ss-trainer-sentence--tts {
+  cursor: pointer;
+}
 .ss-trainer-slot {
   display: inline-block;
   min-width: 2.2ch;
@@ -2341,6 +2344,7 @@ html[dir='rtl'] .seashell-crt .seashell-card-lang-shell__head .ss-modal-dismiss 
   border-left: 2px solid var(--crt-accent-muted);
 }
 .ss-trainer-wordimg {
+  cursor: pointer;
   width: min(66vw, 280px);
   height: min(66vw, 280px);
   border-radius: 12px;
