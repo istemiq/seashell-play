@@ -11,6 +11,7 @@ import { speakEnglish } from '../utils/tts.js';
 import { translate } from '../i18n/translate.js';
 import { resolveContentLocaleForApi } from '../utils/contentLocale.js';
 import { fetchTrainerExamples } from '../api/trainerApi.js';
+import { translateClientSide } from '../api/readerApi.js';
 import {
   PRONOUN_STEPS_EN,
   PRONOUN_WORDS_EN,
@@ -82,6 +83,7 @@ export function PronounTrainerPage() {
   const [input, setInput] = useState('');
   const [writeStatus, setWriteStatus] = useState('idle'); // idle | wrong | right
   const [generated, setGenerated] = useState(null); // {frames, wordExamples} | null
+  const [sentenceTr, setSentenceTr] = useState('');
 
   useEffect(() => {
     let live = true;
@@ -120,7 +122,35 @@ export function PronounTrainerPage() {
     setPicked(null);
     setInput('');
     setWriteStatus('idle');
+    setSentenceTr('');
   };
+
+  // Авто-озвучка: карточка слова и фраза шага звучат сразу при показе.
+  // На уровне «Письмо» не озвучиваем — услышанный ответ убьёт упражнение.
+  useEffect(() => {
+    const text = level === 'words' ? word.word : level === 'choice' ? targetSentence : '';
+    if (!text) return;
+    const timer = setTimeout(() => {
+      void speakEnglish(text).catch(() => {});
+    }, 350);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [level, wordIdx, stepIdx, steps]);
+
+  // Перевод фразы на язык словаря — после выбора/верного ответа.
+  useEffect(() => {
+    if (!picked && writeStatus !== 'right') return undefined;
+    let live = true;
+    translateClientSide(targetSentence, { dst: cardLocale })
+      .then((arr) => {
+        if (live) setSentenceTr(arr?.[0] || '');
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [picked, writeStatus, targetSentence, cardLocale]);
 
   const pick = (opt) => {
     setPicked(opt);
@@ -322,6 +352,7 @@ export function PronounTrainerPage() {
             </span>
             <span>{step.after}</span>
           </div>
+          {sentenceTr ? <div className="ss-trainer-sentence-tr">{sentenceTr}</div> : null}
 
           {level === 'choice' ? (
             <div className="ss-trainer-options">

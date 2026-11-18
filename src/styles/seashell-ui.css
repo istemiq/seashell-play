@@ -2377,6 +2377,11 @@ html[dir='rtl'] .seashell-crt .seashell-card-lang-shell__head .ss-modal-dismiss 
   font-style: normal;
   font-size: 1.05em;
 }
+.ss-trainer-sentence-tr {
+  font-size: 0.95em;
+  color: var(--crt-fg-dim);
+  font-style: italic;
+}
 .ss-trainer-wordex {
   font-size: 0.95em;
   color: var(--crt-fg-dim);
