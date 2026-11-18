@@ -395,8 +395,8 @@ export async function ensureMp3Cached({ text, ttsText, locale, rate }) {
 
   const kokoro = kokoroFor(locale);
   const useEspeak = !kokoro && localeUsesEspeakFallback(locale);
-  // :kp bumps the cache key — files synthesized before the real KPipeline must not be served.
-  const model = kokoro ? `kokoro:${kokoro.voice}:kp` : useEspeak ? 'espeak-ng' : voiceModelPath(locale);
+  // :kp2 busts files cached while Kokoro was erroring out to the Piper fallback.
+  const model = kokoro ? `kokoro:${kokoro.voice}:kp2` : useEspeak ? 'espeak-ng' : voiceModelPath(locale);
   if (!model) {
     const e = new Error('No TTS voice for locale');
     e.httpStatus = 501;

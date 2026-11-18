@@ -48,7 +48,7 @@ def pipeline(code):
     if pipe_b is None:
         from kokoro import KPipeline
         pipe_b = KPipeline(lang_code='b', model=model)
-        return pipe_b
+    return pipe_b
 
 
 def onnx():
