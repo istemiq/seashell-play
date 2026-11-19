@@ -1,5 +1,8 @@
+import { AppLauncher } from '@capacitor/app-launcher';
+
 import { apiUrl } from '../api/apiUrl.js';
 import { setPlatformUserId } from './platformUser.js';
+import { isCapacitorNative } from './runtime.js';
 
 const TOKEN_KEY = 'seashell.tgLink.token';
 const UID_KEY = 'seashell.tgLink.uid';
@@ -52,7 +55,14 @@ export async function signInWithTelegramLink() {
   const { code, url } = await start.json();
   if (!code || !url) throw new Error('Telegram sign-in is unavailable');
 
-  window.open(url, '_blank');
+  // В WebView window.open наружу не работает — только нативный intent.
+  if (isCapacitorNative()) {
+    await AppLauncher.openUrl({ url }).catch(() => {
+      window.open(url, '_blank');
+    });
+  } else {
+    window.open(url, '_blank');
+  }
 
   const deadline = Date.now() + POLL_TIMEOUT_MS;
   for (;;) {
