@@ -83,6 +83,7 @@ export function PronounTrainerPage() {
   const [writeStatus, setWriteStatus] = useState('idle'); // idle | wrong | right
   const [generated, setGenerated] = useState(null); // {frames, wordExamples} | null
   const [sentenceTr, setSentenceTr] = useState('');
+  const [wordExTr, setWordExTr] = useState('');
 
   useEffect(() => {
     let live = true;
@@ -128,7 +129,24 @@ export function PronounTrainerPage() {
   // навсегда прячет изображения на всех последующих карточках.
   useEffect(() => {
     setImgFailed(false);
+    setWordExTr('');
   }, [wordIdx]);
+
+  // Перевод примера на карточке — когда карточка раскрыта.
+  useEffect(() => {
+    const ex = wordExamples[word.id];
+    if (!revealed || !ex) return undefined;
+    let live = true;
+    translateClientSide(ex, { dst: cardLocale })
+      .then((arr) => {
+        if (live) setWordExTr(arr?.[0] || '');
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [revealed, wordIdx, wordExamples, cardLocale, word.id]);
 
   // Одиночное слово звучит в контексте — «it», пауза, «It sleeps on the ball.»
   // '||' — маркер паузы: Kokoro-сервис вклеивает реальную тишину между клипами.
@@ -325,6 +343,9 @@ export function PronounTrainerPage() {
             </span>
             {revealed && wordExamples[word.id] ? (
               <span className="ss-trainer-wordex">{wordExamples[word.id]}</span>
+            ) : null}
+            {revealed && wordExTr ? (
+              <span className="ss-trainer-wordtr ss-trainer-wordtr--open">{wordExTr}</span>
             ) : null}
           </button>
 
