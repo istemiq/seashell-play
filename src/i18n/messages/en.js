@@ -1232,6 +1232,7 @@ export default {
   'trainer.notThisOne': 'Not this one — see why below.',
   'trainer.next': 'Next',
   'trainer.finish': 'Finish',
+  'trainer.swipeHint': 'Swipe to flip cards',
   'trainer.doneTitle': 'Level complete!',
   'trainer.doneText': 'Now write the words yourself — no hints this time.',
   'trainer.startWrite': 'Start writing',

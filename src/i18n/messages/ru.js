@@ -1092,6 +1092,7 @@ export default {
   'trainer.notThisOne': 'Не этот вариант — почему, ниже.',
   'trainer.next': 'Дальше',
   'trainer.finish': 'Завершить',
+  'trainer.swipeHint': 'Листайте свайпом',
   'trainer.doneTitle': 'Уровень пройден!',
   'trainer.doneText': 'Теперь пиши слова сам — без подсказок.',
   'trainer.startWrite': 'К письму',

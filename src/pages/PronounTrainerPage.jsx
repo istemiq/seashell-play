@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { Button, Input, Panel, PanelHeader, PanelHeaderBack } from '../components/Ui.jsx';
+import { Button, Footnote, Input, Panel, PanelHeader, PanelHeaderBack } from '../components/Ui.jsx';
 import { useI18n } from '../i18n/I18nContext.jsx';
 import { useEscapeBack } from '../hooks/useEscapeBack.js';
 import { useNavigateBackOrHome } from '../utils/useNavigateBackOrHome.js';
@@ -234,14 +234,33 @@ export function PronounTrainerPage() {
     setImgFailed(false);
   };
 
-  const swipeX = useRef(0);
+  // Свайп карточек: pointer-события покрывают и тач, и мышь; dragX оттягивает карточку за пальцем.
+  const [dragX, setDragX] = useState(0);
+  const swipeRef = useRef({ x: 0, dragging: false });
+  const suppressCardClick = useRef(false);
   const onWordSwipeStart = (e) => {
-    swipeX.current = e.touches[0].clientX;
+    swipeRef.current = { x: e.clientX, dragging: true };
+  };
+  const onWordSwipeMove = (e) => {
+    if (!swipeRef.current.dragging) return;
+    const dx = e.clientX - swipeRef.current.x;
+    setDragX(dx);
+    if (Math.abs(dx) > 12) suppressCardClick.current = true;
   };
   const onWordSwipeEnd = (e) => {
-    const dx = e.changedTouches[0].clientX - swipeX.current;
-    if (dx <= -48) nextWord();
-    else if (dx >= 48) prevWord();
+    if (!swipeRef.current.dragging) return;
+    swipeRef.current.dragging = false;
+    const dx = e.clientX - swipeRef.current.x;
+    setDragX(0);
+    if (dx <= -56) nextWord();
+    else if (dx >= 56) prevWord();
+  };
+  const swallowClickAfterSwipe = (e) => {
+    if (suppressCardClick.current) {
+      suppressCardClick.current = false;
+      e.preventDefault();
+      e.stopPropagation();
+    }
   };
 
   if (!isEnglishLearnModule(learnLocale)) {
@@ -299,8 +318,16 @@ export function PronounTrainerPage() {
       {level === 'words' ? (
         <div
           className="ss-trainer-body"
-          onTouchStart={onWordSwipeStart}
-          onTouchEnd={onWordSwipeEnd}
+          style={{
+            touchAction: 'pan-y',
+            transform: dragX ? `translateX(${dragX * 0.55}px)` : undefined,
+            transition: dragX ? 'none' : 'transform .18s ease-out',
+          }}
+          onPointerDown={onWordSwipeStart}
+          onPointerMove={onWordSwipeMove}
+          onPointerUp={onWordSwipeEnd}
+          onPointerCancel={onWordSwipeEnd}
+          onClickCapture={swallowClickAfterSwipe}
         >
           <div className="ss-trainer-meta">
             <span className="ss-trainer-axis">{t('trainer.levelWords')}</span>
@@ -330,9 +357,9 @@ export function PronounTrainerPage() {
                 </span>
               ) : (
                 <img
+                  key={word.id}
                   src={wordImageSrc}
                   alt=""
-                  loading="lazy"
                   onError={() => setImgFailed(true)}
                 />
               )}
@@ -350,9 +377,7 @@ export function PronounTrainerPage() {
           </button>
 
           <div className="ss-trainer-actions">
-            <Button stretched mode="primary" onClick={nextWord}>
-              {isLastWord ? t('trainer.finish') : t('trainer.next')}
-            </Button>
+            <Footnote>{t('trainer.swipeHint')}</Footnote>
           </div>
           {wordIdx > 0 ? (
             <button type="button" className="ss-flat-link ss-trainer-back" onClick={prevWord}>

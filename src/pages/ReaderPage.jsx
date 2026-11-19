@@ -30,6 +30,8 @@ import { READER_CATALOG } from '../data/readerCatalog.js';
 
 /** Сервер принимает word до 200 символов (POST /api/words). */
 const MAX_SELECTION_LEN = 200;
+/** Больше этого — почти наверняка «сбежавшее» выделение (drag уехал к низу экрана). Гасим сразу. */
+const RUNAWAY_SELECTION_LEN = 1000;
 const TEXT_BLOCK_TAGS = new Set([
   'p', 'v', 'title', 'subtitle', 'text-author',
   'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
@@ -287,6 +289,14 @@ export function ReaderPage() {
     }
   };
 
+  const notifySelectionTooLong = useCallback(() => {
+    setSnackbar(
+      <Snackbar onClose={() => setSnackbar(null)} duration={3000}>
+        {t('reader.selectionTooLong', { max: MAX_SELECTION_LEN })}
+      </Snackbar>,
+    );
+  }, [t]);
+
   // Выделение в plain-text режиме (drag-select мышью или пальцем).
   useEffect(() => {
     if (book?.kind !== 'text') return undefined;
@@ -299,6 +309,11 @@ export function ReaderPage() {
       if (!textAreaRef.current || !node || !textAreaRef.current.contains(node)) return;
       const text = sel.toString().replace(/\s+/g, ' ').trim();
       if (text) {
+        if (text.length > RUNAWAY_SELECTION_LEN) {
+          sel.removeAllRanges();
+          notifySelectionTooLong();
+          return;
+        }
         setSelectedText(text);
         setAddedText(null);
         // Выделенная фраза (phrasal verb, предложение) → сразу попап с переводом.
@@ -312,7 +327,7 @@ export function ReaderPage() {
     };
     document.addEventListener('selectionchange', onSelectionChange);
     return () => document.removeEventListener('selectionchange', onSelectionChange);
-  }, [book?.kind]);
+  }, [book?.kind, notifySelectionTooLong]);
 
   // Позиция чтения — per book (имя + размер как ключ)
   const posKey = book
@@ -376,6 +391,15 @@ export function ReaderPage() {
     }
     text = text.replace(/\s+/g, ' ').trim();
     if (text) {
+      if (text.length > RUNAWAY_SELECTION_LEN) {
+        try {
+          contents?.window?.getSelection()?.removeAllRanges();
+        } catch {
+          /* ignore */
+        }
+        notifySelectionTooLong();
+        return;
+      }
       setSelectedText(text);
       setAddedText(null);
       setLookup(null);
@@ -583,7 +607,13 @@ export function ReaderPage() {
   }, []);
 
   const handleBack = useCallback(() => {
-    if (immersive) {
+    if (lookup) {
+      setLookup(null);
+    } else if (selectedText || adding || addedText) {
+      setSelectedText(null);
+      setAddedText(null);
+      clearNativeSelection();
+    } else if (immersive) {
       exitImmersive();
     } else if (book) {
       setBook(null);
@@ -592,7 +622,7 @@ export function ReaderPage() {
     } else {
       navigate('/');
     }
-  }, [immersive, book, navigate, exitImmersive]);
+  }, [lookup, selectedText, adding, addedText, immersive, book, navigate, exitImmersive]);
 
   // Системный «назад»: закрыть открытую книгу → каталог; иначе → главная.
   useEffect(() => {
