@@ -6,6 +6,7 @@ import { verifyVkLaunchParams } from './vkSignature.js';
 import { verifyTelegramInitData } from './telegramAuth.js';
 import { tryGoogleIdTokenAuth, tryPlayDevAuth } from './playAuth.js';
 import { tryPlayAppHeaderAuth } from './playAppAuth.js';
+import { tryTelegramLinkAuth } from './telegramLinkAuth.js';
 import { isProd, isVkAppsHostingOrigin } from './routeHelpers.js';
 
 function platformUserIdFromHeader(req) {
@@ -171,6 +172,10 @@ function isVkClientRequest(req) {
 /** Play + Google + Telegram initData + VK launch params (shared VPS API). */
 export async function appAuthMiddleware(req, res, next) {
   if (tryPlayAppHeaderAuth(req)) {
+    return next();
+  }
+
+  if (await tryTelegramLinkAuth(req)) {
     return next();
   }
 

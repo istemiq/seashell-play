@@ -9,6 +9,7 @@ import {
   saveGoogleProfile,
 } from './googleAuthStore.js';
 import { setPlatformUserId } from './platformUser.js';
+import { clearTgLinkSession } from './telegramLinkAuth.js';
 
 const DEV_USER_ID = Number(import.meta.env.VITE_PLAY_DEV_USER_ID) || 5000000001;
 
@@ -55,6 +56,7 @@ export async function signInWithGoogle() {
 
 export async function signOutGoogle() {
   clearGoogleAuth();
+  clearTgLinkSession();
   setPlatformUserId(null);
   if (!isPlayDevAuth()) {
     try {

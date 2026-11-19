@@ -16,6 +16,7 @@ import { LearnLocaleTitleSync } from './components/LearnLocaleTitleSync.jsx';
 import { loadGoogleProfile, saveGoogleProfile } from './platform/googleAuthStore.js';
 import { bootstrapGoogleSession, completeGoogleSignIn, whenGoogleSessionReady } from './platform/googleSession.js';
 import { hasGoogleSession } from './platform/googleSignIn.js';
+import { hasTgLinkSession } from './platform/telegramLinkAuth.js';
 import { isPlayDevAuth } from './platform/runtime.js';
 import { fetchUserProfile } from './api/userApi.js';
 
@@ -171,7 +172,7 @@ export function App() {
         }
       }
       if (cancelled) return;
-      const ok = hasGoogleSession();
+      const ok = hasGoogleSession() || hasTgLinkSession();
       setSignedIn(ok);
       if (ok) {
         await refreshProfileState(setUser, setNeedsOnboarding);

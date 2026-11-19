@@ -1,5 +1,6 @@
 import { setPlatformUserId, resolvePlatformUserId } from '../platform/platformUser.js';
 import { getGoogleIdToken, hasGoogleSession } from '../platform/googleSignIn.js';
+import { getTgLinkToken, getTgLinkUserId, hasTgLinkSession } from '../platform/telegramLinkAuth.js';
 import { whenGoogleSessionReady } from '../platform/googleSession.js';
 import { loadGoogleProfile } from '../platform/googleAuthStore.js';
 import { isPlayDevAuth } from '../platform/runtime.js';
@@ -23,12 +24,13 @@ export async function buildAuthHeaders() {
   await whenGoogleSessionReady();
   const playSecret = String(import.meta.env.VITE_PLAY_APP_SECRET ?? '').trim();
   const token = getGoogleIdToken();
-  if (!token && !isPlayDevAuth() && !playSecret) {
-    throw new Error('Not signed in with Google');
+  const tgToken = getTgLinkToken();
+  if (!token && !tgToken && !isPlayDevAuth() && !playSecret) {
+    throw new Error('Not signed in');
   }
 
   const profile = loadGoogleProfile();
-  const userId = profile?.userId ?? resolvePlatformUserId();
+  const userId = getTgLinkUserId() ?? profile?.userId ?? resolvePlatformUserId();
   if (!userId) {
     throw new Error('User session is not ready');
   }
@@ -49,6 +51,7 @@ export async function buildAuthHeaders() {
     'X-Target-Lang': targetLang,
     'X-Practice-Level': resolvePracticeLevelForApi(),
     ...(token ? { 'X-Google-Id-Token': token } : null),
+    ...(tgToken ? { 'X-Telegram-Link-Token': tgToken } : null),
     ...(String(import.meta.env.VITE_PLAY_APP_SECRET ?? '').trim()
       ? { 'X-Play-App-Secret': String(import.meta.env.VITE_PLAY_APP_SECRET).trim() }
       : null),
@@ -63,5 +66,5 @@ export function invalidateAuthHeadersCache() {
 }
 
 export function isAuthenticatedForApi() {
-  return hasGoogleSession();
+  return hasGoogleSession() || hasTgLinkSession();
 }

@@ -20,6 +20,7 @@ import { registerSttTranscribe } from './stt.js';
 import { handleGoogleSession } from './playAuth.js';
 import { handleTelegramBillingUpdate, verifyWebhookSecret } from './telegramBilling.js';
 import { handleTelegramMessageUpdate } from './telegramBooks.js';
+import { registerTelegramLinkRoutes } from './telegramLinkAuth.js';
 import { isProd, isVkAppsHostingOrigin, makeRateLimiter } from './routeHelpers.js';
 import { appAuthMiddleware, vkReviewerProbeMiddleware } from './authMiddleware.js';
 import { registerAdminStatsRoute, registerAdminRoutes } from './routes/admin.js';
@@ -141,6 +142,9 @@ app.post('/api/telegram/webhook', async (req, res) => {
 app.post('/api/auth/google/session', (req, res) => {
   void handleGoogleSession(req, res);
 });
+
+// Вход в Play-приложение через Telegram-бота (код → /start → поллинг).
+registerTelegramLinkRoutes(app);
 
 app.use(appAuthMiddleware);
 app.use(vkReviewerProbeMiddleware);

@@ -214,6 +214,9 @@ export async function initDb() {
 
   const { ensurePlatformAccountsSchema } = await import('./platformUsersDb.js');
   await ensurePlatformAccountsSchema();
+
+  const { ensureTgLinkSchema } = await import('./telegramLinkAuth.js');
+  await ensureTgLinkSchema();
 }
 
 function parseVerbUsageColumn(raw) {

@@ -4,6 +4,7 @@
  */
 import { sendTelegramMessage } from './telegramNotify.js';
 import { saveUserBook, bookExtOk, MAX_BOOK_BYTES } from './userBooks.js';
+import { parseLinkStartParam, completeLinkCode } from './telegramLinkAuth.js';
 
 const botToken = () => String(process.env.TELEGRAM_BOT_TOKEN ?? '').trim();
 const APP_URL = () =>
@@ -100,6 +101,19 @@ export async function handleTelegramMessageUpdate(update) {
 
   const text = String(msg.text ?? '').trim();
   const cmd = text.split(/\s|@/)[0]?.toLowerCase();
+
+  // Deep-link из Play-приложения: /start play_<code> — подтверждение входа.
+  const linkCode = cmd === '/start' ? parseLinkStartParam(text) : null;
+  if (linkCode) {
+    const linked = completeLinkCode(linkCode, userId);
+    await reply(
+      chatId,
+      linked
+        ? '✅ Вход в Seashell Play подтверждён — возвращайся в приложение.\n\nSigned in — back to the app.'
+        : 'Эта ссылка входа устарела — запроси новую в приложении.\n\nLogin link expired — request a new one in the app.',
+    );
+    return { handled: true, kind: linked ? 'play_link' : 'play_link_expired' };
+  }
 
   if (cmd === '/start' || cmd === '/app' || cmd === '/help') {
     await reply(chatId, WELCOME, { replyMarkup: openAppKeyboard() });
