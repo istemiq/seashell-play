@@ -73,6 +73,11 @@ export async function signInWithTelegramLink() {
     if (data.status === 'linked' && data.token && data.userId) {
       saveTgLinkSession(data.token, data.userId);
       setPlatformUserId(data.userId);
+      try {
+        sessionStorage.removeItem('seashell.auth.signedOutOnce');
+      } catch {
+        /* ignore */
+      }
       return { userId: data.userId };
     }
     if (data.status === 'expired') throw new Error('Login code expired — try again');

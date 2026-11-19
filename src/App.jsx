@@ -15,7 +15,7 @@ import { OnboardingPage } from './pages/OnboardingPage.jsx';
 import { LearnLocaleTitleSync } from './components/LearnLocaleTitleSync.jsx';
 import { loadGoogleProfile, saveGoogleProfile } from './platform/googleAuthStore.js';
 import { bootstrapGoogleSession, completeGoogleSignIn, whenGoogleSessionReady } from './platform/googleSession.js';
-import { hasGoogleSession } from './platform/googleSignIn.js';
+import { hasGoogleSession, consumeSignedOutOnce } from './platform/googleSignIn.js';
 import { hasTgLinkSession } from './platform/telegramLinkAuth.js';
 import { isPlayDevAuth } from './platform/runtime.js';
 import { fetchUserProfile } from './api/userApi.js';
@@ -158,7 +158,7 @@ export function App() {
   useEffect(() => {
     let cancelled = false;
     void (async () => {
-      if (!hasGoogleSession() && isPlayDevAuth()) {
+      if (!hasGoogleSession() && !hasTgLinkSession() && isPlayDevAuth() && !consumeSignedOutOnce()) {
         try {
           await completeGoogleSignIn();
         } catch (err) {

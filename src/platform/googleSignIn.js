@@ -34,6 +34,7 @@ export function hasGoogleSession() {
 }
 
 export async function signInWithGoogle() {
+  clearSignedOutFlag();
   if (isPlayDevAuth()) {
     setPlatformUserId(DEV_USER_ID);
     saveGoogleProfile({ userId: DEV_USER_ID, email: 'dev@local' });
@@ -54,10 +55,36 @@ export async function signInWithGoogle() {
   return { idToken, profile: loadGoogleProfile() };
 }
 
+const SIGNED_OUT_KEY = 'seashell.auth.signedOutOnce';
+
+/** Ручной выход глушит dev-автовход при следующей загрузке приложения. */
+export function consumeSignedOutOnce() {
+  try {
+    const v = sessionStorage.getItem(SIGNED_OUT_KEY) === '1';
+    sessionStorage.removeItem(SIGNED_OUT_KEY);
+    return v;
+  } catch {
+    return false;
+  }
+}
+
+export function clearSignedOutFlag() {
+  try {
+    sessionStorage.removeItem(SIGNED_OUT_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 export async function signOutGoogle() {
   clearGoogleAuth();
   clearTgLinkSession();
   setPlatformUserId(null);
+  try {
+    sessionStorage.setItem(SIGNED_OUT_KEY, '1');
+  } catch {
+    /* ignore */
+  }
   if (!isPlayDevAuth()) {
     try {
       await GoogleAuth.signOut();
