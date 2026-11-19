@@ -78,7 +78,9 @@ export async function fetchUserAvatarBlobUrl() {
   try {
     const headers = await buildAuthHeaders();
     const { 'Content-Type': _drop, ...authHeaders } = headers;
-    const r = await apiFetch('/user/avatar', { headers: authHeaders });
+    // Суточный бакет: аватар не кэшируется дольше дня, но и не дёргает Bot API на каждый маунт.
+    const dayBucket = Math.floor(Date.now() / 86_400_000);
+    const r = await apiFetch(`/user/avatar?v=${dayBucket}`, { headers: authHeaders });
     if (r.status === 404 || !r.ok) return null;
     const blob = await r.blob();
     if (!blob.size) return null;

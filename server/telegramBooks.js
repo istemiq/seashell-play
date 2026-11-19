@@ -5,6 +5,7 @@
 import { sendTelegramMessage } from './telegramNotify.js';
 import { saveUserBook, bookExtOk, MAX_BOOK_BYTES } from './userBooks.js';
 import { parseLinkStartParam, completeLinkCode } from './telegramLinkAuth.js';
+import { upsertTgUserProfile } from './platformUsersDb.js';
 
 const botToken = () => String(process.env.TELEGRAM_BOT_TOKEN ?? '').trim();
 const APP_URL = () =>
@@ -94,6 +95,11 @@ export async function handleTelegramMessageUpdate(update) {
   const chatId = msg.chat?.id ?? msg.from?.id;
   const userId = msg.from?.id;
   if (!chatId || !userId) return { handled: false };
+
+  // Каждое сообщение боту освежает имя/username — профиль в Play-приложении не протухает.
+  void upsertTgUserProfile(msg.from).catch((e) =>
+    console.warn('[bot] tg profile upsert failed', e?.message),
+  );
 
   if (msg.document) {
     return handleDocument(msg, chatId, userId);

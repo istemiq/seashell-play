@@ -70,6 +70,7 @@ function profileFromStore() {
   const name = String(p.displayName || p.name || 'User').trim();
   const parts = name.split(/\s+/);
   return {
+    id: p.userId ?? p.id,
     first_name: parts[0] || 'User',
     last_name: parts.slice(1).join(' ') || undefined,
     photo_200: p.picture || undefined,

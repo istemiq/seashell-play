@@ -20,7 +20,7 @@ import { getPracticeQuotaStatus, getWordsQuotaStatus } from '../routeHelpers.js'
 export function registerUserRoutes(app) {
   app.get('/api/user/profile', async (req, res) => {
     try {
-      const profile = await getUserProfileResponse(req.vkUserId);
+      const profile = await getUserProfileResponse(req.vkUserId, req.authVia);
       res.json(profile);
     } catch (e) {
       console.error(e);
@@ -61,7 +61,7 @@ export function registerUserRoutes(app) {
     try {
       const photo = await fetchTelegramUserProfilePhoto(req.vkUserId);
       if (!photo) return res.status(404).end();
-      res.set('Cache-Control', 'private, max-age=3600');
+      res.set('Cache-Control', 'private, max-age=600');
       res.set('Content-Type', photo.contentType);
       return res.send(photo.buffer);
     } catch (e) {

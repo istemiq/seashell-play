@@ -12,6 +12,14 @@ async function telegramApiGet(method, query) {
   return data.result;
 }
 
+/** getChat — свежее имя/username юзера (для обновления tg_user_profiles). */
+export async function fetchTelegramChat(userId) {
+  const uid = parseInt(String(userId), 10);
+  if (!Number.isFinite(uid) || uid <= 0) return null;
+  if (!botToken()) return null;
+  return telegramApiGet('getChat', { chat_id: String(uid) });
+}
+
 /** Latest profile photo for a Telegram user (requires prior bot interaction). */
 export async function fetchTelegramUserProfilePhoto(userId) {
   const uid = parseInt(String(userId), 10);
