@@ -124,6 +124,12 @@ export function PronounTrainerPage() {
     setSentenceTr('');
   };
 
+  // Сбрасываем флаг битой картинки при смене слова — иначе один 404
+  // навсегда прячет изображения на всех последующих карточках.
+  useEffect(() => {
+    setImgFailed(false);
+  }, [wordIdx]);
+
   // Одиночное слово звучит в контексте — «it», пауза, «It sleeps on the ball.»
   // '||' — маркер паузы: Kokoro-сервис вклеивает реальную тишину между клипами.
   const wordTtsText = (w, ex) => (ex ? `${w}. || ${ex}` : `${w}.`);
