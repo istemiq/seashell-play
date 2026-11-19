@@ -32,6 +32,8 @@ import {
 } from '../utils/fontScale.js';
 import { useNavigateBackOrHome } from '../utils/useNavigateBackOrHome.js';
 import { usePremium } from '../hooks/usePremium.js';
+import { signOutGoogle } from '../platform/googleSignIn.js';
+import { invalidateAuthHeadersCache } from '../api/buildAuthHeaders.js';
 
 function SettingOptions({ options, value, onChange, disabled = false }) {
   const { tb } = useI18n();
@@ -287,6 +289,25 @@ export function SettingsPage() {
             value={Number(s.ttsRate) || 0.95}
             onChange={(v) => setAndPersist({ ttsRate: v })}
             disabled={!s.ttsEnabled}
+          />
+        </FormItem>
+      </Group>
+
+      <Group className="ss-settings-list" header={<GroupHeader mode="secondary">{t('settings.account')}</GroupHeader>}>
+        <FormItem>
+          <Button
+            size="l"
+            stretched
+            mode="secondary"
+            i18nKey="settings.signOut"
+            onClick={() => {
+              void signOutGoogle()
+                .catch(() => {})
+                .finally(() => {
+                  invalidateAuthHeadersCache();
+                  window.location.reload();
+                });
+            }}
           />
         </FormItem>
       </Group>
