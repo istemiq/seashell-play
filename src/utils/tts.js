@@ -11,6 +11,8 @@ import { isCapacitorNative } from '../platform/runtime.js';
 let sharedAudio = null;
 let activeAudio = null;
 let blobUrlToRevoke = null;
+/** Монотонный id: новый вызов speak* делает взвизгнувшие/летящие запросы устаревшими. */
+let speakSeq = 0;
 
 /** mp3 blob URLs keyed by remote URL — avoids re-download on repeat Listen taps. */
 const mp3BlobCache = new Map();
@@ -237,7 +239,7 @@ async function audioSrcForUrl(url) {
   }
 }
 
-async function playUrl(url, { onStart } = {}) {
+async function playUrl(url, { onStart, stale } = {}) {
   const remote = resolveTtsPlayUrl(url);
   if (!remote) return false;
 
@@ -248,6 +250,10 @@ async function playUrl(url, { onStart } = {}) {
 
   const tryPlaySrc = (src) =>
     new Promise((resolve) => {
+      if (stale?.()) {
+        resolve(false);
+        return;
+      }
       let settled = false;
       const finish = (ok) => {
         if (settled) return;
@@ -268,6 +274,10 @@ async function playUrl(url, { onStart } = {}) {
       const onReady = () => {
         if (started) return;
         started = true;
+        if (stale?.()) {
+          finish(false);
+          return;
+        }
         a.play().catch(() => finish(false));
       };
       const timer = window.setTimeout(() => finish(false), 12000);
@@ -293,6 +303,7 @@ async function playUrl(url, { onStart } = {}) {
     if (cached && (await tryPlaySrc(cached))) return true;
 
     if (isCapacitorNative()) {
+      if (stale?.()) return false;
       if (await tryPlaySrc(remote)) {
         void fetch(remote)
           .then((r) => (r.ok ? r.blob() : null))
@@ -306,7 +317,7 @@ async function playUrl(url, { onStart } = {}) {
     }
 
     const src = await audioSrcForUrl(url);
-    if (!src) return false;
+    if (!src || stale?.()) return false;
     return tryPlaySrc(src);
   } finally {
     if (activeAudio === a) activeAudio = null;
@@ -413,12 +424,17 @@ export function prefetchStudyTts(text, learnOrTtsLocale, { ttsText } = {}) {
  * Speak study-language text via Piper backend (mp3), native/Web Speech as fallback.
  */
 export async function speakStudyText(text, learnOrTtsLocale, { ttsText, onStart } = {}) {
+  const seq = ++speakSeq;
+  const stale = () => seq !== speakSeq;
+
   const line = clipTextForTts(String(text ?? '').trim());
   if (!line) return;
   const locale = effectiveTtsLocale(learnOrTtsLocale);
   const markedRaw = String(ttsText ?? '').trim();
   const marked = markedRaw ? clipTextForTts(markedRaw) : undefined;
   const speakLine = marked || line;
+  // '||' — маркер паузы только для Kokoro; веб/нативный TTS читал бы его вслух.
+  const plainLine = line.replace(/\s*\|\|+\s*/g, '. ');
 
   stopAllPlayback();
 
@@ -440,16 +456,19 @@ export async function speakStudyText(text, learnOrTtsLocale, { ttsText, onStart 
         locale,
         rate: Number(s.ttsRate) || 0.95,
       });
-      if (await playUrl(r.url, { onStart })) return;
+      if (stale()) return;
+      if (await playUrl(r.url, { onStart, stale })) return;
       piperError = new Error(tStatic('errors.ttsUnavailable'));
     } catch (e) {
+      if (stale()) return;
       piperError = e instanceof Error ? e : new Error(tStatic('errors.ttsUnavailable'));
     }
   }
 
-  if (isCapacitorNative() && tryNativeTts(line, locale, { onStart })) return;
+  if (stale()) return;
+  if (isCapacitorNative() && tryNativeTts(plainLine, locale, { onStart })) return;
 
-  if (await tryWebSpeech(line, locale, { onStart })) return;
+  if (await tryWebSpeech(plainLine, locale, { onStart })) return;
 
   throw piperError || new Error(tStatic('errors.ttsUnavailable'));
 }
