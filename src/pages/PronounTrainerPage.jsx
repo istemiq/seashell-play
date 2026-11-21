@@ -234,12 +234,39 @@ export function PronounTrainerPage() {
     setImgFailed(false);
   };
 
-  // Свайп карточек: pointer-события покрывают и тач, и мышь; dragX оттягивает карточку за пальцем.
+  // Свайп карточек как перелистывание: за пальцем 1:1, отпустил далеко —
+  // карточка улетает за край, новая влетает с противоположной стороны.
   const [dragX, setDragX] = useState(0);
+  const [anim, setAnim] = useState(false); // transition включается только на долёте
   const swipeRef = useRef({ x: 0, dragging: false });
+  const flyingRef = useRef(false);
   const suppressCardClick = useRef(false);
+
+  const flyOut = (dir, flip) => {
+    const w = Math.max(window.innerWidth, 480);
+    flyingRef.current = true;
+    setAnim(true);
+    setDragX(dir * w); // улетает за край
+    window.setTimeout(() => {
+      flip();
+      setAnim(false);
+      setDragX(-dir * w); // новая карточка прыгает за другой край
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          setAnim(true);
+          setDragX(0); // влетает
+          window.setTimeout(() => {
+            flyingRef.current = false;
+          }, 200);
+        });
+      });
+    }, 190);
+  };
+
   const onWordSwipeStart = (e) => {
+    if (flyingRef.current) return;
     swipeRef.current = { x: e.clientX, dragging: true };
+    setAnim(false);
   };
   const onWordSwipeMove = (e) => {
     if (!swipeRef.current.dragging) return;
@@ -251,9 +278,17 @@ export function PronounTrainerPage() {
     if (!swipeRef.current.dragging) return;
     swipeRef.current.dragging = false;
     const dx = e.clientX - swipeRef.current.x;
-    setDragX(0);
-    if (dx <= -56) nextWord();
-    else if (dx >= 56) prevWord();
+    if (dx <= -56) {
+      suppressCardClick.current = true;
+      flyOut(-1, nextWord);
+    } else if (dx >= 56 && wordIdx > 0) {
+      suppressCardClick.current = true;
+      flyOut(1, prevWord);
+    } else {
+      setAnim(true);
+      setDragX(0);
+      window.setTimeout(() => setAnim(false), 200);
+    }
   };
   const swallowClickAfterSwipe = (e) => {
     if (suppressCardClick.current) {
@@ -320,8 +355,8 @@ export function PronounTrainerPage() {
           className="ss-trainer-body"
           style={{
             touchAction: 'pan-y',
-            transform: dragX ? `translateX(${dragX * 0.55}px)` : undefined,
-            transition: dragX ? 'none' : 'transform .18s ease-out',
+            transform: dragX ? `translateX(${dragX}px)` : undefined,
+            transition: anim ? 'transform .19s ease-out' : 'none',
           }}
           onPointerDown={onWordSwipeStart}
           onPointerMove={onWordSwipeMove}
