@@ -2,12 +2,13 @@ SEASHELL SMALLTALK TRAINER — ПРОМПТЫ ДЛЯ GEMINI
 ==============================================
 
 Порядок работы:
-  1. Возьми эталонного персонажа — ТОТ ЖЕ лист, что и для урока
-     pronouns (public/trainer/pronouns/reference.png или
+  1. Референс — ОРИГИНАЛ девочки: reference.jpg лежит рядом
+     в этой папке (тот же файл, что Desktop\SeaShell\1.jpg и
      .devin/skills/trainer-lessons/character-reference.jpg).
-     Заново генерировать эталон НЕ нужно.
-  2. Для каждой из 15 карточек: приложи эталон как референс
-     и отправь соответствующий промпт ниже (действие уже подставлено).
+     На ней она в футболке — промпты ниже уже пишут t-shirt,
+     а не комбинезон из урока pronouns.
+  2. Для каждой из 15 карточек: приложи reference.jpg
+     и отправь соответствующий промпт (действие уже подставлено).
   3. Сохраняй результат как <id>.png в public/trainer/smalltalk/
      (обе репы: seashell_play и seashell_tg_clean).
   4. Один кадр за запрос. Не понравился — регенерируй только его.
@@ -15,87 +16,87 @@ SEASHELL SMALLTALK TRAINER — ПРОМПТЫ ДЛЯ GEMINI
      является частью картинки и виден на любом фоне.
 
 
-15 КАРТОЧЕК (эталон приложен как референс)
------------------------------------------
+15 КАРТОЧЕК (оригинал приложен как референс)
+------------------------------------------
 
 === hello.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is waving hello at the viewer, open palm high, big welcoming smile.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === bye.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is waving goodbye over her shoulder as she walks away, a wistful little smile.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === please.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is pressing her palms together in a pleading gesture, huge puppy eyes.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === thanks.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she has her hand on her heart with a warm grateful smile, a slight bow of the head.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === sorry.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is giving a sheepish apologetic shrug, one hand rubbing the back of her neck, guilty little grimace.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === yes.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is nodding enthusiastically with a big grin, arm pumping a small fist of joy.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === no.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is shaking her head with arms crossed in an X in front of her chest, firm refusal.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === good.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is doing a chef's-kiss gesture, eyes closed, delighted approving grin.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === morning.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is stretching both arms up with a sleepy yawn, a simple sketched sun rising behind her.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === evening.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is sipping tea beside a sketched window showing a low setting sun and warm lamplight.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === night.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is yawning behind her hand under a sketched crescent moon and a few stars.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === name.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is pointing at a sketched "HELLO, my name is ___" sticker tag on her chest, friendly grin.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === nice.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is offering a small sketched flower toward the viewer, warm charming smile.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === meet.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is shaking hands with a simple sketched stranger figure, polite first-meeting smile.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 === fine.png ===
 Same girl, same pencil-on-sketchbook-paper style, same torn paper patch.
 Now she is leaning casually with a relaxed "all good" OK hand sign and an easy lopsided smile.
-Keep her face, hairstyle, jumpsuit and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
+Keep her face, hairstyle, t-shirt and jeans, and line weight identical to the reference. Simple readable pose, one clear gesture that a language learner would decode instantly. Square 1:1.
 
 
 ЗАМЕТКИ
 -------
 - Если Gemini плывёт по персонажу после нескольких запросов —
-  заново приложи эталон и повтори.
+  заново приложи reference.jpg и повтори.
 - Квадрат 1:1, PNG. Приложение само кадрирует по центру в плашку.
