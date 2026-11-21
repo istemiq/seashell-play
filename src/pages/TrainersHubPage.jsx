@@ -36,6 +36,12 @@ export function TrainersHubPage() {
         featured: true,
         onClick: () => navigate('/trainers/pronouns'),
       },
+      {
+        key: 'smalltalk',
+        iconName: 'trainers',
+        label: tr('trainers.smalltalk'),
+        onClick: () => navigate('/trainers/smalltalk'),
+      },
     ],
     [navigate, tr],
   );
@@ -78,6 +84,7 @@ export function TrainersHubPage() {
           {isAcademic ? (
             <Group className="ss-practice-hub ss-nav-menu">
               <Cell chevron i18nKey="trainers.pronouns" onClick={() => navigate('/trainers/pronouns')} />
+              <Cell chevron i18nKey="trainers.smalltalk" onClick={() => navigate('/trainers/smalltalk')} />
             </Group>
           ) : (
             <StyleNavTiles items={beginnerItems} className="ss-hub-tiles" columns={1} />

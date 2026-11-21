@@ -61,6 +61,61 @@ export const TRAINER_LESSONS = [
     ],
     framesPerAxis: 2,
   },
+  {
+    id: 'smalltalk-en',
+    targetLang: 'en',
+    level: 'beginner',
+    newWords: [
+      'hello', 'bye', 'please', 'thanks', 'sorry',
+      'yes', 'no', 'good', 'morning', 'evening', 'night',
+      'name', 'nice', 'meet', 'fine',
+    ],
+    // Списки урока 1 не накапливаются (только newWords) — нужные формы,
+    // носители и клей объявляем заново, плюс формы новых слов и
+    // разговорные глаголы-связки (am/are/how/what — база смолтолка).
+    extraForms: [
+      'me', 'my', 'mine',
+      'him', 'his',
+      'her', 'hers',
+      'us', 'our', 'ours',
+      'them', 'their', 'theirs',
+      'your', 'yours',
+      'its',
+      'eats', 'drinks', 'runs', 'reads', 'plays', 'walks', 'sleeps',
+      'meets', 'says',
+    ],
+    carrierWords: ['book', 'ball', 'food', 'dog', 'cat', 'water', 'tea', 'friend'],
+    functionWords: [
+      'look', 'at', 'now', 'this', 'is', 'am', 'are', 'a', 'the',
+      'see', 'with', 'and', 'on', 'in', 'to', 'not', 'do', 'does',
+      'how', 'what', 'can', 'have', 'here', 'time', 'later', 'say', 'late', 'for',
+    ],
+    wordForms: {
+      i: ['me', 'my', 'mine'],
+      you: ['your', 'yours'],
+      he: ['him', 'his'],
+      she: ['her', 'hers'],
+      it: ['its'],
+      we: ['us', 'our', 'ours'],
+      they: ['them', 'their', 'theirs'],
+      eat: ['eats'], drink: ['drinks'], run: ['runs'], read: ['reads'],
+      play: ['plays'], walk: ['walks'], sleep: ['sleeps'],
+      meet: ['meets'],
+    },
+    // Социальные контрасты: встреча/прощание, согласие/отказ,
+    // просьба/благодарность/извинение, часть суток.
+    axes: [
+      { id: 'hello-bye', target: 'hello', wrong: 'bye' },
+      { id: 'bye-hello', target: 'bye', wrong: 'hello' },
+      { id: 'yes-no', target: 'yes', wrong: 'no' },
+      { id: 'no-yes', target: 'no', wrong: 'yes' },
+      { id: 'please-thanks', target: 'please', wrong: 'thanks' },
+      { id: 'thanks-sorry', target: 'thanks', wrong: 'sorry' },
+      { id: 'sorry-thanks', target: 'sorry', wrong: 'thanks' },
+      { id: 'night-morning', target: 'night', wrong: 'morning' },
+    ],
+    framesPerAxis: 2,
+  },
 ];
 
 export function trainerLesson(lessonId) {

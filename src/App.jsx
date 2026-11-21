@@ -44,6 +44,9 @@ const TrainersHubPage = lazy(() =>
 const PronounTrainerPage = lazy(() =>
   import('./pages/PronounTrainerPage.jsx').then((m) => ({ default: m.PronounTrainerPage })),
 );
+const SmalltalkTrainerPage = lazy(() =>
+  import('./pages/SmalltalkTrainerPage.jsx').then((m) => ({ default: m.SmalltalkTrainerPage })),
+);
 const IrregularVerbsPage = lazy(() =>
   import('./pages/IrregularVerbsPage.jsx').then((m) => ({ default: m.IrregularVerbsPage })),
 );
@@ -129,6 +132,7 @@ function AppRoutes({ fetchedUser }) {
           <Route path="practice" element={<PracticeHubPage />} />
           <Route path="trainers" element={<TrainersHubPage />} />
           <Route path="trainers/pronouns" element={<PronounTrainerPage />} />
+          <Route path="trainers/smalltalk" element={<SmalltalkTrainerPage />} />
           <Route path="practice/chat" element={<PracticePage />} />
           <Route path="practice/expert" element={<ExpertPracticePage />} />
           <Route path="practice/expert/:expertId" element={<ExpertPracticePage />} />
